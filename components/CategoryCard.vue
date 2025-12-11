@@ -1,0 +1,30 @@
+<script setup lang="ts">
+import type { ICategory } from "~/Types/category.type";
+const config = useRuntimeConfig();
+
+const props = defineProps<{
+  category: ICategory;
+}>();
+
+const emit = defineEmits<{
+  (e: "click", category: string): void;
+}>();
+
+const { image, name, id } = props.category;
+
+const imageUrl = `${config.public.bucketUrl}${image}`;
+</script>
+
+<template>
+  <div
+    class="relative flex flex-col w-[350px] h-[280px]"
+    @click="() => emit('click', name)"
+  >
+    <NuxtImg :src="imageUrl" class="w-[350px] h-[280px] object-cover" />
+    <h3
+      class="absolute text-white font-medium text-[24px] bottom-0 self-center"
+    >
+      {{ name }}
+    </h3>
+  </div>
+</template>

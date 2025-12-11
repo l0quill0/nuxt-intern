@@ -1,0 +1,73 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+@font-face {
+  font-family: "Gilroy";
+  src: url("/fonts/Gilroy-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Gilroy";
+  src: url("/fonts/Gilroy-Semibold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Gilroy";
+  src: url("/fonts/Gilroy-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --font-sans: "Gilroy", system-ui, sans-serif;
+}
+
+html,
+body,
+#__nuxt {
+  background-color: #f0f0f0;
+  color: #000000;
+  font-family: "Gilroy", sans-serif;
+}
+:disabled {
+  cursor: default !important;
+}
+
+html {
+  overflow-y: scroll;
+}
+
+body::-webkit-scrollbar {
+  width: 0px;
+}
+
+[data-slot="file"] [data-slot="root"] {
+  @apply rounded-none;
+}
+
+[data-slot="wrapper"] [data-slot="root"] {
+  @apply bg-transparent;
+}
+
+[data-slot="wrapper"] [data-slot="root"] [data-slot="icon"] {
+  @apply text-[#333333];
+}
+
+[data-slot="increment"] [data-slot="base"] {
+  @apply text-white hover:text-gray-300 active:text-gray-500;
+}
+
+[data-slot="decrement"] [data-slot="base"] {
+  @apply text-white hover:text-gray-300 active:text-gray-500;
+}
+
+[data-slot="focusScope"] [data-slot="root"] [data-slot="input"] {
+  @apply placeholder:text-white;
+}

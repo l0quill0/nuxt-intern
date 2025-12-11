@@ -1,0 +1,33 @@
+{
+  "name": "nuxt-intern",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@nuxt/image": "^2.0.0",
+    "@nuxt/ui": "^4.2.1",
+    "@pinia/nuxt": "^0.11.3",
+    "@tailwindcss/vite": "^4.1.17",
+    "dayjs": "^1.11.19",
+    "iconify-icon": "^3.0.2",
+    "lodash": "^4.17.21",
+    "lucide-vue-next": "^0.555.0",
+    "nuxt": "^4.2.1",
+    "pinia": "^3.0.4",
+    "tailwindcss": "^4.1.17",
+    "vue": "^3.5.25",
+    "vue-router": "^4.6.3",
+    "zod": "^4.1.13"
+  },
+  "devDependencies": {
+    "@nuxt/fonts": "^0.12.1",
+    "@types/lodash": "^4.17.21",
+    "@types/node": "^24.10.1"
+  }
+}
