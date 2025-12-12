@@ -85,7 +85,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         }"
       />
     </UFormField>
-    <UFormField label="Категорії" class="w-full">
+    <UFormField label="Категорія" class="w-full">
       <USelectMenu
         v-model="state.categoryName"
         :items="menuItems.map((m) => m)"
@@ -116,6 +116,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       <UProgress
         animation="swing"
         v-model="isUploading"
+        color="neutral"
         :ui="{ base: 'rounded-none bg-[#333333]', indicator: 'rounded-none' }"
       />
       <UFileUpload

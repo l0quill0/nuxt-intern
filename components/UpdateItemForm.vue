@@ -3,7 +3,7 @@ import type { FormSubmitEvent } from "@nuxt/ui";
 import * as zod from "zod";
 import { getCategories } from "~/api/categoryApi";
 import { getItemById, updateItem } from "~/api/itemApi";
-import { every, values } from "lodash";
+import { every, isEqual, isUndefined, omit, omitBy, values } from "lodash";
 
 const props = defineProps({
   itemId: { type: Number, required: true },
@@ -48,8 +48,18 @@ const hasErrors = computed(() => !validation.value.success);
 const isUploading = ref<number | null>(0);
 
 const checkForChange = () => {
+  if (state.image) return true;
+
   const stateValues = values(state);
   if (every(stateValues, (v) => v === undefined)) return false;
+
+  const clean = (obj: object) => omitBy(omit(obj, ["image"]), isUndefined);
+
+  if (item.value) {
+    return !isEqual(clean(state), clean(item.value));
+  }
+
+  return false;
 };
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
@@ -89,7 +99,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         v-model="state.title"
         class="w-full"
         :ui="{
-          base: 'bg-transparent! rounded-none ring-white focus-visible:ring-white aria-invalid:ring-error aria-invalid:focus-visible:ring-error',
+          base: 'bg-transparent! rounded-none ring-white focus-visible:ring-white aria-invalid:ring-error aria-invalid:focus-visible:ring-error placeholder:text-white',
         }"
         :placeholder="title"
       />
@@ -104,18 +114,19 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         orientation="vertical"
         class="w-full"
         :ui="{
-          base: 'bg-transparent! rounded-none ring-white focus-visible:ring-white aria-invalid:ring-error aria-invalid:focus-visible:ring-error',
+          base: 'bg-transparent! rounded-none ring-white focus-visible:ring-white aria-invalid:ring-error aria-invalid:focus-visible:ring-error placeholder:text-white',
         }"
       />
     </UFormField>
-    <UFormField label="Категорії" class="w-full">
+    <UFormField label="Категорія" class="w-full">
       <USelectMenu
         v-model="state.categoryName"
-        :placeholder="categoryName?.name"
+        :placeholder="categoryName"
         :items="menuItems.map((m) => m)"
         class="w-full"
         :ui="{
           base: 'bg-transparent! rounded-none ring-white focus-visible:ring-white aria-invalid:ring-error aria-invalid:focus-visible:ring-error',
+          placeholder: 'text-white',
           content: 'rounded-none bg-[#333333] ring-white',
           input: 'border-white ',
           item: 'before:rounded-none data-highlighted:bg-gray-500',

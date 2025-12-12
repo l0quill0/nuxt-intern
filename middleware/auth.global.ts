@@ -5,7 +5,7 @@ export default defineNuxtRouteMiddleware((to) => {
   const publicRoutes = ["/", "/login", "/register", "/catalog"];
   const publicDynamicRoutes = ["/item/"];
   const protectedUserRoutes = ["/favourite, /profile"];
-  const protectedAdminRoutes = ["/items-admin", "/orders-admin"];
+  const protectedAdminRoutes = ["/admin/items", "/admin/orders"];
 
   if (
     protectedAdminRoutes.includes(to.path) &&

@@ -101,9 +101,15 @@ watch(
         separator: 'hidden',
       }"
       class="w-full h-full"
+      empty="Кошик пустий"
     >
       <template #image-cell="{ row }">
-        <NuxtImg :src="row.original.image" class="w-[75px] h-[75px]" />
+        <NuxtImg
+          :src="row.original.image"
+          @error=""
+          class="w-[75px] h-[75px]"
+          :placeholder="'/no-image.png'"
+        />
       </template>
       <template #quantity-cell="{ row }">
         <UButton

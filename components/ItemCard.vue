@@ -18,7 +18,11 @@ const imageUrl = `${config.public.bucketUrl}${image}`;
     class="w-[350px] h-[440px] flex flex-col items-center p-[35px] hover:border hover: border-[#333333]"
     @click="() => emit('click', id)"
   >
-    <NuxtImg :src="imageUrl" class="h-[220px] w-[280px] object-cover" />
+    <NuxtImg
+      :src="imageUrl"
+      class="h-[220px] w-[280px] object-cover"
+      :placeholder="'/no-image.png'"
+    />
     <span class="mt-auto">{{ categoryName }}</span>
     <h1 class="font-semibold text-2xl mt-2.5 mb-[15px]">
       {{ title }}

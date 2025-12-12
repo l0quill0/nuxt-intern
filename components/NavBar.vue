@@ -35,7 +35,7 @@ function onFavouriteClick() {
         v-model="pagination.search"
         v-if="
           route.fullPath.startsWith('/catalog') ||
-          route.fullPath.startsWith('/items-admin')
+          route.fullPath.startsWith('/admin/items')
         "
       />
       <UButton

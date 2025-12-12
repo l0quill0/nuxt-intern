@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import { isNumber } from "lodash";
 import { getCategories } from "~/api/categoryApi";
 
 const { data: categories } = await getCategories();
 const { pagination } = useItemPagination();
-
 const categoryItems = ref<Array<string>>([]);
 
 const sortFieldItems = [
@@ -20,6 +20,12 @@ const sortOrderItems = {
     { value: "asc", label: "Від А до Я" },
     { value: "desc", label: "Від Я до А" },
   ],
+};
+
+const formatInput = (value: string) => {
+  const num = parseFloat(value);
+
+  return Number.isFinite(num) && num > 0 ? num : undefined;
 };
 
 watchEffect(() => {
@@ -90,9 +96,14 @@ watchEffect(() => {
         base: 'rounded-none bg-transparent h-[34px] text-[#333333] pl-0',
       }"
       type="number"
+      min="0"
       variant="none"
       placeholder="Ціна від"
-      v-model="pagination.priceMin"
+      @input="
+        pagination.priceMin = formatInput(
+          ($event.target as HTMLInputElement).value
+        )
+      "
     />
     <UInput
       class="w-40 text-[#333333] border-b border-[#D6D6D6] no-spinner"
@@ -103,6 +114,11 @@ watchEffect(() => {
       variant="none"
       placeholder="Ціна до"
       v-model="pagination.priceMax"
+      @input="
+        pagination.priceMax = formatInput(
+          ($event.target as HTMLInputElement).value
+        )
+      "
     />
   </div>
 </template>

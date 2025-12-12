@@ -4,18 +4,47 @@ import { getPaginatedItems, removeItem } from "~/api/itemApi";
 import type { IItem } from "~/Types/item.type";
 
 const config = useRuntimeConfig();
-
 const route = useRoute();
 const { pagination } = useItemPagination();
+
 const UButton = resolveComponent("UButton");
 
-const items = ref<IItem[]>([]);
+const items = ref<IItem[]>();
 const toast = useToast();
-let total = 0;
-let totalPages = 0;
+const total = ref(0);
+const totalPages = ref(0);
+
+watch(
+  () => route.query,
+  () => loadItems(),
+  { deep: true, immediate: true }
+);
+
+async function loadItems() {
+  try {
+    const response = await getPaginatedItems(route.query);
+    items.value = response.data;
+    total.value = response.meta.totalItems;
+    totalPages.value = response.meta.totalPages;
+  } catch (error) {}
+}
+
+const onItemClick = (id: number) => {
+  navigateTo(`/item/${id}`);
+};
+
+const onRemoveClick = async (id: number) => {
+  try {
+    await removeItem(id);
+    await loadItems();
+    toast.add({ title: "Товар видалено", color: "success" });
+  } catch (error) {
+    toast.add({ title: error as string, color: "error" });
+  }
+};
 
 const onPageChange = (page: number) => {
-  if (page < 1 || page > totalPages) return;
+  if (page < 1 || page > totalPages.value) return;
   pagination.value.page = page;
 };
 
@@ -25,7 +54,7 @@ const tableColumns: TableColumn<TableRow>[] = [
   { accessorKey: "title", header: "Назва" },
   {
     accessorKey: "image",
-    header: "",
+    header: "tesr",
   },
   {
     accessorKey: "price",
@@ -40,37 +69,6 @@ const tableColumns: TableColumn<TableRow>[] = [
     header: "Дії",
   },
 ];
-
-watch(
-  () => route.query,
-  () => loadItems(),
-  { deep: true, immediate: true }
-);
-
-function onItemClick(id: number) {
-  navigateTo(`/item/${id}`);
-}
-
-const onRemoveClick = async (id: number) => {
-  try {
-    await removeItem(id);
-    await loadItems();
-    toast.add({ title: "Товар видалено", color: "success" });
-  } catch (error) {
-    toast.add({ title: error as string, color: "error" });
-  }
-};
-
-async function loadItems() {
-  try {
-    const response = await getPaginatedItems(route.query);
-    items.value = response.data;
-    total = response.meta.totalItems;
-    totalPages = response.meta.totalPage;
-  } catch (error) {}
-}
-
-await loadItems();
 </script>
 
 <template>
@@ -81,15 +79,17 @@ await loadItems();
       :data="items"
       @select="(e, row) => onItemClick(row.original.id)"
       :columns="tableColumns"
+      empty="Товарів не знайдено"
       class="w-full grow"
       :ui="{
         th: 'text-[#333333]',
         tbody:
           '[&>tr]:data-[selectable=true]:hover:bg-stone-300 [&>tr]:data-[selectable=true]:duration-300',
+        td: 'text-[#333333] max-w-28',
       }"
     >
       <template #controls-cell="{ row }">
-        <div class="flex gap-1.5">
+        <div class="flex gap-1.5 max-w-[180px]">
           <UModal
             :aria-describedby="undefined"
             description="ItemUpdate"
@@ -123,6 +123,7 @@ await loadItems();
         <NuxtImg
           :src="`${config.public.bucketUrl}${row.original.image}`"
           class="w-[75px] h-[75px]"
+          :placeholder="'/no-image.png'"
         />
       </template>
       <template #price-cell="{ row }">

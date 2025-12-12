@@ -9,6 +9,12 @@ function onItemClick(id: number) {
 
 <template>
   <div class="w-screen flex flex-col items-center">
+    <h2
+      class="text-3xl font-bold text-[#333333] pt-12"
+      v-if="data?.items.length"
+    >
+      Улюблене
+    </h2>
     <div
       class="max-w-[1110px] w-max flex flex-col items-center pt-[30px] gap-[50px]"
     >

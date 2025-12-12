@@ -20,7 +20,11 @@ const imageUrl = `${config.public.bucketUrl}${image}`;
     class="relative flex flex-col w-[350px] h-[280px]"
     @click="() => emit('click', name)"
   >
-    <NuxtImg :src="imageUrl" class="w-[350px] h-[280px] object-cover" />
+    <NuxtImg
+      :src="imageUrl"
+      class="w-[350px] h-[280px] object-cover"
+      :placeholder="'/no-image.png'"
+    />
     <h3
       class="absolute text-white font-medium text-[24px] bottom-0 self-center"
     >

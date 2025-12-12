@@ -29,7 +29,13 @@ await loadItems();
 <template>
   <div class="w-screen flex flex-col items-center pt-[100px]">
     <CatalogFilters />
-    <div class="flex gap-x-[30px] pt-[60px] pb-[60px] flex-wrap max-w-[1110px]">
+    <h2 v-if="!items.length" class="text-3xl font-bold text-[#333333] pt-12">
+      Товарів не знайдено
+    </h2>
+    <div
+      class="flex gap-x-[30px] pt-[60px] pb-[60px] flex-wrap max-w-[1110px]"
+      v-if="items.length"
+    >
       <template v-for="(item, index) in items" :key="item.id">
         <ItemCard :item-info="item" @click="onItemClick" />
         <div

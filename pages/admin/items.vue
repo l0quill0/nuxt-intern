@@ -1,6 +1,23 @@
+<script setup lang="ts">
+const showRemoved = ref<boolean>(false);
+const { pagination } = useItemPagination();
+watch(showRemoved, () => {
+  pagination.value.showRemoved = String(showRemoved.value);
+});
+</script>
+
 <template>
   <div class="w-fit flex flex-col items-end gap-2.5 pt-[50px] h-full">
-    <div class="flex gap-2.5">
+    <div class="flex gap-2.5 items-center">
+      <UCheckbox
+        v-model="showRemoved"
+        label="Включити видалені"
+        :ui="{
+          label: 'text-[#333333]',
+          base: 'rounded-none',
+          indicator: 'bg-[#333333] text-white',
+        }"
+      />
       <UModal
         title="createCategory"
         description="createCategory"

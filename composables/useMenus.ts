@@ -32,14 +32,14 @@ export const useMenus = () => {
       label: "Товари",
       icon: "i-lucide-package",
       onSelect: () => {
-        navigateTo("/items-admin");
+        navigateTo("/admin/items");
       },
     },
     {
       label: "Замовлення",
       icon: "i-lucide-list",
       onSelect: () => {
-        navigateTo("/orders-admin");
+        navigateTo("/admin/orders");
       },
     },
     {

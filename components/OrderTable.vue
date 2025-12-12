@@ -234,6 +234,7 @@ watch(
         td: 'text-[#333333] ',
       }"
       class="w-full grow"
+      empty="Замовлень не знайдено"
     >
       <template #expanded="{ row }">
         <UTable
@@ -246,11 +247,13 @@ watch(
               '[&>tr]:data-[selectable=true]:hover:bg-stone-300 [&>tr]:data-[selectable=true]:duration-300',
           }"
           @select="(e, row) => onItemClick(row.original.id)"
+          empty="Товарів не знайдено"
         >
           <template #image-cell="{ row }">
             <NuxtImg
               :src="`${config.public.bucketUrl}${row.original.image}`"
               class="w-[75px] h-[75px]"
+              :placeholder="'/no-image.png'"
             />
           </template>
           <template #price-cell="{ row }">

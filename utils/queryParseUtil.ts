@@ -19,9 +19,5 @@ export function parseQueryParam<T = string, R extends boolean = false>({
       ? def
       : transformer?.(value) ?? def;
 
-  if (required && result === undefined) {
-    throw new Error("negative number");
-  }
-
   return result as T;
 }

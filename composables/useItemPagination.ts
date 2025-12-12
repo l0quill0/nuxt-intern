@@ -4,7 +4,7 @@ export const useItemPagination = () => {
 
   const enabled = computed(
     () =>
-      route.path.startsWith("/catalog") || route.path.startsWith("/items-admin")
+      route.path.startsWith("/catalog") || route.path.startsWith("/admin/items")
   );
 
   const { query } = route;
@@ -39,6 +39,9 @@ export const useItemPagination = () => {
       value: query.category,
       def: [],
       transformer: (value) => (Array.isArray(value) ? value : [value]),
+    }),
+    showRemoved: parseQueryParam({
+      value: query.showRemoved,
     }),
   }));
 

@@ -7,6 +7,6 @@ export interface IPaginatedItems {
     itemCount: number;
     itemsPerPage: number;
     totalItems: number;
-    totalPage: number;
+    totalPages: number;
   };
 }
