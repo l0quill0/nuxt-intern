@@ -13,7 +13,16 @@ const user = useUserStore().getUser();
 
 const toast = useToast();
 
-const { data: orders, refresh } = await getOrders(pagination);
+const { data: orders, refresh, pending } = getOrders(pagination);
+
+const parsedData = computed<tableRow[]>(
+  () =>
+    orders.value?.data.map((order) => ({
+      ...order,
+      status: OrderStatus[order.status as keyof typeof OrderStatus],
+      createdAt: dayjs(order.createdAt).format("DD.MM.YYYY"),
+    })) ?? []
+);
 
 const sortField = ref<string>("id");
 const sortAsc = ref(true);
@@ -206,22 +215,6 @@ const orderItemColumns: TableColumn<itemTableRow>[] = [
     header: "Кількість",
   },
 ];
-
-const parsedData = ref<tableRow[]>([]);
-
-watch(
-  orders,
-  (newData) => {
-    if (newData) {
-      parsedData.value = newData.data.map((order) => ({
-        ...order,
-        status: OrderStatus[order.status as keyof typeof OrderStatus],
-        createdAt: dayjs(order.createdAt).format("DD.MM.YYYY"),
-      }));
-    }
-  },
-  { immediate: true }
-);
 </script>
 
 <template>
@@ -229,6 +222,7 @@ watch(
     <UTable
       :data="parsedData"
       :columns="tableColumns"
+      :loading="pending"
       :ui="{
         th: 'pl-0 text-[#333333] ',
         td: 'text-[#333333] ',

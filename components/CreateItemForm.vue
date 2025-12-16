@@ -8,19 +8,21 @@ const schema = zod.object({
   title: zod.string("Введіть назву товару").min(5, "Назва коротка"),
   description: zod.string("Додайте опис товару").min(5, "Опис малий"),
   price: zod.number("Зазначте ціну товару").min(0.01),
-  categoryName: zod.string("Оберіть категорію"),
+  category: zod.string("Оберіть категорію"),
   image: zod.instanceof(File, { message: "Додайте фото товару" }),
 });
 
 const toast = useToast();
-const menuItems = ref<Array<string>>([]);
+const menuItems = ref<{ label: string; value: string }[]>([]);
 
 const { data: categories } = await getCategories();
 
 watchEffect(() => {
-  if (categories.value) {
-    menuItems.value = categories.value.map((c) => c.name);
-  }
+  if (categories.value)
+    menuItems.value = categories.value.map((c) => ({
+      label: c.name.charAt(0).toUpperCase() + c.name.slice(1),
+      value: c.slug,
+    }));
 });
 
 type Schema = zod.output<typeof schema>;
@@ -30,7 +32,7 @@ const state = reactive<Partial<Schema>>({
   description: undefined,
   price: undefined,
   image: undefined,
-  categoryName: undefined,
+  category: undefined,
 });
 
 const validation = computed(() => schema.safeParse(state));
@@ -40,13 +42,14 @@ const isUploading = ref<number | null>(0);
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   try {
     isUploading.value = null;
+    console.log(event.data);
     await createItem(event.data);
     toast.add({ title: "Товар створено", color: "success" });
     state.title = undefined;
     state.description = undefined;
     state.price = undefined;
     state.image = undefined;
-    state.categoryName = undefined;
+    state.category = undefined;
     isUploading.value = 100;
   } catch (error) {
     isUploading.value = 0;
@@ -87,7 +90,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     </UFormField>
     <UFormField label="Категорія" class="w-full">
       <USelectMenu
-        v-model="state.categoryName"
         :items="menuItems.map((m) => m)"
         class="w-full"
         :ui="{
@@ -100,6 +102,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         :search-input="{
           placeholder: 'Пошук...',
         }"
+        value-key="value"
+        v-model="state.category"
       />
     </UFormField>
     <UFormField label="Опис товару" name="description" class="w-full">

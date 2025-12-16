@@ -43,6 +43,13 @@ export const useMenus = () => {
       },
     },
     {
+      label: "Категорії",
+      icon: "i-lucide-tags",
+      onSelect: () => {
+        navigateTo("/admin/categories");
+      },
+    },
+    {
       label: "Вийти",
       icon: "i-lucide-log-out",
       onSelect: () => {

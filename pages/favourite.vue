@@ -18,7 +18,6 @@ function onItemClick(id: number) {
     <div
       class="max-w-[1110px] w-max flex flex-col items-center pt-[30px] gap-[50px]"
     >
-      <NuxtLoadingIndicator v-if="pending" />
       <div class="flex flex-col items-center">
         <h1
           v-if="!data?.items.length"

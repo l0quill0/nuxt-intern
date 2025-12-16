@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
+@plugin 'daisyui';
 
 @font-face {
   font-family: "Gilroy";
@@ -38,14 +39,6 @@ body,
 }
 :disabled {
   cursor: default !important;
-}
-
-html {
-  overflow-y: scroll;
-}
-
-body::-webkit-scrollbar {
-  width: 0px;
 }
 
 [data-slot="file"] [data-slot="root"] {

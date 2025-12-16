@@ -2,28 +2,17 @@
 import { getPaginatedItems } from "~/api/itemApi";
 import type { IItem } from "~/Types/item.type";
 
-const route = useRoute();
+const { pagination } = useItemPagination();
 
-const items = ref<IItem[]>([]);
+const { data: response } = getPaginatedItems(pagination);
 
-watch(
-  () => route.query,
-  () => loadItems(),
-  { deep: true, immediate: true }
-);
+const items = computed<IItem[]>(() => {
+  return response.value?.data ?? [];
+});
 
 function onItemClick(id: number) {
   navigateTo(`/item/${id}`);
 }
-
-async function loadItems() {
-  try {
-    const response = await getPaginatedItems(route.query);
-    items.value = response.data;
-  } catch (error) {}
-}
-
-await loadItems();
 </script>
 
 <template>

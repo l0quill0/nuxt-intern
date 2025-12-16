@@ -8,7 +8,7 @@ const emit = defineEmits<{
   (e: "click", itemId: number): void;
 }>();
 
-const { title, image, categoryName, price, id } = props.itemInfo;
+const { title, image, category, price, id } = props.itemInfo;
 
 const imageUrl = `${config.public.bucketUrl}${image}`;
 </script>
@@ -23,7 +23,7 @@ const imageUrl = `${config.public.bucketUrl}${image}`;
       class="h-[220px] w-[280px] object-cover"
       :placeholder="'/no-image.png'"
     />
-    <span class="mt-auto">{{ categoryName }}</span>
+    <span class="mt-auto">{{ category.name }}</span>
     <h1 class="font-semibold text-2xl mt-2.5 mb-[15px]">
       {{ title }}
     </h1>

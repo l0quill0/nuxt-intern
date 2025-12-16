@@ -1,42 +1,49 @@
 <script setup lang="ts">
 import type { TableColumn } from "@nuxt/ui";
-import { getPaginatedItems, removeItem } from "~/api/itemApi";
+import { getPaginatedItems, removeItem, restoreItem } from "~/api/itemApi";
 import type { IItem } from "~/Types/item.type";
+import UpdateItemForm from "./UpdateItemForm.vue";
 
 const config = useRuntimeConfig();
-const route = useRoute();
 const { pagination } = useItemPagination();
 
 const UButton = resolveComponent("UButton");
 
-const items = ref<IItem[]>();
 const toast = useToast();
-const total = ref(0);
-const totalPages = ref(0);
 
-watch(
-  () => route.query,
-  () => loadItems(),
-  { deep: true, immediate: true }
-);
+const overlay = useOverlay();
+const updateModal = overlay.create(UpdateItemForm);
 
-async function loadItems() {
-  try {
-    const response = await getPaginatedItems(route.query);
-    items.value = response.data;
-    total.value = response.meta.totalItems;
-    totalPages.value = response.meta.totalPages;
-  } catch (error) {}
-}
+const { data: response, pending, refresh } = getPaginatedItems(pagination);
+
+const items = computed(() => response.value?.data ?? []);
+
+const total = computed(() => response.value?.meta.totalItems ?? 0);
+
+const totalPages = computed(() => response.value?.meta.totalPages ?? 0);
 
 const onItemClick = (id: number) => {
   navigateTo(`/item/${id}`);
 };
 
+const openUpdateModal = (id: number) => {
+  updateModal.open({ itemId: id });
+};
+
+const onReturnClick = async (id: number) => {
+  try {
+    await restoreItem(id);
+    await refresh();
+    toast.add({ title: "Товар відновлено", color: "success" });
+  } catch (error) {
+    toast.add({ title: error as string, color: "error" });
+  }
+};
+
 const onRemoveClick = async (id: number) => {
   try {
     await removeItem(id);
-    await loadItems();
+    await refresh();
     toast.add({ title: "Товар видалено", color: "success" });
   } catch (error) {
     toast.add({ title: error as string, color: "error" });
@@ -54,14 +61,14 @@ const tableColumns: TableColumn<TableRow>[] = [
   { accessorKey: "title", header: "Назва" },
   {
     accessorKey: "image",
-    header: "tesr",
+    header: "",
   },
   {
     accessorKey: "price",
     header: "Ціна",
   },
   {
-    accessorKey: "categoryName",
+    accessorKey: "category",
     header: "Категорія",
   },
   {
@@ -75,7 +82,7 @@ const tableColumns: TableColumn<TableRow>[] = [
   <div class="flex flex-col items-center grow">
     <CatalogFilters />
     <UTable
-      :loading="!items"
+      :loading="pending"
       :data="items"
       @select="(e, row) => onItemClick(row.original.id)"
       :columns="tableColumns"
@@ -90,32 +97,31 @@ const tableColumns: TableColumn<TableRow>[] = [
     >
       <template #controls-cell="{ row }">
         <div class="flex gap-1.5 max-w-[180px]">
-          <UModal
-            :aria-describedby="undefined"
-            description="ItemUpdate"
-            title="ItemUpdate"
-            :ui="{
-              content: 'rounded-none',
-              overlay: 'bg-[#f0f0f0b2]',
-            }"
-          >
-            <UButton
-              @click.stop
-              class="rounded-none bg-[#333333] text-white hover:bg-gray-500 active:bg-gray-700"
-              >Оновити</UButton
-            >
-
-            <template #content>
-              <UpdateItemForm :item-id="row.original.id" />
-            </template>
-          </UModal>
           <UButton
+            v-if="!row.original.isRemoved"
+            @click.stop
+            @click="openUpdateModal(row.original.id)"
+            class="rounded-none"
+            color="success"
+            >Оновити</UButton
+          >
+          <UButton
+            v-if="!row.original.isRemoved"
             @click.stop
             class="rounded-none"
             color="error"
             @click="() => onRemoveClick(row.original.id)"
           >
             Видалити
+          </UButton>
+          <UButton
+            v-if="row.original.isRemoved"
+            @click.stop
+            class="rounded-none"
+            color="success"
+            @click="() => onReturnClick(row.original.id)"
+          >
+            Повернути
           </UButton>
         </div>
       </template>
@@ -128,6 +134,12 @@ const tableColumns: TableColumn<TableRow>[] = [
       </template>
       <template #price-cell="{ row }">
         <span>{{ `${row.original.price.toFixed(2)} ₴` }}</span>
+      </template>
+      <template #category-cell="{ row }">
+        <span>{{
+          row.original.category.name.charAt(0).toUpperCase() +
+          row.original.category.name.slice(1)
+        }}</span>
       </template>
     </UTable>
     <UPagination

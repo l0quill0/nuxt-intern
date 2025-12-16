@@ -24,8 +24,9 @@ const isUploading = ref<number | null>(0);
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   try {
     isUploading.value = null;
-    await createCategory(event.data.image, event.data.name);
+    await createCategory(event.data.image, event.data.name.toLowerCase());
     await refreshNuxtData("categories");
+    await refreshNuxtData("category-paginated");
     state.name = undefined;
     state.image = undefined;
     isUploading.value = 100;

@@ -1,5 +1,7 @@
+import type { MultiWatchSources } from "vue";
 import type { RouteQueryAndHash } from "vue-router";
 import type { ICreateItem } from "~/Types/item.create.type";
+import type { IItemQuery } from "~/Types/item.query";
 import type { IItem } from "~/Types/item.type";
 import type { IPaginatedItems } from "~/Types/items.paginated";
 import type { IUpdateItem } from "~/Types/update.item";
@@ -11,7 +13,7 @@ export async function createItem(payload: ICreateItem) {
   formData.append("description", payload.description);
   formData.append("price", payload.price.toString());
   formData.append("file", payload.image);
-  formData.append("categoryName", payload.categoryName);
+  formData.append("category", payload.category);
 
   return useNuxtApp().$api(`item`, {
     method: "POST",
@@ -25,12 +27,17 @@ export async function updateItem(itemId: number, payload: IUpdateItem) {
   if (payload.description) formData.append("description", payload.description);
   if (payload.price) formData.append("price", payload.price.toString());
   if (payload.image) formData.append("file", payload.image);
-  if (payload.categoryName)
-    formData.append("categoryName", payload.categoryName);
+  if (payload.category) formData.append("category", payload.category);
 
   return useNuxtApp().$api(`item/${itemId}`, {
     method: "PATCH",
     body: formData,
+  });
+}
+
+export async function restoreItem(id: number) {
+  return useNuxtApp().$api(`item/return/${id}`, {
+    method: "PATCH",
   });
 }
 
@@ -46,14 +53,10 @@ export async function getItemById(id: number) {
   });
 }
 
-export async function getPaginatedItems(queryOptions: RouteQueryAndHash) {
-  const config = useRuntimeConfig();
-
-  return $fetch<IPaginatedItems>(`${config.public.apiUrl}item`, {
+export function getPaginatedItems(queryOptions: Ref<IItemQuery>) {
+  return useApi<IPaginatedItems>(`item`, {
     method: "GET",
     query: queryOptions,
-    onResponseError: (error) => {
-      throw error.response._data.message;
-    },
+    key: "items-paginated",
   });
 }

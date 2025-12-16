@@ -1,9 +1,15 @@
 <script setup lang="ts">
 const showRemoved = ref<boolean>(false);
 const { pagination } = useItemPagination();
-watch(showRemoved, () => {
-  pagination.value.showRemoved = String(showRemoved.value);
-});
+watch(
+  () => showRemoved.value,
+  () => {
+    pagination.value.showRemoved = showRemoved.value
+      ? String(showRemoved.value)
+      : undefined;
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
@@ -18,37 +24,6 @@ watch(showRemoved, () => {
           indicator: 'bg-[#333333] text-white',
         }"
       />
-      <UModal
-        title="createCategory"
-        description="createCategory"
-        :ui="{
-          content: 'bg-[#f0f0f0] rounded-none ring-[#333333] w-full',
-          overlay: 'bg-[#f0f0f0b2]',
-        }"
-      >
-        <UButton class="w-fit rounded-none" color="success"
-          >Створити категорію</UButton
-        >
-        <template #content>
-          <CreateCategoryForm />
-        </template>
-      </UModal>
-      <UModal
-        title="removeCategory"
-        description="removeCategory"
-        :ui="{
-          content:
-            'bg-[#f0f0f0] rounded-none ring-[#333333] max-w-[350px] w-full',
-          overlay: 'bg-[#f0f0f0b2]',
-        }"
-      >
-        <UButton class="w-fit rounded-none" color="error"
-          >Видалити категорію</UButton
-        >
-        <template #content>
-          <RemoveCategory />
-        </template>
-      </UModal>
       <UModal
         title="createItem"
         description="createItem"

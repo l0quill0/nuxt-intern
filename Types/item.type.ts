@@ -4,5 +4,6 @@ export interface IItem {
   description: string;
   image: string;
   price: number;
-  categoryName: string;
+  isRemoved: boolean;
+  category: { name: string; slug?: string };
 }

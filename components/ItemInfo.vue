@@ -13,7 +13,7 @@ const toast = useToast();
 
 const { data: value, refresh } = await getItemById(props.id);
 
-const { title, description, image, price, categoryName, isInFavourite } =
+const { title, description, image, price, category, isInFavourite, isRemoved } =
   value.value || {};
 
 const imageLink = `${config.public.bucketUrl}${image}`;
@@ -64,7 +64,7 @@ async function addToCartClick() {
           {{ title }}
         </h3>
         <span class="text-[#979797] text-[14px] leading-[150%]">{{
-          `Категорія: ${categoryName}`
+          `Категорія: ${category?.name}`
         }}</span>
         <div class="w-full h-px bg-[#D6D6D6]"></div>
         <span class="h-full text-[14px] leading-[150%] wrap-break-word">{{
@@ -73,7 +73,7 @@ async function addToCartClick() {
         <span class="text-[24px] tracking-wider uppercase font-semibold">{{
           `${price?.toFixed(2)} ₴`
         }}</span>
-        <div class="flex items-center gap-[30px]">
+        <div class="flex items-center gap-[30px]" v-if="!isRemoved">
           <UButton
             class="rounded-none bg-[#333333] border border-white pt-2.5 pb-2.5 pl-5 pr-5 hover:bg-gray-500 active:bg-gray-600 text-white duration-300"
             @click="addToCartClick"

@@ -1,10 +1,16 @@
 <script setup lang="ts">
-import { isNumber } from "lodash";
 import { getCategories } from "~/api/categoryApi";
 
-const { data: categories } = await getCategories();
 const { pagination } = useItemPagination();
-const categoryItems = ref<Array<string>>([]);
+const { data: categories } = getCategories();
+
+const categoryItems = computed<{ label: string; value: string }[]>(
+  () =>
+    categories.value?.map((c) => ({
+      label: c.name.charAt(0).toUpperCase() + c.name.slice(1),
+      value: c.slug,
+    })) ?? []
+);
 
 const sortFieldItems = [
   { value: "title", label: "Назвою" },
@@ -27,12 +33,6 @@ const formatInput = (value: string) => {
 
   return Number.isFinite(num) && num > 0 ? num : undefined;
 };
-
-watchEffect(() => {
-  if (categories.value) {
-    categoryItems.value = categories.value.map((c) => c.name);
-  }
-});
 </script>
 
 <template>

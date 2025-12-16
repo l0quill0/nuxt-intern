@@ -1,3 +1,5 @@
+import type { IItemQuery } from "~/Types/item.query";
+
 export const useItemPagination = () => {
   const route = useRoute();
   const router = useRouter();
@@ -9,16 +11,12 @@ export const useItemPagination = () => {
 
   const { query } = route;
 
-  const pagination = useState("itemPagination", () => ({
+  const pagination = useState<IItemQuery>("itemPagination", () => ({
     page: parseQueryParam({
-      def: 1,
-      required: true,
       value: query.page,
       transformer: Number,
     }),
     pageSize: parseQueryParam({
-      def: 6,
-      required: true,
       value: query.pageSize,
       transformer: Number,
     }),
@@ -27,17 +25,12 @@ export const useItemPagination = () => {
     priceMax: parseQueryParam({ value: query.priceMax, transformer: Number }),
     sortBy: parseQueryParam({
       value: query.sortBy,
-      def: "title",
-      required: true,
     }),
     sortOrder: parseQueryParam({
       value: query.sortOrder,
-      def: "asc",
-      required: true,
     }),
     category: parseQueryParam({
       value: query.category,
-      def: [],
       transformer: (value) => (Array.isArray(value) ? value : [value]),
     }),
     showRemoved: parseQueryParam({

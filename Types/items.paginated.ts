@@ -1,12 +1,7 @@
 import type { IItem } from "./item.type";
+import type { IPaginationMeta } from "./pagination.meta";
 
 export interface IPaginatedItems {
   data: IItem[];
-  meta: {
-    currentPage: number;
-    itemCount: number;
-    itemsPerPage: number;
-    totalItems: number;
-    totalPages: number;
-  };
+  meta: IPaginationMeta;
 }

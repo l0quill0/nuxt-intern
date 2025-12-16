@@ -2,7 +2,7 @@ import type { IOrderQuery } from "~/Types/order.query";
 import type { IOrder } from "~/Types/order.type";
 import type { IOrdersPaginated } from "~/Types/orders.paginated";
 
-export async function getOrders(orderQuery: Ref<IOrderQuery>) {
+export function getOrders(orderQuery: Ref<IOrderQuery>) {
   return useApi<IOrdersPaginated>("order", {
     method: "GET",
     query: orderQuery,

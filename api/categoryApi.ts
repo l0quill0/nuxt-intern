@@ -1,9 +1,19 @@
+import type { ICategoryPaginated } from "~/Types/category.paginated";
+import type { IcategoryQuery } from "~/Types/category.query";
 import type { ICategory } from "~/Types/category.type";
 
-export async function getCategories() {
-  return useApi<ICategory[]>("category", {
+export function getCategories() {
+  return useApi<ICategory[]>("category/all", {
     method: "GET",
     key: "categories",
+  });
+}
+
+export function getPaginatedCategories(query: Ref<IcategoryQuery>) {
+  return useApi<ICategoryPaginated>("category", {
+    method: "GET",
+    query: query,
+    key: "category-paginated",
   });
 }
 
