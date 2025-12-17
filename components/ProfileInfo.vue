@@ -10,8 +10,12 @@ const user = userStore.getUser() as IUser;
 const toast = useToast();
 
 const schema = zod.object({
-  email: zod.email().optional(),
-  name: zod.string().min(3).optional(),
+  email: zod.email("Невірний формат").optional(),
+  name: zod
+    .string()
+    .min(3, "Мінімум 3 символи")
+    .max(12, "Максимум 12 символів")
+    .optional(),
 });
 
 type Schema = zod.output<typeof schema>;

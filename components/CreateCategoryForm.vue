@@ -4,9 +4,14 @@ import * as zod from "zod";
 import { createCategory } from "~/api/categoryApi";
 
 const schema = zod.object({
-  name: zod.string("Введіть назву категорії").min(3),
-  image: zod.instanceof(File, { message: "Додайте фото товару" }),
+  name: zod
+    .string("Введіть назву категорії")
+    .min(3, "Мінімум 3 символи")
+    .max(10, "Максимум 10 символів"),
+  image: zod.instanceof(File, { message: "Додайте фото категорії" }),
 });
+
+const emit = defineEmits<{ (e: "uploading", isDismissable: boolean): void }>();
 
 type Schema = zod.output<typeof schema>;
 
@@ -24,6 +29,7 @@ const isUploading = ref<number | null>(0);
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   try {
     isUploading.value = null;
+    emit("uploading", true);
     await createCategory(event.data.image, event.data.name.toLowerCase());
     await refreshNuxtData("categories");
     await refreshNuxtData("category-paginated");
@@ -31,7 +37,9 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     state.image = undefined;
     isUploading.value = 100;
     toast.add({ title: "Категорію створено", color: "success" });
+    emit("uploading", false);
   } catch (error) {
+    emit("uploading", false);
     isUploading.value = 0;
     toast.add({ title: error as string, color: "error" });
   }

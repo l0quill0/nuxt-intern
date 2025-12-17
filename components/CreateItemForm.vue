@@ -5,12 +5,19 @@ import { getCategories } from "~/api/categoryApi";
 import { createItem } from "~/api/itemApi";
 
 const schema = zod.object({
-  title: zod.string("Введіть назву товару").min(5, "Назва коротка"),
-  description: zod.string("Додайте опис товару").min(5, "Опис малий"),
-  price: zod.number("Зазначте ціну товару").min(0.01),
+  title: zod
+    .string("Введіть назву товару")
+    .min(3, "Мінімум 3 символи")
+    .max(15, "Максимум 15 символів"),
+  description: zod.string("Додайте опис товару").min(3, "Мінімум 3 символи"),
+  price: zod
+    .number("Зазначте ціну товару")
+    .min(0.01, "Мініальна вартість 0.01"),
   category: zod.string("Оберіть категорію"),
   image: zod.instanceof(File, { message: "Додайте фото товару" }),
 });
+
+const emit = defineEmits<{ (e: "uploading", isDismissable: boolean): void }>();
 
 const toast = useToast();
 const menuItems = ref<{ label: string; value: string }[]>([]);
@@ -41,8 +48,8 @@ const isUploading = ref<number | null>(0);
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   try {
+    emit("uploading", true);
     isUploading.value = null;
-    console.log(event.data);
     await createItem(event.data);
     toast.add({ title: "Товар створено", color: "success" });
     state.title = undefined;
@@ -51,7 +58,10 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     state.image = undefined;
     state.category = undefined;
     isUploading.value = 100;
+    emit("uploading", false);
+    refreshNuxtData("items-paginated");
   } catch (error) {
+    emit("uploading", false);
     isUploading.value = 0;
     toast.add({ title: error as string, color: "error" });
   }

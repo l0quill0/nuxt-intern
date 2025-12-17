@@ -53,6 +53,7 @@ const formatInput = (value: string) => {
       variant="none"
       placeholder="Категорії"
       multiple
+      value-key="value"
       v-model="pagination.category"
     >
     </USelect>

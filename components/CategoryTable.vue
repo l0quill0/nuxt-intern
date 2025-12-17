@@ -41,7 +41,7 @@ const onRemoveClick = async (id: number) => {
   try {
     isDeleting.value = true;
     await deleteCategory(id);
-    refresh();
+    await refresh();
     toast.add({ title: "Категорія видалена", color: "success" });
     isDeleting.value = false;
   } catch (error) {
@@ -74,7 +74,7 @@ const onRemoveClick = async (id: number) => {
           :key="row.original.id"
           :src="`${config.public.bucketUrl}${row.original.image}`"
           :placeholder="'/no-image.png'"
-          class="w-[75px] h-[75px]"
+          class="w-[50px] h-[50px]"
         />
       </template>
       <template #controls-cell="{ row }">

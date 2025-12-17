@@ -18,6 +18,10 @@ const { data: response, pending, refresh } = getPaginatedItems(pagination);
 
 const items = computed(() => response.value?.data ?? []);
 
+const page = computed(() => pagination.value.page ?? 1);
+
+const pageSize = computed(() => pagination.value.pageSize ?? 6);
+
 const total = computed(() => response.value?.meta.totalItems ?? 0);
 
 const totalPages = computed(() => response.value?.meta.totalPages ?? 0);
@@ -51,8 +55,11 @@ const onRemoveClick = async (id: number) => {
 };
 
 const onPageChange = (page: number) => {
-  if (page < 1 || page > totalPages.value) return;
-  pagination.value.page = page;
+  if (page < 2) {
+    pagination.value.page = undefined;
+  } else if (page <= totalPages.value) {
+    pagination.value.page = page;
+  }
 };
 
 type TableRow = IItem;
@@ -127,6 +134,7 @@ const tableColumns: TableColumn<TableRow>[] = [
       </template>
       <template #image-cell="{ row }">
         <NuxtImg
+          :key="row.original.id"
           :src="`${config.public.bucketUrl}${row.original.image}`"
           class="w-[75px] h-[75px]"
           :placeholder="'/no-image.png'"
@@ -143,8 +151,8 @@ const tableColumns: TableColumn<TableRow>[] = [
       </template>
     </UTable>
     <UPagination
-      :page="pagination.page"
-      :items-per-page="pagination.pageSize"
+      :page="page"
+      :items-per-page="pageSize"
       :total="total"
       @update:page="onPageChange"
       class="pt-2.5 pb-2.5"

@@ -10,7 +10,7 @@ const emit = defineEmits<{
   (e: "click", category: string): void;
 }>();
 
-const { image, name, id } = props.category;
+const { image, name, id, slug } = props.category;
 
 const imageUrl = `${config.public.bucketUrl}${image}`;
 </script>
@@ -18,9 +18,10 @@ const imageUrl = `${config.public.bucketUrl}${image}`;
 <template>
   <div
     class="relative flex flex-col w-[350px] h-[280px]"
-    @click="() => emit('click', name)"
+    @click="() => emit('click', slug)"
   >
     <NuxtImg
+      :key="id"
       :src="imageUrl"
       class="w-[350px] h-[280px] object-cover"
       :placeholder="'/no-image.png'"

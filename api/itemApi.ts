@@ -47,7 +47,7 @@ export async function removeItem(id: number) {
   });
 }
 
-export async function getItemById(id: number) {
+export function getItemById(id: number) {
   return useApi<IItem & { isInFavourite: boolean }>(`item/${id}`, {
     method: "GET",
   });
@@ -58,5 +58,12 @@ export function getPaginatedItems(queryOptions: Ref<IItemQuery>) {
     method: "GET",
     query: queryOptions,
     key: "items-paginated",
+  });
+}
+
+export function getSuggestedItems(category: string) {
+  return useApi<IPaginatedItems>(`item`, {
+    method: "GET",
+    query: { pageSize: 3, category: category },
   });
 }

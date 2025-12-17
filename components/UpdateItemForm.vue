@@ -10,18 +10,26 @@ const props = defineProps({
 });
 
 const schema = zod.object({
-  title: zod.string("Введіть назву товару").min(5, "Назва коротка").optional(),
+  title: zod
+    .string("Введіть назву товару")
+    .min(3, "Мінімум 3 символи")
+    .max(15, "Максимум 15 символів")
+    .optional(),
   description: zod
     .string("Додайте опис товару")
-    .min(5, "Опис малий")
+    .min(3, "Мінімум 3 символи")
     .optional(),
-  price: zod.number("Зазначте ціну товару").min(0.01).optional(),
+  price: zod
+    .number("Зазначте ціну товару")
+    .min(0.01, "Мініальна вартість 0.01")
+    .optional(),
   category: zod.string("Оберіть категорію").optional(),
   image: zod.instanceof(File, { message: "Додайте фото товару" }).optional(),
 });
 
 const toast = useToast();
 const menuItems = ref<{ label: string; value: string }[]>([]);
+const isDismissable = ref(false);
 
 const { data: categories } = await getCategories();
 const { data: item, refresh } = await getItemById(props.itemId);
@@ -72,6 +80,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
   try {
     isUploading.value = null;
+    isDismissable.value = false;
     await updateItem(props.itemId, event.data);
     toast.add({ title: "Товар оновлено", color: "success" });
     state.title = undefined;
@@ -80,9 +89,11 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     state.image = undefined;
     state.category = undefined;
     isUploading.value = 100;
+    isDismissable.value = true;
     refreshNuxtData("items-paginated");
   } catch (error) {
     isUploading.value = 0;
+    isDismissable.value = true;
     toast.add({ title: error as string, color: "error" });
   }
 }
@@ -103,6 +114,7 @@ watch(
       content: 'rounded-none',
       overlay: 'bg-[#f0f0f0b2]',
     }"
+    :dismissible="isDismissable"
   >
     <template #content>
       <UForm

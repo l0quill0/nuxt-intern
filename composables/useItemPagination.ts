@@ -11,6 +11,8 @@ export const useItemPagination = () => {
 
   const { query } = route;
 
+  const isInfiniteScroll = useState("infinite-scroll", () => false);
+
   const pagination = useState<IItemQuery>("itemPagination", () => ({
     page: parseQueryParam({
       value: query.page,
@@ -38,19 +40,61 @@ export const useItemPagination = () => {
     }),
   }));
 
+  const clearQuery = () => {
+    Object.keys(pagination.value).forEach(
+      (k) => (pagination.value[k as keyof IItemQuery] = undefined)
+    );
+  };
+
   const updateQuery = () => {
     if (!enabled.value) return;
-    const clean = Object.fromEntries(
-      Object.entries(pagination.value).filter(
-        ([_, v]) => v !== undefined && v !== ""
-      )
-    );
+
+    let clean = {};
+
+    if (isInfiniteScroll.value) {
+      clean = Object.fromEntries(
+        Object.entries(pagination.value).filter(
+          ([_, v]) =>
+            v !== undefined && v !== "" && _ !== "page" && _ !== "pageSize"
+        )
+      );
+    } else {
+      clean = Object.fromEntries(
+        Object.entries(pagination.value).filter(
+          ([_, v]) => v !== undefined && v !== ""
+        )
+      );
+    }
 
     router.replace({ query: clean });
   };
 
   watch(pagination, updateQuery, { deep: true });
+  watch(
+    () => [
+      pagination.value.category,
+      pagination.value.priceMax,
+      pagination.value.priceMin,
+      pagination.value.search,
+      pagination.value.sortBy,
+      pagination.value.sortOrder,
+    ],
+    () => {
+      if (isInfiniteScroll) {
+        pagination.value.page = undefined;
+        pagination.value.pageSize = undefined;
+      }
+    }
+  );
+  watch(
+    () => route.path,
+    () => {
+      if (enabled) {
+        clearQuery();
+      }
+    }
+  );
   onMounted(() => enabled && updateQuery());
 
-  return { pagination };
+  return { pagination, isInfiniteScroll };
 };

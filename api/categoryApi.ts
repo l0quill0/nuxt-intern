@@ -9,7 +9,7 @@ export function getCategories() {
   });
 }
 
-export function getPaginatedCategories(query: Ref<IcategoryQuery>) {
+export function getPaginatedCategories(query?: Ref<IcategoryQuery>) {
   return useApi<ICategoryPaginated>("category", {
     method: "GET",
     query: query,

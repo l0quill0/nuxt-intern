@@ -62,7 +62,7 @@ const onSortClick = (sortBy: string) => {
 const onCancelClick = async (id: number) => {
   try {
     await cancelOrder(id);
-    refresh();
+    await refresh();
     toast.add({ title: `Замовлення №${id} скасовано`, color: "success" });
   } catch (error) {
     toast.add({ title: error as string, color: "error" });
@@ -72,7 +72,7 @@ const onCancelClick = async (id: number) => {
 const onConfirmClick = async (id: number) => {
   try {
     await confirmOrder(id);
-    refresh();
+    await refresh();
     toast.add({ title: `Замовлення №${id} підтвержено`, color: "success" });
   } catch (error) {
     toast.add({ title: error as string, color: "error" });
@@ -245,6 +245,7 @@ const orderItemColumns: TableColumn<itemTableRow>[] = [
         >
           <template #image-cell="{ row }">
             <NuxtImg
+              :key="row.original.id"
               :src="`${config.public.bucketUrl}${row.original.image}`"
               class="w-[75px] h-[75px]"
               :placeholder="'/no-image.png'"

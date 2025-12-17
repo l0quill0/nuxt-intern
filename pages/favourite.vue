@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { getFavourites } from "~/api/userApi";
 
-const { data, pending } = await getFavourites();
+const { data } = await getFavourites();
 function onItemClick(id: number) {
   navigateTo(`/item/${id}`);
 }
 </script>
 
 <template>
-  <div class="w-screen flex flex-col items-center">
+  <div class="w-full flex flex-col items-center">
     <h2
       class="text-3xl font-bold text-[#333333] pt-12"
       v-if="data?.items.length"
@@ -43,7 +43,7 @@ function onItemClick(id: number) {
         <template v-for="(item, index) in data.items" :key="item.id">
           <ItemCard :item-info="item" @click="onItemClick" />
           <div
-            v-if="(index + 1) % 3 === 0"
+            v-if="(index + 1) % 3 === 0 && index + 1 !== data.items.length"
             class="w-full h-px bg-[#D6D6D6] my-[30px]"
           ></div>
         </template>

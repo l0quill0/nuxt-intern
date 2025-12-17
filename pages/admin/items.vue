@@ -1,6 +1,15 @@
 <script setup lang="ts">
 const showRemoved = ref<boolean>(false);
-const { pagination } = useItemPagination();
+const { pagination, isInfiniteScroll } = useItemPagination();
+
+isInfiniteScroll.value = false;
+
+const isDismissible = ref(true);
+
+const onItemSubmit = (isUploading: boolean) => {
+  isDismissible.value = !isUploading;
+};
+
 watch(
   () => showRemoved.value,
   () => {
@@ -31,12 +40,13 @@ watch(
           content: 'bg-[#f0f0f0] rounded-none ring-[#333333] w-full',
           overlay: 'bg-[#f0f0f0b2]',
         }"
+        :dismissible="isDismissible"
       >
         <UButton class="w-fit rounded-none" color="success"
           >Створити товар</UButton
         >
         <template #content>
-          <CreateItemForm />
+          <CreateItemForm @uploading="onItemSubmit" />
         </template>
       </UModal>
     </div>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { getCategories } from "~/api/categoryApi";
+import { getPaginatedCategories } from "~/api/categoryApi";
 
-const { data: categories } = await getCategories();
+const { data: categories } = await getPaginatedCategories();
 const { pagination } = useItemPagination();
 
 const onCategoryClick = (category: string) => {
@@ -13,8 +13,8 @@ const onCategoryClick = (category: string) => {
 <template>
   <div class="flex flex-wrap gap-[30px] max-w-[1110px] pt-[55px]">
     <CategoryCard
-      v-if="categories"
-      v-for="category in categories"
+      v-if="categories?.data"
+      v-for="category in categories.data"
       :category="category"
       @click="onCategoryClick"
     />

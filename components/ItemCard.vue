@@ -19,6 +19,7 @@ const imageUrl = `${config.public.bucketUrl}${image}`;
     @click="() => emit('click', id)"
   >
     <NuxtImg
+      :key="id"
       :src="imageUrl"
       class="h-[220px] w-[280px] object-cover"
       :placeholder="'/no-image.png'"
@@ -28,7 +29,7 @@ const imageUrl = `${config.public.bucketUrl}${image}`;
       {{ title }}
     </h1>
     <UButton
-      class="w-fit rounded-none bg-[#333333] text-white pt-2.5 pb-2.5 pr-5 pl-5 text-[18px] hover:bg-gray-500 border border-white active:bg-[#333333]"
+      class="w-fit rounded-none bg-[#333333] text-white pt-2.5 pb-2.5 pr-5 pl-5 text-[18px] hover:bg-gray-500 border border-white active:bg-[#333333] duration-300"
       >{{ `${price} ₴` }}</UButton
     >
   </div>

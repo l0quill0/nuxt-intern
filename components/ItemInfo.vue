@@ -2,26 +2,28 @@
 import { getItemById } from "~/api/itemApi";
 import { addFavourites, removeFavourites } from "~/api/userApi";
 import { addToCart } from "~/api/cartApi";
-const props = defineProps({
-  id: { type: Number, required: true },
-});
-const config = useRuntimeConfig();
+import type { IItem } from "~/Types/item.type";
+const props = defineProps<{
+  itemInfo: IItem & { isInFavourite: boolean };
+}>();
+
+const emit = defineEmits<{
+  (e: "updateInfo"): void;
+}>();
+
 const user = useUserStore().getUser();
 const token = useTokenStore().getToken();
 
+const config = useRuntimeConfig();
+
 const toast = useToast();
 
-const { data: value, refresh } = await getItemById(props.id);
-
-const { title, description, image, price, category, isInFavourite, isRemoved } =
-  value.value || {};
-
-const imageLink = `${config.public.bucketUrl}${image}`;
+const imageLink = `${config.public.bucketUrl}${props.itemInfo.image}`;
 
 async function onFavouriteAddClick() {
   try {
-    await addFavourites(props.id);
-    refresh();
+    await addFavourites(props.itemInfo.id);
+    emit("updateInfo");
     toast.add({ title: "Додано до улюбленого", color: "success" });
   } catch (error) {
     toast.add({ title: error as string, color: "error" });
@@ -29,8 +31,8 @@ async function onFavouriteAddClick() {
 }
 async function onFavouriteRemoveClick() {
   try {
-    await removeFavourites(props.id);
-    refresh();
+    await removeFavourites(props.itemInfo.id);
+    emit("updateInfo");
     toast.add({ title: "Видалено з улюбленого", color: "success" });
   } catch (error) {
     toast.add({ title: error as string, color: "error" });
@@ -39,7 +41,7 @@ async function onFavouriteRemoveClick() {
 
 async function addToCartClick() {
   try {
-    await addToCart(props.id);
+    await addToCart(props.itemInfo.id);
     toast.add({ title: "Додано до кошика", color: "success" });
   } catch (error) {
     toast.add({ title: error as string, color: "error" });
@@ -50,6 +52,7 @@ async function addToCartClick() {
 <template>
   <div class="flex justify-center items-center gap-[30px]">
     <NuxtImg
+      :key="props.itemInfo.id"
       :src="imageLink"
       class="w-[540px] h-[580px] object-cover"
       :placeholder="'/no-image.png'"
@@ -61,33 +64,37 @@ async function addToCartClick() {
         class="w-full h-full border border-[#D6D6D6] flex flex-col pl-[30px] pr-[30px] pt-10 pb-10 gap-[30px]"
       >
         <h3 class="text-2xl text-[#333333] tracking-widest">
-          {{ title }}
+          {{ props.itemInfo.title }}
         </h3>
         <span class="text-[#979797] text-[14px] leading-[150%]">{{
-          `Категорія: ${category?.name}`
+          `Категорія: ${props.itemInfo.category?.name}`
         }}</span>
         <div class="w-full h-px bg-[#D6D6D6]"></div>
         <span class="h-full text-[14px] leading-[150%] wrap-break-word">{{
-          description
+          props.itemInfo.description
         }}</span>
         <span class="text-[24px] tracking-wider uppercase font-semibold">{{
-          `${price?.toFixed(2)} ₴`
+          `${props.itemInfo.price?.toFixed(2)} ₴`
         }}</span>
-        <div class="flex items-center gap-[30px]" v-if="!isRemoved">
+        <div
+          class="flex items-center gap-[30px]"
+          v-if="!props.itemInfo.isRemoved"
+        >
           <UButton
+            v-if="user && token"
             class="rounded-none bg-[#333333] border border-white pt-2.5 pb-2.5 pl-5 pr-5 hover:bg-gray-500 active:bg-gray-600 text-white duration-300"
             @click="addToCartClick"
             >Додати у кошик</UButton
           >
           <UButton
             class="rounded-none bg-[#F9F9F9] border border-[#333333] pt-2.5 pb-2.5 pl-5 pr-5 hover:bg-slate-300 active:bg-gray-600 duration-300"
-            v-if="user && token && !isInFavourite"
+            v-if="user && token && !props.itemInfo.isInFavourite"
             @click="onFavouriteAddClick"
             >Додати у улюблене</UButton
           >
           <UButton
             class="rounded-none bg-[#F9F9F9] border border-[#333333] pt-2.5 pb-2.5 pl-5 pr-5 hover:bg-slate-300 active:bg-gray-600 duration-300"
-            v-if="user && token && isInFavourite"
+            v-if="user && token && props.itemInfo.isInFavourite"
             @click="onFavouriteRemoveClick"
             >Прибрати з улюбленого</UButton
           >

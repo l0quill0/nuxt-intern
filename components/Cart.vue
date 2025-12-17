@@ -29,7 +29,7 @@ async function onClearClick() {
   try {
     await clearCart();
     totalOrder.value = 0;
-    refresh();
+    await refresh();
   } catch (error) {
     toast.add({ title: error as string, color: "error" });
   }
@@ -38,7 +38,7 @@ async function onClearClick() {
 async function onAddClick(id: number) {
   try {
     await addToCart(id);
-    refresh();
+    await refresh();
   } catch (error) {
     toast.add({ title: error as string, color: "error" });
   }
@@ -47,7 +47,7 @@ async function onAddClick(id: number) {
 async function onRemoveClick(id: number) {
   try {
     await removeFromCart(id, 1);
-    refresh();
+    await refresh();
   } catch (error) {
     toast.add({ title: error as string, color: "error" });
   }
@@ -56,7 +56,7 @@ async function onRemoveClick(id: number) {
 async function onCreateClick() {
   try {
     await createOrder();
-    refresh();
+    await refresh();
     await refreshNuxtData("orderPagination");
     toast.add({ title: "Замовлення створено", color: "success" });
   } catch (error) {
@@ -105,6 +105,7 @@ watch(
     >
       <template #image-cell="{ row }">
         <NuxtImg
+          :key="row.original.id"
           :src="row.original.image"
           @error=""
           class="w-[75px] h-[75px]"

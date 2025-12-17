@@ -1,5 +1,5 @@
 <template>
-  <div class="w-screen h-screen">
+  <div class="w-full h-screen">
     <UApp :toaster="{ ui: { base: 'rounded-none bg-[#333333]' } }">
       <NuxtLayout>
         <NuxtRouteAnnouncer />
