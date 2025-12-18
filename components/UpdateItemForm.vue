@@ -28,21 +28,20 @@ const schema = zod.object({
 });
 
 const toast = useToast();
-const menuItems = ref<{ label: string; value: string }[]>([]);
-const isDismissable = ref(false);
+const isDismissable = ref(true);
 
 const { data: categories } = await getCategories();
-const { data: item, refresh } = await getItemById(props.itemId);
-const { title, description, image, price, category } = item.value || {};
+const { data: response, refresh } = getItemById(props.itemId);
 
-watchEffect(() => {
-  if (categories.value)
-    menuItems.value = categories.value.map((c) => ({
+const item = computed(() => response.value);
+
+const categoryItems = computed<{ label: string; value: string }[]>(
+  () =>
+    categories.value?.map((c) => ({
       label: c.name.charAt(0).toUpperCase() + c.name.slice(1),
       value: c.slug,
-    }));
-});
-
+    })) ?? []
+);
 type Schema = zod.output<typeof schema>;
 
 const state = reactive<Partial<Schema>>({
@@ -63,10 +62,14 @@ const checkForChange = () => {
   const stateValues = values(state);
   if (every(stateValues, (v) => v === undefined)) return false;
 
-  const clean = (obj: object) => omitBy(omit(obj, ["image"]), isUndefined);
+  const clean = (obj: object) =>
+    omitBy(omit(obj, ["image", "category"]), isUndefined);
 
   if (item.value) {
-    return !isEqual(clean(state), clean(item.value));
+    return (
+      !isEqual(clean(state), clean(item.value)) &&
+      state.category !== item.value.category.slug
+    );
   }
 
   return false;
@@ -82,6 +85,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     isUploading.value = null;
     isDismissable.value = false;
     await updateItem(props.itemId, event.data);
+    await refresh();
+    await refreshNuxtData("items-paginated");
     toast.add({ title: "Товар оновлено", color: "success" });
     state.title = undefined;
     state.description = undefined;
@@ -90,19 +95,12 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     state.category = undefined;
     isUploading.value = 100;
     isDismissable.value = true;
-    refreshNuxtData("items-paginated");
   } catch (error) {
     isUploading.value = 0;
     isDismissable.value = true;
     toast.add({ title: error as string, color: "error" });
   }
 }
-
-watch(
-  () => props.itemId,
-  () => refresh(),
-  { immediate: true }
-);
 </script>
 
 <template>
@@ -121,6 +119,7 @@ watch(
         v-if="item"
         :schema="schema"
         :state="state"
+        :validate-on="['blur']"
         @submit="onSubmit"
         class="flex flex-col items-center justify-center min-w-[250px] p-4 bg-[#333333] gap-2.5"
       >
@@ -132,13 +131,13 @@ watch(
             :ui="{
               base: 'bg-transparent! rounded-none ring-white focus-visible:ring-white aria-invalid:ring-error aria-invalid:focus-visible:ring-error placeholder:text-white',
             }"
-            :placeholder="title"
+            :placeholder="item.title"
           />
         </UFormField>
         <UFormField label="Ціна товару" name="price" class="w-full">
           <UInputNumber
             v-model="state.price"
-            :placeholder="price?.toFixed(2)"
+            :placeholder="item.price.toFixed(2)"
             :min="0.01"
             :max-fraction-digits="2"
             :step="0.01"
@@ -151,8 +150,11 @@ watch(
         </UFormField>
         <UFormField label="Категорія" class="w-full">
           <USelectMenu
-            :placeholder="category?.name"
-            :items="menuItems.map((m) => m)"
+            :placeholder="
+              item.category.name.charAt(0).toUpperCase() +
+              item.category.name.slice(1)
+            "
+            :items="categoryItems.map((m) => m)"
             class="w-full"
             :ui="{
               base: 'bg-transparent! rounded-none ring-white focus-visible:ring-white aria-invalid:ring-error aria-invalid:focus-visible:ring-error',
@@ -173,7 +175,7 @@ watch(
           <UTextarea
             v-model="state.description"
             :autoresize="false"
-            :placeholder="description"
+            :placeholder="item.description"
             class="w-full h-24"
             :ui="{
               base: 'resize-none bg-transparent rounded-none ring-white focus-visible:ring-white placeholder:text-white h-24',

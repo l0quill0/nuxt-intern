@@ -1,3 +1,5 @@
+import { PublicRoutes } from "~/enums/routes.enum";
+
 export default defineNuxtPlugin((nuxtApp) => {
   const token = useTokenStore();
   const user = useUserStore();
@@ -14,7 +16,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       if (response.status === 401) {
         token.clearToken();
         user.clearUser();
-        await nuxtApp.runWithContext(() => navigateTo("/login"));
+        await nuxtApp.runWithContext(() => navigateTo(PublicRoutes.LOGIN));
       } else throw response._data.message;
     },
   });

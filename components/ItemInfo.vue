@@ -2,7 +2,7 @@
 import { getItemById } from "~/api/itemApi";
 import { addFavourites, removeFavourites } from "~/api/userApi";
 import { addToCart } from "~/api/cartApi";
-import type { IItem } from "~/Types/item.type";
+import type { IItem } from "~/types/item.type";
 const props = defineProps<{
   itemInfo: IItem & { isInFavourite: boolean };
 }>();

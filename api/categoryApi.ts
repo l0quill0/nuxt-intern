@@ -1,6 +1,6 @@
-import type { ICategoryPaginated } from "~/Types/category.paginated";
-import type { IcategoryQuery } from "~/Types/category.query";
-import type { ICategory } from "~/Types/category.type";
+import type { ICategoryPaginated } from "~/types/category.paginated";
+import type { IcategoryQuery } from "~/types/category.query";
+import type { ICategory } from "~/types/category.type";
 
 export function getCategories() {
   return useApi<ICategory[]>("category/all", {
@@ -17,6 +17,12 @@ export function getPaginatedCategories(query?: Ref<IcategoryQuery>) {
   });
 }
 
+export function getCategoryById(id: number) {
+  return useApi<ICategory>(`category/${id}`, {
+    method: "GET",
+  });
+}
+
 export async function createCategory(image: File, name: string) {
   const formData = new FormData();
   formData.append("file", image);
@@ -24,6 +30,24 @@ export async function createCategory(image: File, name: string) {
 
   return useNuxtApp().$api(`category`, {
     method: "POST",
+    body: formData,
+  });
+}
+
+export async function updateCategory(
+  id: number,
+  data: { name?: string; image?: File }
+) {
+  const formData = new FormData();
+  if (data.name) {
+    formData.append("name", data.name);
+  }
+  if (data.image) {
+    formData.append("file", data.image);
+  }
+
+  return useNuxtApp().$api(`category/${id}`, {
+    method: "PATCH",
     body: formData,
   });
 }

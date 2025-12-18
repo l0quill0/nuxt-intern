@@ -20,17 +20,16 @@ const schema = zod.object({
 const emit = defineEmits<{ (e: "uploading", isDismissable: boolean): void }>();
 
 const toast = useToast();
-const menuItems = ref<{ label: string; value: string }[]>([]);
 
 const { data: categories } = await getCategories();
 
-watchEffect(() => {
-  if (categories.value)
-    menuItems.value = categories.value.map((c) => ({
+const categoryItems = computed<{ label: string; value: string }[]>(
+  () =>
+    categories.value?.map((c) => ({
       label: c.name.charAt(0).toUpperCase() + c.name.slice(1),
       value: c.slug,
-    }));
-});
+    })) ?? []
+);
 
 type Schema = zod.output<typeof schema>;
 
@@ -72,6 +71,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   <UForm
     :schema="schema"
     :state="state"
+    :validate-on="['blur']"
     @submit="onSubmit"
     class="flex flex-col items-center justify-center min-w-[250px] p-4 bg-[#333333] gap-2.5"
   >
@@ -100,7 +100,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     </UFormField>
     <UFormField label="Категорія" class="w-full">
       <USelectMenu
-        :items="menuItems.map((m) => m)"
+        :items="categoryItems.map((m) => m)"
         class="w-full"
         :ui="{
           base: 'bg-transparent! rounded-none ring-white focus-visible:ring-white aria-invalid:ring-error aria-invalid:focus-visible:ring-error',

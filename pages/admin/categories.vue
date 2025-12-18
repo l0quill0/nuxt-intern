@@ -1,11 +1,18 @@
 <script setup lang="ts">
 const { pagination } = useCategoryPagination();
 
+const search = ref("");
+const debouncedSearch = refDebounced(search, 500);
+
 const isDismissible = ref(true);
 
 const onCategorySubmit = (isUploading: boolean) => {
   isDismissible.value = !isUploading;
 };
+
+watch(debouncedSearch, (value) => {
+  pagination.value.search = value;
+});
 </script>
 
 <template>
@@ -19,7 +26,7 @@ const onCategorySubmit = (isUploading: boolean) => {
         }"
         variant="none"
         placeholder="Пошук..."
-        v-model="pagination.search"
+        v-model="search"
       />
       <UModal
         title="createCategory"

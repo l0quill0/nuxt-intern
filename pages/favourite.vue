@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { getFavourites } from "~/api/userApi";
+import { PublicDynamicRoutes, PublicRoutes } from "~/enums/routes.enum";
 
 const { data } = await getFavourites();
 function onItemClick(id: number) {
-  navigateTo(`/item/${id}`);
+  navigateTo(`${PublicDynamicRoutes.ITEM}${id}`);
 }
 </script>
 
@@ -28,7 +29,7 @@ function onItemClick(id: number) {
         <NuxtLink
           v-if="!data?.items.length"
           class="mt-5 text-2xl text-[#333333] hover:text-gray-500 border-b-2 border-transparent hover:border-gray-500"
-          to="/catalog"
+          :to="PublicRoutes.CATALOG"
           >До каталогу</NuxtLink
         >
       </div>

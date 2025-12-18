@@ -1,11 +1,17 @@
 <script setup lang="ts">
 import type { TableColumn } from "@nuxt/ui";
 import { deleteCategory, getPaginatedCategories } from "~/api/categoryApi";
-import type { ICategory } from "~/Types/category.type";
+import type { ICategory } from "~/types/category.type";
+import UpdateCategoryForm from "./UpdateCategoryForm.vue";
 
 const { pagination } = useCategoryPagination();
+
+pagination.value.pageSize = 8;
+
 const config = useRuntimeConfig();
 const toast = useToast();
+const overlay = useOverlay();
+const updateModal = overlay.create(UpdateCategoryForm);
 
 const isDeleting = ref(false);
 
@@ -18,7 +24,7 @@ const tableColumns: TableColumn<TableRow>[] = [
   },
   {
     accessorKey: "image",
-    header: "",
+    header: "Зображення",
   },
   {
     id: "controls",
@@ -31,6 +37,10 @@ const { data: response, pending, refresh } = getPaginatedCategories(pagination);
 const total = computed(() => response.value?.meta.totalItems ?? 0);
 
 const totalPages = computed(() => response.value?.meta.totalPages ?? 0);
+
+const openUpdateModal = (id: number, name: string) => {
+  updateModal.open({ id });
+};
 
 const onPageChange = (page: number) => {
   if (page < 1 || page > totalPages.value) return;
@@ -79,6 +89,13 @@ const onRemoveClick = async (id: number) => {
       </template>
       <template #controls-cell="{ row }">
         <div class="flex gap-1.5 max-w-[180px]">
+          <UButton
+            v-if="!row.original.immutable"
+            @click="openUpdateModal(row.original.id, row.original.name)"
+            class="rounded-none"
+            color="success"
+            >Оновити</UButton
+          >
           <UButton
             v-if="!row.original.immutable"
             class="rounded-none"

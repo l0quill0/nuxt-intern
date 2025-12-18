@@ -1,10 +1,15 @@
-import type { ILoginData } from "~/Types/login.type";
-import type { IRegisterData } from "~/Types/register.type";
+import type { ILoginData } from "~/types/login.type";
+import type { IRegisterData } from "~/types/register.type";
 
 export async function login(payload: ILoginData) {
-  return useNuxtApp().$api<{ access_token: string }>(`auth/login`, {
+  const config = useRuntimeConfig();
+
+  return $fetch<{ access_token: string }>(`${config.public.apiUrl}auth/login`, {
     method: "POST",
     body: payload,
+    onResponseError: ({ response }) => {
+      throw response._data.message;
+    },
   });
 }
 

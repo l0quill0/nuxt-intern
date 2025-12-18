@@ -1,4 +1,5 @@
-import type { IUser } from "~/Types/user.type";
+import { AdminRoutes, PublicRoutes, UserRoutes } from "~/enums/routes.enum";
+import type { IUser } from "~/types/user.type";
 
 export const useMenus = () => {
   const tokenStore = useTokenStore();
@@ -11,7 +12,7 @@ export const useMenus = () => {
     {
       label: "Мій профіль",
       icon: "i-lucide-user",
-      onSelect: () => navigateTo("/profile"),
+      onSelect: () => navigateTo(UserRoutes.PROFILE),
     },
     {
       label: "Вийти",
@@ -19,7 +20,7 @@ export const useMenus = () => {
       onSelect: () => {
         useTokenStore().clearToken();
         useUserStore().clearUser();
-        navigateTo("/");
+        navigateTo(PublicRoutes.HOME);
         toast.add({ title: "Вихід успішний", color: "success" });
       },
     },
@@ -32,21 +33,21 @@ export const useMenus = () => {
       label: "Товари",
       icon: "i-lucide-package",
       onSelect: () => {
-        navigateTo("/admin/items");
+        navigateTo(AdminRoutes.ITEMS);
       },
     },
     {
       label: "Замовлення",
       icon: "i-lucide-list",
       onSelect: () => {
-        navigateTo("/admin/orders");
+        navigateTo(AdminRoutes.ORDERS);
       },
     },
     {
       label: "Категорії",
       icon: "i-lucide-tags",
       onSelect: () => {
-        navigateTo("/admin/categories");
+        navigateTo(AdminRoutes.CATEGORIES);
       },
     },
     {
@@ -55,7 +56,7 @@ export const useMenus = () => {
       onSelect: () => {
         useTokenStore().setToken("");
         useUserStore().setUser({} as IUser);
-        navigateTo("/");
+        navigateTo(PublicRoutes.HOME);
         toast.add({ title: "Вихід успішний", color: "success" });
       },
     },

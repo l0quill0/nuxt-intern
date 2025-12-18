@@ -2,7 +2,7 @@
 import type { FormSubmitEvent } from "@nuxt/ui";
 import * as zod from "zod";
 import { updateMe } from "~/api/userApi";
-import type { IUser } from "~/Types/user.type";
+import type { IUser } from "~/types/user.type";
 
 const userStore = useUserStore();
 const isEditing = ref(false);
@@ -97,7 +97,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     <UButton
       type="submit"
       :disabled="!isEditing"
-      class="disabled:bg-slate-100 rounded-none bg-white active:bg-slate-200 hover:bg-slate-300 duration-300"
+      class="rounded-none"
+      color="success"
       >Зберегти</UButton
     >
   </UForm>

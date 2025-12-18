@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { Cookie } from "~/enums/cookie.enum";
 
 export const useTokenStore = defineStore("userToken", {
   state: () => ({
@@ -6,19 +7,19 @@ export const useTokenStore = defineStore("userToken", {
   }),
   actions: {
     loadToken() {
-      const token = useCookie("token");
+      const token = useCookie(Cookie.TOKEN);
       this.userToken = token.value || null;
     },
     getToken() {
       return this.userToken;
     },
     setToken(token: string) {
-      const cookie = useCookie("token");
+      const cookie = useCookie(Cookie.TOKEN);
       cookie.value = token;
       this.userToken = token;
     },
     clearToken() {
-      const cookie = useCookie("token");
+      const cookie = useCookie(Cookie.TOKEN);
       cookie.value = null;
       this.userToken = null;
     },

@@ -2,8 +2,9 @@
 import type { TableColumn } from "@nuxt/ui";
 import dayjs from "dayjs";
 import { cancelOrder, confirmOrder, getOrders } from "~/api/orderApi";
-import type { IItem } from "~/Types/item.type";
-import { OrderStatus } from "~/Types/order.status.enum";
+import { PublicDynamicRoutes } from "~/enums/routes.enum";
+import type { IItem } from "~/types/item.type";
+import { OrderStatus } from "~/types/order.status.enum";
 
 const UButton = resolveComponent("UButton");
 const config = useRuntimeConfig();
@@ -38,7 +39,7 @@ type tableRow = {
 type itemTableRow = IItem & { quantity: number };
 
 const onItemClick = (itemId: number) => {
-  navigateTo(`/item/${itemId}`);
+  navigateTo(`${PublicDynamicRoutes.ITEM}${itemId}`);
 };
 
 const onPageChange = (page: number) => {

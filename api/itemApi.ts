@@ -1,10 +1,10 @@
 import type { MultiWatchSources } from "vue";
 import type { RouteQueryAndHash } from "vue-router";
-import type { ICreateItem } from "~/Types/item.create.type";
-import type { IItemQuery } from "~/Types/item.query";
-import type { IItem } from "~/Types/item.type";
-import type { IPaginatedItems } from "~/Types/items.paginated";
-import type { IUpdateItem } from "~/Types/update.item";
+import type { ICreateItem } from "~/types/item.create.type";
+import type { IItemQuery } from "~/types/item.query";
+import type { IItem } from "~/types/item.type";
+import type { IPaginatedItems } from "~/types/items.paginated";
+import type { IUpdateItem } from "~/types/update.item";
 
 export async function createItem(payload: ICreateItem) {
   const formData = new FormData();
@@ -61,9 +61,9 @@ export function getPaginatedItems(queryOptions: Ref<IItemQuery>) {
   });
 }
 
-export function getSuggestedItems(category: string) {
-  return useApi<IPaginatedItems>(`item`, {
+export function getSuggestedItems(itemId: number, itemCount: number = 3) {
+  return useApi<IItem[]>(`item/suggestions`, {
     method: "GET",
-    query: { pageSize: 3, category: category },
+    query: { itemId: itemId, itemCount: itemCount },
   });
 }

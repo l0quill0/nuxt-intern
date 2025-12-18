@@ -1,27 +1,38 @@
 <script setup lang="ts">
 import { ShoppingCart } from "lucide-vue-next";
+import { PublicRoutes, UserRoutes } from "~/enums/routes.enum";
 const { currentMenu } = useMenus();
 const { pagination } = useItemPagination();
-const isMenuActive = currentMenu.value.length > 0;
+
 const tokenStore = useTokenStore();
 const userStore = useUserStore();
 const { userToken } = storeToRefs(tokenStore);
 const { user } = storeToRefs(userStore);
 const route = useRoute();
+const search = ref(pagination.value.search);
+const searchDebounced = debouncedRef(search, 2000);
+const isMenuActive = computed(() => user && userToken);
 
 function onLoginClick() {
-  navigateTo("/login");
+  navigateTo(PublicRoutes.LOGIN);
 }
 
 function onFavouriteClick() {
-  navigateTo("/favourite");
+  navigateTo(UserRoutes.FAVOURITE);
 }
+
+watch(searchDebounced, (value) => {
+  pagination.value.search = value;
+});
 </script>
 
 <template>
   <div
-    class="w-full max-w-[1110px] h-[111px] max-h-[111px] mx-auto flex items-center justify-end"
+    class="w-full max-w-[1110px] h-[111px] max-h-[111px] mx-auto flex items-center justify-between"
   >
+    <NuxtLink :to="PublicRoutes.HOME" class="text-white text-4xl font-bold"
+      >Logo</NuxtLink
+    >
     <div class="flex items-center justify-center gap-10">
       <UInput
         placeholder="Пошук"
@@ -32,14 +43,18 @@ function onFavouriteClick() {
           base: 'placeholder-white! h-6 text-[14px]! duration-300',
           leadingIcon: 'text-white w-[18px] h-[18px] p-0',
         }"
-        v-model="pagination.search"
+        v-model="search"
         v-if="
           route.fullPath.startsWith('/catalog') ||
           route.fullPath.startsWith('/admin/items')
         "
       />
       <UButton
-        v-if="!user || !userToken"
+        v-if="
+          (!user || !userToken) &&
+          route.path !== PublicRoutes.LOGIN &&
+          route.path !== PublicRoutes.REGISTER
+        "
         class="bg-transparent hover:bg-transparent active:bg-transparent hover:underline hover:text-slate-500 text-white p-0 h-[21px] text-sm duration-300"
         @click="onLoginClick"
       >

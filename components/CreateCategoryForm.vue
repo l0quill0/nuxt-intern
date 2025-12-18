@@ -49,6 +49,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   <UForm
     :schema="schema"
     :state="state"
+    :validate-on="['blur']"
     class="flex flex-col items-center justify-center bg-[#333333] p-4 gap-2.5"
     @submit="onSubmit"
   >

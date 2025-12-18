@@ -1,4 +1,4 @@
-import type { IUser } from "~/Types/user.type";
+import type { IUser } from "~/types/user.type";
 
 export const useUserStore = defineStore("userStore", {
   state: () => ({
@@ -8,13 +8,13 @@ export const useUserStore = defineStore("userStore", {
     async fetchUser() {
       const token = useTokenStore().getToken();
       if (!token) return;
+
       const user = await $fetch<IUser>("http://localhost:3000/user/me", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
       this.user = user;
     },
 

@@ -1,4 +1,4 @@
-import type { IOrderQuery } from "~/Types/order.query";
+import type { IOrderQuery } from "~/types/order.query";
 
 export const useOrderPagination = () => {
   const pagination = useState<IOrderQuery>("orderPagination", () => ({

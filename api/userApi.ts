@@ -1,5 +1,6 @@
-import type { IItem } from "~/Types/item.type";
-import type { IUser } from "~/Types/user.type";
+import { method } from "lodash";
+import type { IItem } from "~/types/item.type";
+import type { IUser } from "~/types/user.type";
 
 export async function getMe() {
   return useApi<IUser>("user/me", {
@@ -11,6 +12,13 @@ export async function updateMe(email?: string, name?: string) {
   return useNuxtApp().$api<IUser>("user/update-me", {
     method: "PATCH",
     body: { email, name },
+  });
+}
+
+export async function updatePassword(oldPassword: string, newPassword: string) {
+  return useNuxtApp().$api("user/update-password", {
+    method: "PATCH",
+    body: { oldPassword, newPassword },
   });
 }
 

@@ -1,4 +1,4 @@
-import type { IItemQuery } from "~/Types/item.query";
+import type { IItemQuery } from "~/types/item.query";
 
 export const useItemPagination = () => {
   const route = useRoute();
@@ -40,10 +40,11 @@ export const useItemPagination = () => {
     }),
   }));
 
-  const clearQuery = () => {
-    Object.keys(pagination.value).forEach(
-      (k) => (pagination.value[k as keyof IItemQuery] = undefined)
-    );
+  const clearQuery = (keepCategory: boolean) => {
+    Object.keys(pagination.value).forEach((k) => {
+      if (keepCategory && k === "category") return;
+      pagination.value[k as keyof IItemQuery] = undefined;
+    });
   };
 
   const updateQuery = () => {
@@ -88,9 +89,9 @@ export const useItemPagination = () => {
   );
   watch(
     () => route.path,
-    () => {
+    (newPath, oldPath) => {
       if (enabled) {
-        clearQuery();
+        oldPath === "/" ? clearQuery(true) : clearQuery(false);
       }
     }
   );

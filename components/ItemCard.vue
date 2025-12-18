@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { IItem } from "~/Types/item.type";
+import type { IItem } from "~/types/item.type";
 const config = useRuntimeConfig();
 const props = defineProps<{
   itemInfo: IItem;

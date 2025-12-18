@@ -1,31 +1,28 @@
+import { AdminRoutes, PublicRoutes, UserRoutes } from "~/enums/routes.enum";
+
 export default defineNuxtRouteMiddleware((to) => {
   const userStore = useUserStore();
   const tokenStore = useTokenStore();
 
-  const publicRoutes = ["/", "/login", "/register", "/catalog"];
-  const publicDynamicRoutes = ["/item/"];
-  const protectedUserRoutes = ["/favourite, /profile"];
-  const protectedAdminRoutes = ["/admin/items", "/admin/orders"];
-
   if (
-    protectedAdminRoutes.includes(to.path) &&
+    to.path in AdminRoutes &&
     (userStore.getUser()?.role !== "ADMIN" || !tokenStore.getToken())
   ) {
-    return navigateTo("/");
+    return navigateTo(PublicRoutes.HOME);
   }
 
   if (
-    protectedUserRoutes.includes(to.path) &&
+    to.path in UserRoutes &&
     (!userStore.getUser() || !tokenStore.getToken())
   ) {
-    return navigateTo("/");
+    return navigateTo(PublicRoutes.HOME);
   }
 
   if (
-    (!userStore.getUser() || !tokenStore.getToken()) &&
-    !publicRoutes.includes(to.path) &&
-    !publicDynamicRoutes.some((route) => to.path.startsWith(route))
+    (to.path === PublicRoutes.LOGIN || to.path === PublicRoutes.REGISTER) &&
+    userStore.getUser() &&
+    tokenStore.getToken()
   ) {
-    return navigateTo("/");
+    return navigateTo(PublicRoutes.HOME);
   }
 });

@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import type { TableColumn } from "@nuxt/ui";
 import { getPaginatedItems, removeItem, restoreItem } from "~/api/itemApi";
-import type { IItem } from "~/Types/item.type";
+import type { IItem } from "~/types/item.type";
 import UpdateItemForm from "./UpdateItemForm.vue";
+import { PublicDynamicRoutes } from "~/enums/routes.enum";
 
 const config = useRuntimeConfig();
 const { pagination } = useItemPagination();
@@ -27,7 +28,7 @@ const total = computed(() => response.value?.meta.totalItems ?? 0);
 const totalPages = computed(() => response.value?.meta.totalPages ?? 0);
 
 const onItemClick = (id: number) => {
-  navigateTo(`/item/${id}`);
+  navigateTo(`${PublicDynamicRoutes.ITEM}${id}`);
 };
 
 const openUpdateModal = (id: number) => {
@@ -68,7 +69,7 @@ const tableColumns: TableColumn<TableRow>[] = [
   { accessorKey: "title", header: "Назва" },
   {
     accessorKey: "image",
-    header: "",
+    header: "Зображення",
   },
   {
     accessorKey: "price",

@@ -1,4 +1,4 @@
-import type { IOrder } from "~/Types/order.type";
+import type { IOrder } from "~/types/order.type";
 
 export async function getCart() {
   return useApi<IOrder>("order/current", {

@@ -1,6 +1,7 @@
 <script setup lang="tsx">
 import { getPaginatedItems } from "~/api/itemApi";
-import type { IItem } from "~/Types/item.type";
+import { PublicDynamicRoutes } from "~/enums/routes.enum";
+import type { IItem } from "~/types/item.type";
 
 const { pagination, isInfiniteScroll } = useItemPagination();
 
@@ -28,7 +29,7 @@ const page = computed(() => pagination.value.page ?? 1);
 const totalPages = computed(() => response.value?.meta.totalPages ?? 0);
 
 function onItemClick(id: number) {
-  navigateTo(`/item/${id}`);
+  navigateTo(`${PublicDynamicRoutes.ITEM}${id}`);
 }
 
 function onLoadMoreClick() {
