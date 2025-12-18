@@ -10,7 +10,7 @@ const { userToken } = storeToRefs(tokenStore);
 const { user } = storeToRefs(userStore);
 const route = useRoute();
 const search = ref(pagination.value.search);
-const searchDebounced = debouncedRef(search, 2000);
+const searchDebounced = debouncedRef(search, 500);
 const isMenuActive = computed(() => user && userToken);
 
 function onLoginClick() {

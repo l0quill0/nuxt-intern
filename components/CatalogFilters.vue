@@ -8,8 +8,8 @@ const { data: categories } = getCategories();
 
 const priceMin = ref(pagination.value.priceMin);
 const priceMax = ref(pagination.value.priceMax);
-const priceMinDebounced = refDebounced(priceMin, 2000);
-const priceMaxDebounced = refDebounced(priceMax, 2000);
+const priceMinDebounced = refDebounced(priceMin, 500);
+const priceMaxDebounced = refDebounced(priceMax, 500);
 
 const categoryItems = computed<{ label: string; value: string }[]>(
   () =>
@@ -126,6 +126,7 @@ watch(priceMaxDebounced, (value) => {
       }"
       variant="none"
       placeholder="Порядок"
+      :disabled="!pagination.sortBy"
       :items="sortOrderItems[pagination.sortBy as keyof typeof sortOrderItems]"
       v-model="pagination.sortOrder"
     />
