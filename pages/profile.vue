@@ -13,7 +13,7 @@ const onOpenModalClick = () => {
   <div class="flex pt-[50px] h-full">
     <div class="flex flex-col items-center gap-2.5">
       <ProfileInfo />
-      <UButton class="rounded-none" color="success" @click="onOpenModalClick"
+      <UButton color="success" @click="onOpenModalClick"
         >Змінити пароль</UButton
       >
     </div>

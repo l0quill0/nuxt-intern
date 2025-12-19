@@ -6,25 +6,19 @@ import UpdateItemForm from "./UpdateItemForm.vue";
 import { PublicDynamicRoutes } from "~/enums/routes.enum";
 
 const config = useRuntimeConfig();
-const { pagination } = useItemPagination();
-
 const UButton = resolveComponent("UButton");
-
 const toast = useToast();
-
 const overlay = useOverlay();
 const updateModal = overlay.create(UpdateItemForm);
+
+const { pagination } = useItemPagination();
 
 const { data: response, pending, refresh } = getPaginatedItems(pagination);
 
 const items = computed(() => response.value?.data ?? []);
-
 const page = computed(() => pagination.value.page ?? 1);
-
 const pageSize = computed(() => pagination.value.pageSize ?? 6);
-
 const total = computed(() => response.value?.meta.totalItems ?? 0);
-
 const totalPages = computed(() => response.value?.meta.totalPages ?? 0);
 
 const onItemClick = (id: number) => {
@@ -99,7 +93,7 @@ const tableColumns: TableColumn<TableRow>[] = [
       :ui="{
         th: 'text-[#333333]',
         tbody:
-          '[&>tr]:data-[selectable=true]:hover:bg-stone-300 [&>tr]:data-[selectable=true]:duration-300',
+          '[&>tr]:data-[selectable=true]:hover:bg-stone-300 [&>tr]:data-[selectable=true]:duration-300 [&>tr]:border-b-0 [&>tr]:border-t [&>tr]:hover:cursor-pointer',
         td: 'text-[#333333] max-w-28',
       }"
     >
@@ -158,7 +152,7 @@ const tableColumns: TableColumn<TableRow>[] = [
       @update:page="onPageChange"
       class="pt-2.5 pb-2.5"
       :ui="{
-        item: 'rounded-none bg-transparent active:bg-transparent hover:text-white  hover:bg-[#333333] text-[#333333] ring-0',
+        item: 'rounded-none bg-transparent active:bg-transparent active:text-[#333333] hover:text-white  hover:bg-[#333333] text-[#333333] ring-0 aria-[current=page]:bg-[#333333] aria-[current=page]:text-white duration:300',
         first: 'rounded-none bg-[#333333] disabled:bg-gray-500 ring-0',
         last: 'rounded-none bg-[#333333] disabled:bg-gray-500 ring-0',
         next: 'rounded-none bg-[#333333] disabled:bg-gray-500 ring-0',

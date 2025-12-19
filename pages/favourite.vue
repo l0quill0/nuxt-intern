@@ -3,6 +3,7 @@ import { getFavourites } from "~/api/userApi";
 import { PublicDynamicRoutes, PublicRoutes } from "~/enums/routes.enum";
 
 const { data } = await getFavourites();
+
 function onItemClick(id: number) {
   navigateTo(`${PublicDynamicRoutes.ITEM}${id}`);
 }

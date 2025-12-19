@@ -3,6 +3,8 @@ import type { FormSubmitEvent } from "@nuxt/ui";
 import * as zod from "zod";
 import { updatePassword } from "~/api/userApi";
 
+const toast = useToast();
+
 const schema = zod
   .object({
     oldPassword: zod
@@ -31,18 +33,20 @@ const state = reactive<Schema>({
   newPassword: "",
   confirmPassword: "",
 });
+
 const showOldPassword = ref(false);
 const showNewPassword = ref(false);
 const isDismissable = ref(true);
-
-const toast = useToast();
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   try {
     isDismissable.value = false;
     await updatePassword(event.data.oldPassword, event.data.newPassword);
-    toast.add({ title: "Пароль змінений", color: "success" });
+    state.oldPassword = "";
+    state.newPassword = "";
+    state.confirmPassword = "";
     isDismissable.value = true;
+    toast.add({ title: "Пароль змінений", color: "success" });
   } catch (error) {
     toast.add({ title: error as string, color: "error" });
     isDismissable.value = true;
@@ -115,9 +119,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
               base: 'bg-transparent! rounded-none ring-white focus-visible:ring-white aria-invalid:ring-error aria-invalid:focus-visible:ring-error',
             }"
         /></UFormField>
-        <UButton class="rounded-none" color="success" type="submit"
-          >Змінити пароль</UButton
-        >
+        <UButton color="success" type="submit">Змінити пароль</UButton>
       </UForm>
     </template>
   </UModal>

@@ -9,6 +9,10 @@ isInfiniteScroll.value = true;
 
 const { data: response } = await getPaginatedItems(pagination);
 
+const page = computed(() => pagination.value.page ?? 1);
+
+const totalPages = computed(() => response.value?.meta.totalPages ?? 0);
+
 const items = ref<IItem[]>([]);
 
 watch(
@@ -24,9 +28,6 @@ watch(
   },
   { immediate: true }
 );
-
-const page = computed(() => pagination.value.page ?? 1);
-const totalPages = computed(() => response.value?.meta.totalPages ?? 0);
 
 function onItemClick(id: number) {
   navigateTo(`${PublicDynamicRoutes.ITEM}${id}`);

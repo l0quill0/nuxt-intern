@@ -4,14 +4,20 @@ import { deleteCategory, getPaginatedCategories } from "~/api/categoryApi";
 import type { ICategory } from "~/types/category.type";
 import UpdateCategoryForm from "./UpdateCategoryForm.vue";
 
-const { pagination } = useCategoryPagination();
-
-pagination.value.pageSize = 8;
-
 const config = useRuntimeConfig();
 const toast = useToast();
 const overlay = useOverlay();
 const updateModal = overlay.create(UpdateCategoryForm);
+
+const { pagination } = useCategoryPagination();
+
+pagination.value.pageSize = 8;
+
+const { data: response, pending, refresh } = getPaginatedCategories(pagination);
+
+const total = computed(() => response.value?.meta.totalItems ?? 0);
+
+const totalPages = computed(() => response.value?.meta.totalPages ?? 0);
 
 const isDeleting = ref(false);
 
@@ -32,13 +38,7 @@ const tableColumns: TableColumn<TableRow>[] = [
   },
 ];
 
-const { data: response, pending, refresh } = getPaginatedCategories(pagination);
-
-const total = computed(() => response.value?.meta.totalItems ?? 0);
-
-const totalPages = computed(() => response.value?.meta.totalPages ?? 0);
-
-const openUpdateModal = (id: number, name: string) => {
+const openUpdateModalOpen = (id: number, name: string) => {
   updateModal.open({ id });
 };
 
@@ -75,7 +75,7 @@ const onRemoveClick = async (id: number) => {
       :ui="{
         th: 'text-[#333333]',
         tbody:
-          '[&>tr]:data-[selectable=true]:hover:bg-stone-300 [&>tr]:data-[selectable=true]:duration-300',
+          '[&>tr]:data-[selectable=true]:hover:bg-stone-300 [&>tr]:data-[selectable=true]:duration-300 [&>tr]:border-b-0 [&>tr]:border-t [&>tr]hover:cursor-pointer',
         td: 'text-[#333333] max-w-16',
       }"
     >
@@ -91,7 +91,7 @@ const onRemoveClick = async (id: number) => {
         <div class="flex gap-1.5 max-w-[180px]">
           <UButton
             v-if="!row.original.immutable"
-            @click="openUpdateModal(row.original.id, row.original.name)"
+            @click="openUpdateModalOpen(row.original.id, row.original.name)"
             class="rounded-none"
             color="success"
             >Оновити</UButton
@@ -113,7 +113,7 @@ const onRemoveClick = async (id: number) => {
       @update:page="onPageChange"
       class="pt-2.5 pb-2.5"
       :ui="{
-        item: 'rounded-none bg-transparent active:bg-transparent hover:text-white  hover:bg-[#333333] text-[#333333] ring-0',
+        item: 'rounded-none bg-transparent active:bg-transparent active:text-[#333333] hover:text-white  hover:bg-[#333333] text-[#333333] ring-0 aria-[current=page]:bg-[#333333] aria-[current=page]:text-white duration:300',
         first: 'rounded-none bg-[#333333] disabled:bg-gray-500 ring-0',
         last: 'rounded-none bg-[#333333] disabled:bg-gray-500 ring-0',
         next: 'rounded-none bg-[#333333] disabled:bg-gray-500 ring-0',

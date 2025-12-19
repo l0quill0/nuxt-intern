@@ -3,37 +3,37 @@ import type { FormSubmitEvent } from "@nuxt/ui";
 import * as zod from "zod";
 import { getCategories } from "~/api/categoryApi";
 import { getItemById, updateItem } from "~/api/itemApi";
-import { every, isEqual, isUndefined, omit, omitBy, values } from "lodash";
+import type { IItem } from "~/types/item.type";
 
 const props = defineProps({
   itemId: { type: Number, required: true },
 });
 
+const toast = useToast();
+
 const schema = zod.object({
   title: zod
     .string("Введіть назву товару")
     .min(3, "Мінімум 3 символи")
-    .max(15, "Максимум 15 символів")
-    .optional(),
-  description: zod
-    .string("Додайте опис товару")
-    .min(3, "Мінімум 3 символи")
-    .optional(),
-  price: zod
+    .max(15, "Максимум 15 символів"),
+  description: zod.string("Додайте опис товару").min(3, "Мінімум 3 символи"),
+  price: zod.coerce
     .number("Зазначте ціну товару")
     .min(0.01, "Мініальна вартість 0.01")
-    .optional(),
-  category: zod.string("Оберіть категорію").optional(),
+    .transform((value) => Number(value)),
+  category: zod.string("Оберіть категорію"),
   image: zod.instanceof(File, { message: "Додайте фото товару" }).optional(),
 });
 
-const toast = useToast();
-const isDismissable = ref(true);
-
 const { data: categories } = await getCategories();
-const { data: response, refresh } = getItemById(props.itemId);
+const { data: response, refresh } = await getItemById(props.itemId);
 
-const item = computed(() => response.value);
+const validation = computed(() => schema.safeParse(state));
+const hasErrors = computed(() => !validation.value.success);
+const item = computed(() => response.value ?? ({} as IItem));
+
+const isUploading = ref<number | null>(0);
+const isDismissable = ref(true);
 
 const categoryItems = computed<{ label: string; value: string }[]>(
   () =>
@@ -45,42 +45,25 @@ const categoryItems = computed<{ label: string; value: string }[]>(
 type Schema = zod.output<typeof schema>;
 
 const state = reactive<Partial<Schema>>({
-  title: undefined,
-  description: undefined,
-  price: undefined,
+  title: item.value?.title,
+  description: item.value?.description,
+  price: item.value?.price,
   image: undefined,
-  category: undefined,
+  category: item.value?.category.slug,
 });
 
-const validation = computed(() => schema.safeParse(state));
-const hasErrors = computed(() => !validation.value.success);
-const isUploading = ref<number | null>(0);
-
-const checkForChange = () => {
-  if (state.image) return true;
-
-  const stateValues = values(state);
-  if (every(stateValues, (v) => v === undefined)) return false;
-
-  const clean = (obj: object) =>
-    omitBy(omit(obj, ["image", "category"]), isUndefined);
-
-  if (item.value) {
-    return (
-      !isEqual(clean(state), clean(item.value)) &&
-      state.category !== item.value.category.slug
-    );
-  }
-
-  return false;
-};
-
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  if (!checkForChange()) {
+  if (
+    checkForChange({
+      initialState: { ...item.value, category: item.value.category.slug },
+      newState: event.data,
+      omitKeys: ["image"],
+    }) &&
+    !state.image
+  ) {
     toast.add({ title: "Змін не знайдено", color: "error" });
     return;
   }
-
   try {
     isUploading.value = null;
     isDismissable.value = false;
@@ -88,11 +71,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     await refresh();
     await refreshNuxtData("items-paginated");
     toast.add({ title: "Товар оновлено", color: "success" });
-    state.title = undefined;
-    state.description = undefined;
-    state.price = undefined;
     state.image = undefined;
-    state.category = undefined;
     isUploading.value = 100;
     isDismissable.value = true;
   } catch (error) {
@@ -131,29 +110,20 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
             :ui="{
               base: 'bg-transparent! rounded-none ring-white focus-visible:ring-white aria-invalid:ring-error aria-invalid:focus-visible:ring-error placeholder:text-white',
             }"
-            :placeholder="item.title"
           />
         </UFormField>
         <UFormField label="Ціна товару" name="price" class="w-full">
-          <UInputNumber
-            v-model="state.price"
-            :placeholder="item.price.toFixed(2)"
-            :min="0.01"
-            :max-fraction-digits="2"
-            :step="0.01"
-            orientation="vertical"
+          <UInput
             class="w-full"
             :ui="{
               base: 'bg-transparent! rounded-none ring-white focus-visible:ring-white aria-invalid:ring-error aria-invalid:focus-visible:ring-error placeholder:text-white',
             }"
+            v-model="state.price"
+            @beforeinput="formatToFloat"
           />
         </UFormField>
         <UFormField label="Категорія" class="w-full">
           <USelectMenu
-            :placeholder="
-              item.category.name.charAt(0).toUpperCase() +
-              item.category.name.slice(1)
-            "
             :items="categoryItems.map((m) => m)"
             class="w-full"
             :ui="{
@@ -175,7 +145,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
           <UTextarea
             v-model="state.description"
             :autoresize="false"
-            :placeholder="item.description"
             class="w-full h-24"
             :ui="{
               base: 'resize-none bg-transparent rounded-none ring-white focus-visible:ring-white placeholder:text-white h-24',

@@ -1,16 +1,21 @@
 <script setup lang="ts">
 import { ShoppingCart } from "lucide-vue-next";
 import { PublicRoutes, UserRoutes } from "~/enums/routes.enum";
+
 const { currentMenu } = useMenus();
 const { pagination } = useItemPagination();
 
 const tokenStore = useTokenStore();
 const userStore = useUserStore();
+
 const { userToken } = storeToRefs(tokenStore);
 const { user } = storeToRefs(userStore);
+
 const route = useRoute();
+
 const search = ref(pagination.value.search);
 const searchDebounced = debouncedRef(search, 500);
+
 const isMenuActive = computed(() => user && userToken);
 
 function onLoginClick() {
@@ -88,7 +93,7 @@ watch(searchDebounced, (value) => {
           :items="currentMenu"
           :ui="{
             content: 'rounded-none bg-[#333333] ring-gray-500',
-            item: 'bg-[#333333] rounded-none hover:rounded-none before:rounded-none hover:bg-white group',
+            item: 'bg-[#333333] rounded-none hover:rounded-none before:rounded-none hover:bg-white group hover:cursor-pointer',
             itemLabel: 'group-hover:text-black',
             itemLeadingIcon: 'text-white! group-hover:text-black!',
             group: 'p-0',

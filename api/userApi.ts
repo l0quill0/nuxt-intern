@@ -1,4 +1,3 @@
-import { method } from "lodash";
 import type { IItem } from "~/types/item.type";
 import type { IUser } from "~/types/user.type";
 

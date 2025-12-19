@@ -4,32 +4,21 @@ import * as zod from "zod";
 import { getCategories } from "~/api/categoryApi";
 import { createItem } from "~/api/itemApi";
 
+const emit = defineEmits<{ (e: "uploading", isDismissable: boolean): void }>();
+const toast = useToast();
+
 const schema = zod.object({
   title: zod
     .string("Введіть назву товару")
     .min(3, "Мінімум 3 символи")
     .max(15, "Максимум 15 символів"),
   description: zod.string("Додайте опис товару").min(3, "Мінімум 3 символи"),
-  price: zod
+  price: zod.coerce
     .number("Зазначте ціну товару")
     .min(0.01, "Мініальна вартість 0.01"),
   category: zod.string("Оберіть категорію"),
   image: zod.instanceof(File, { message: "Додайте фото товару" }),
 });
-
-const emit = defineEmits<{ (e: "uploading", isDismissable: boolean): void }>();
-
-const toast = useToast();
-
-const { data: categories } = await getCategories();
-
-const categoryItems = computed<{ label: string; value: string }[]>(
-  () =>
-    categories.value?.map((c) => ({
-      label: c.name.charAt(0).toUpperCase() + c.name.slice(1),
-      value: c.slug,
-    })) ?? []
-);
 
 type Schema = zod.output<typeof schema>;
 
@@ -41,6 +30,16 @@ const state = reactive<Partial<Schema>>({
   category: undefined,
 });
 
+const { data: categories } = await getCategories();
+
+const categoryItems = computed<{ label: string; value: string }[]>(
+  () =>
+    categories.value?.map((c) => ({
+      label: c.name.charAt(0).toUpperCase() + c.name.slice(1),
+      value: c.slug,
+    })) ?? []
+);
+
 const validation = computed(() => schema.safeParse(state));
 const hasErrors = computed(() => !validation.value.success);
 const isUploading = ref<number | null>(0);
@@ -50,7 +49,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     emit("uploading", true);
     isUploading.value = null;
     await createItem(event.data);
-    toast.add({ title: "Товар створено", color: "success" });
     state.title = undefined;
     state.description = undefined;
     state.price = undefined;
@@ -59,6 +57,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     isUploading.value = 100;
     emit("uploading", false);
     refreshNuxtData("items-paginated");
+    toast.add({ title: "Товар створено", color: "success" });
   } catch (error) {
     emit("uploading", false);
     isUploading.value = 0;
@@ -86,16 +85,13 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       />
     </UFormField>
     <UFormField label="Ціна товару" name="price" class="w-full">
-      <UInputNumber
-        v-model="state.price"
-        :min="0.01"
-        :max-fraction-digits="2"
-        :step="0.01"
-        orientation="vertical"
+      <UInput
         class="w-full"
         :ui="{
           base: 'bg-transparent! rounded-none ring-white focus-visible:ring-white aria-invalid:ring-error aria-invalid:focus-visible:ring-error',
         }"
+        v-model="state.price"
+        @beforeinput="formatToFloat"
       />
     </UFormField>
     <UFormField label="Категорія" class="w-full">

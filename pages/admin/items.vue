@@ -29,8 +29,8 @@ watch(
         label="Включити видалені"
         :ui="{
           label: 'text-[#333333]',
-          base: 'rounded-none',
-          indicator: 'bg-[#333333] text-white',
+          base: 'rounded-none hover:cursor-pointer',
+          indicator: 'bg-[#333333] text-white ',
         }"
       />
       <UModal
@@ -42,9 +42,7 @@ watch(
         }"
         :dismissible="isDismissible"
       >
-        <UButton class="w-fit rounded-none" color="success"
-          >Створити товар</UButton
-        >
+        <UButton class="w-fit" color="success">Створити товар</UButton>
         <template #content>
           <CreateItemForm @uploading="onItemSubmit" />
         </template>

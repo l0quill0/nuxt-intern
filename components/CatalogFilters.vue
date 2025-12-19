@@ -35,21 +35,6 @@ const sortOrderItems = {
   ],
 };
 
-const beforeInput = (e: InputEvent) => {
-  const input = e.target as HTMLInputElement;
-
-  if (!e.data) return;
-  if (!/^[0-9.]$/.test(e.data)) {
-    e.preventDefault();
-    return;
-  }
-
-  if (!/^([0-9]*\.[0-9]{1,2}|[0-9]+\.?)$/.test(input.value + e.data)) {
-    e.preventDefault();
-    return;
-  }
-};
-
 const onSortByChange = () => {
   pagination.value.sortOrder = "asc";
 };
@@ -138,7 +123,7 @@ watch(priceMaxDebounced, (value) => {
       variant="none"
       placeholder="Ціна від"
       v-model="priceMin"
-      @beforeinput="beforeInput"
+      @beforeinput="formatToFloat"
     />
     <UInput
       class="w-40 text-[#333333] border-b border-[#D6D6D6] no-spinner"
@@ -149,7 +134,7 @@ watch(priceMaxDebounced, (value) => {
       variant="none"
       placeholder="Ціна до"
       v-model="priceMax"
-      @beforeinput="beforeInput"
+      @beforeinput="formatToFloat"
     />
   </div>
 </template>

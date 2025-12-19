@@ -6,24 +6,30 @@ import { createOrder } from "~/api/orderApi";
 const config = useRuntimeConfig();
 const toast = useToast();
 
-type tableRow = {
-  id: number;
-  title: string;
-  image: string;
-  quantity: number;
-  price: number;
-  total: number;
-};
-
-const tableColumns: TableColumn<tableRow>[] = [
-  { accessorKey: "title", header: "Товар" },
-  { accessorKey: "image", header: "" },
-  { accessorKey: "quantity", header: "Кількість" },
-  { accessorKey: "total", header: "Ціна" },
-];
-
 const parsedData = ref<tableRow[]>([]);
 const totalOrder = ref(0);
+const isSendDisabled = ref(true);
+
+const { data, refresh } = await getCart();
+
+watch(
+  data,
+  (newData) => {
+    if (newData) {
+      parsedData.value = newData.items.map((item) => ({
+        id: item.id,
+        title: item.title,
+        image: `${config.public.bucketUrl}${item.image}`,
+        quantity: item.quantity,
+        price: item.price,
+        total: item.quantity * item.price,
+      }));
+      totalOrder.value = newData.total;
+      isSendDisabled.value = !parsedData.value.length;
+    }
+  },
+  { immediate: true }
+);
 
 async function onClearClick() {
   try {
@@ -64,28 +70,21 @@ async function onCreateClick() {
   }
 }
 
-const { data, refresh } = await getCart();
+type tableRow = {
+  id: number;
+  title: string;
+  image: string;
+  quantity: number;
+  price: number;
+  total: number;
+};
 
-let isSendDisabled = true;
-
-watch(
-  data,
-  (newData) => {
-    if (newData) {
-      parsedData.value = newData.items.map((item) => ({
-        id: item.id,
-        title: item.title,
-        image: `${config.public.bucketUrl}${item.image}`,
-        quantity: item.quantity,
-        price: item.price,
-        total: item.quantity * item.price,
-      }));
-      totalOrder.value = newData.total;
-      isSendDisabled = !parsedData.value.length;
-    }
-  },
-  { immediate: true }
-);
+const tableColumns: TableColumn<tableRow>[] = [
+  { accessorKey: "title", header: "Товар" },
+  { accessorKey: "image", header: "" },
+  { accessorKey: "quantity", header: "Кількість" },
+  { accessorKey: "total", header: "Ціна" },
+];
 </script>
 
 <template>
@@ -115,7 +114,7 @@ watch(
       <template #quantity-cell="{ row }">
         <UButton
           @click="onRemoveClick(row.original.id)"
-          class="rounded-none mr-2 bg-transparent hover:bg-transparent hover:border-[#333333] border border-transparent active:bg-[#333333] active:text-[#f0f0f0]"
+          class="mr-2 bg-transparent hover:bg-transparent hover:border-[#333333] border border-transparent active:bg-[#333333] active:text-[#f0f0f0]"
           >-</UButton
         >
         <span>{{
@@ -123,7 +122,7 @@ watch(
         }}</span>
         <UButton
           @click="onAddClick(row.original.id)"
-          class="rounded-none ml-2 bg-transparent hover:bg-transparent hover:border-[#333333] border border-transparent active:bg-[#333333] active:text-[#f0f0f0]"
+          class="ml-2 bg-transparent hover:bg-transparent hover:border-[#333333] border border-transparent active:bg-[#333333] active:text-[#f0f0f0]"
           >+</UButton
         >
       </template>
@@ -137,13 +136,13 @@ watch(
       </span>
       <UButton
         @click="onCreateClick"
-        class="rounded-none bg-[#333333] border border-[#333333] pt-2.5 pb-2.5 pl-5 pr-5 hover:bg-gray-500 active:bg-gray-600 text-white disabled:bg-gray-500 duration-300"
+        class="bg-[#333333] border border-[#333333] pt-2.5 pb-2.5 pl-5 pr-5 hover:bg-gray-500 active:bg-gray-600 text-white disabled:bg-gray-500 duration-300"
         :disabled="isSendDisabled"
         >Створити замовлення</UButton
       >
       <UButton
         @click="onClearClick"
-        class="rounded-none bg-[#F9F9F9] border border-[#333333] pt-2.5 pb-2.5 pl-5 pr-5 hover:bg-gray-500 active:bg-gray-600 duration-300 disabled:bg-slate-300"
+        class="bg-[#F9F9F9] border border-[#333333] pt-2.5 pb-2.5 pl-5 pr-5 hover:bg-gray-500 active:bg-gray-600 duration-300 disabled:bg-slate-300"
         :disabled="isSendDisabled"
         >Очистити кошик</UButton
       >

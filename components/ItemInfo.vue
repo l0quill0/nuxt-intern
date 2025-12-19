@@ -11,12 +11,11 @@ const emit = defineEmits<{
   (e: "updateInfo"): void;
 }>();
 
+const config = useRuntimeConfig();
+const toast = useToast();
+
 const user = useUserStore().getUser();
 const token = useTokenStore().getToken();
-
-const config = useRuntimeConfig();
-
-const toast = useToast();
 
 const imageLink = `${config.public.bucketUrl}${props.itemInfo.image}`;
 
@@ -73,9 +72,10 @@ async function addToCartClick() {
         <span class="h-full text-[14px] leading-[150%] wrap-break-word">{{
           props.itemInfo.description
         }}</span>
-        <span class="text-[24px] tracking-wider uppercase font-semibold">{{
-          `${props.itemInfo.price?.toFixed(2)} ₴`
-        }}</span>
+        <span
+          class="text-[24px] tracking-wider uppercase font-semibold text-[#333333]"
+          >{{ `${props.itemInfo.price?.toFixed(2)} ₴` }}</span
+        >
         <div
           class="flex items-center gap-[30px]"
           v-if="!props.itemInfo.isRemoved"

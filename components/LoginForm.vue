@@ -22,6 +22,9 @@ const userStore = useUserStore();
 
 const showPassword = ref(false);
 
+const validation = computed(() => schema.safeParse(state));
+const hasErrors = computed(() => !validation.value.success);
+
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   try {
     const response = await login(event.data);
@@ -36,9 +39,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     });
   }
 }
-
-const validation = computed(() => schema.safeParse(state));
-const hasErrors = computed(() => !validation.value.success);
 </script>
 
 <template>

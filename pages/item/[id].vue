@@ -2,6 +2,7 @@
 import { getItemById } from "~/api/itemApi";
 
 const route = useRoute();
+
 const itemId = Number(route.params.id);
 
 const { data: response, refresh } = getItemById(itemId);

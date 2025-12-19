@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import type { FormSubmitEvent, FormInputEvent } from "@nuxt/ui";
+import type { FormSubmitEvent } from "@nuxt/ui";
 import * as zod from "zod";
 import { register } from "~/api/authApi";
 import { PublicRoutes } from "~/enums/routes.enum";
+
+const toast = useToast();
 
 const schema = zod
   .object({
@@ -33,8 +35,6 @@ const state = reactive<Partial<Schema>>({
 });
 
 const showPassword = ref(false);
-
-const toast = useToast();
 
 const validation = computed(() => schema.safeParse(state));
 const hasErrors = computed(() => !validation.value.success);

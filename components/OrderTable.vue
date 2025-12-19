@@ -8,11 +8,9 @@ import { OrderStatus } from "~/types/order.status.enum";
 
 const UButton = resolveComponent("UButton");
 const config = useRuntimeConfig();
+const toast = useToast();
 
 const { pagination } = useOrderPagination();
-const user = useUserStore().getUser();
-
-const toast = useToast();
 
 const { data: orders, refresh, pending } = getOrders(pagination);
 
@@ -27,6 +25,8 @@ const parsedData = computed<tableRow[]>(
 
 const sortField = ref<string>("id");
 const sortAsc = ref(true);
+
+const user = useUserStore().getUser();
 
 type tableRow = {
   id: number;
@@ -46,7 +46,6 @@ const onPageChange = (page: number) => {
   if (orders.value) {
     if (page < 1 || page > orders.value?.meta.totalPages) return;
   }
-
   pagination.value.page = page;
 };
 
@@ -239,7 +238,7 @@ const orderItemColumns: TableColumn<itemTableRow>[] = [
             td: 'break-all whitespace-normal text-[#333333]',
             th: 'bg-[#333333] text-white font-bold',
             tbody:
-              '[&>tr]:data-[selectable=true]:hover:bg-stone-300 [&>tr]:data-[selectable=true]:duration-300',
+              '[&>tr]:data-[selectable=true]:hover:bg-stone-300 [&>tr]:data-[selectable=true]:duration-300 [&>tr]:border-b-0 [&>tr]:border-t [&>tr]:hover:cursor-pointer',
           }"
           @select="(e, row) => onItemClick(row.original.id)"
           empty="Товарів не знайдено"
@@ -286,7 +285,7 @@ const orderItemColumns: TableColumn<itemTableRow>[] = [
       @update:page="onPageChange"
       class="pt-2.5 pb-2.5"
       :ui="{
-        item: 'rounded-none bg-transparent active:bg-transparent hover:text-white  hover:bg-[#333333] text-[#333333] ring-0',
+        item: 'rounded-none bg-transparent active:bg-transparent active:text-[#333333] hover:text-white  hover:bg-[#333333] text-[#333333] ring-0 aria-[current=page]:bg-[#333333] aria-[current=page]:text-white duration:300',
         first: 'rounded-none bg-[#333333] disabled:bg-gray-500 ring-0',
         last: 'rounded-none bg-[#333333] disabled:bg-gray-500 ring-0',
         next: 'rounded-none bg-[#333333] disabled:bg-gray-500 ring-0',

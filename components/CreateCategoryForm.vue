@@ -3,6 +3,10 @@ import type { FormSubmitEvent } from "@nuxt/ui";
 import * as zod from "zod";
 import { createCategory } from "~/api/categoryApi";
 
+const emit = defineEmits<{ (e: "uploading", isDismissable: boolean): void }>();
+
+const toast = useToast();
+
 const schema = zod.object({
   name: zod
     .string("Введіть назву категорії")
@@ -11,8 +15,6 @@ const schema = zod.object({
   image: zod.instanceof(File, { message: "Додайте фото категорії" }),
 });
 
-const emit = defineEmits<{ (e: "uploading", isDismissable: boolean): void }>();
-
 type Schema = zod.output<typeof schema>;
 
 const state = reactive<Partial<Schema>>({
@@ -20,7 +22,6 @@ const state = reactive<Partial<Schema>>({
   image: undefined,
 });
 
-const toast = useToast();
 const validation = computed(() => schema.safeParse(state));
 const hasErrors = computed(() => !validation.value.success);
 
@@ -45,6 +46,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   }
 }
 </script>
+
 <template>
   <UForm
     :schema="schema"

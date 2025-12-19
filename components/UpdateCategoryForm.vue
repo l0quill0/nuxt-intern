@@ -1,23 +1,23 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from "@nuxt/ui";
-import { every, isEqual, isUndefined, omit, omitBy, values } from "lodash";
 import * as zod from "zod";
 import { getCategoryById, updateCategory } from "~/api/categoryApi";
+import type { ICategory } from "~/types/category.type";
 
 const props = defineProps({
   id: { type: Number, required: true },
 });
 
 const toast = useToast();
-const isDismissable = ref(true);
-const isUploading = ref<number | null>(0);
 
+const { data: response, refresh } = await getCategoryById(props.id);
+
+const category = computed(() => response.value || ({} as ICategory));
 const validation = computed(() => schema.safeParse(state));
 const hasErrors = computed(() => !validation.value.success);
 
-const { data: response, refresh } = getCategoryById(props.id);
-
-const category = computed(() => response.value);
+const isDismissable = ref(true);
+const isUploading = ref<number | null>(0);
 
 const schema = zod.object({
   name: zod
@@ -31,42 +31,32 @@ const schema = zod.object({
 type Schema = zod.output<typeof schema>;
 
 const state = reactive<Partial<Schema>>({
-  name: undefined,
+  name: category.value.name,
   image: undefined,
 });
 
-const checkForChange = () => {
-  if (state.image) return true;
-
-  const stateValues = values(state);
-  if (every(stateValues, (v) => v === undefined)) return false;
-
-  const clean = (obj: object) => omitBy(omit(obj, ["image"]), isUndefined);
-
-  if (category.value) {
-    return !isEqual(clean(state), clean(category.value));
-  }
-
-  return false;
-};
-
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  if (!checkForChange()) {
+  if (
+    checkForChange({
+      initialState: category.value,
+      newState: event.data,
+      omitKeys: ["image"],
+    }) &&
+    !state.image
+  ) {
     toast.add({ title: "Змін не знайдено", color: "error" });
     return;
   }
-
   try {
     isUploading.value = null;
     isDismissable.value = false;
     await updateCategory(props.id, event.data);
     await refresh();
     await refreshNuxtData("category-paginated");
-    toast.add({ title: "Категорія оновлена", color: "success" });
-    state.name = undefined;
     state.image = undefined;
     isUploading.value = 100;
     isDismissable.value = true;
+    toast.add({ title: "Категорія оновлена", color: "success" });
   } catch (error) {
     isUploading.value = 0;
     isDismissable.value = true;
@@ -116,7 +106,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         <UFormField label="Назва" name="name" class="w-full">
           <UInput
             class="w-full"
-            :placeholder="category ? category.name : ''"
             v-model="state.name"
             :ui="{
               base: 'bg-transparent! rounded-none ring-white focus-visible:ring-white aria-invalid:ring-error aria-invalid:focus-visible:ring-error placeholder:text-white',

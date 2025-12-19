@@ -37,9 +37,7 @@ watch(debouncedSearch, (value) => {
         }"
         :dismissible="isDismissible"
       >
-        <UButton class="w-fit rounded-none" color="success"
-          >Створити категорію</UButton
-        >
+        <UButton class="w-fit" color="success">Створити категорію</UButton>
         <template #content>
           <CreateCategoryForm @uploading="onCategorySubmit" />
         </template>

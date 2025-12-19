@@ -17,7 +17,7 @@ const imageUrl = `${config.public.bucketUrl}${image}`;
 
 <template>
   <div
-    class="relative flex flex-col w-[350px] border border-transparent hover:border-[#333333]"
+    class="relative flex flex-col w-[350px] border border-transparent hover:border-[#333333] hover:cursor-pointer"
     @click="() => emit('click', slug)"
   >
     <NuxtImg

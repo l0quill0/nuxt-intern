@@ -6,6 +6,7 @@ import type { IUser } from "~/types/user.type";
 
 const userStore = useUserStore();
 const isEditing = ref(false);
+const form = ref();
 const user = userStore.getUser() as IUser;
 const toast = useToast();
 
@@ -25,8 +26,6 @@ const state = reactive<Partial<Schema>>({
   name: user.name,
 });
 
-const form = ref();
-
 function onCancel() {
   isEditing.value = false;
   state.email = user.email;
@@ -35,11 +34,15 @@ function onCancel() {
 }
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  if (event.data.email === user.email && event.data.name === user.name) {
+  if (
+    checkForChange({
+      initialState: user,
+      newState: event.data,
+    })
+  ) {
     toast.add({ title: "Змін не знайдено", color: "error" });
     return;
   }
-
   try {
     const response = await updateMe(event.data.email, event.data.name);
     userStore.setUser(response);

@@ -1,7 +1,9 @@
 export default defineAppConfig({
   ui: {
-    colors: {
-      primary: "blue",
+    button: {
+      slots: {
+        base: "rounded-none hover:cursor-pointer",
+      },
     },
   },
 });
