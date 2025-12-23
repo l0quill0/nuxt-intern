@@ -26,7 +26,7 @@ watch(
     class="w-full lg:w-fit flex flex-col items-center lg:items-end gap-2.5 pt-5 lg:pt-[50px] h-full"
   >
     <div
-      class="flex gap-2.5 justify-between lg:justify-end items-center w-full pl-5 pr-5 lg:p-0"
+      class="flex gap-2.5 justify-between lg:justify-end items-center w-full px-2.5 lg:p-0"
     >
       <UCheckbox
         v-model="showRemoved"

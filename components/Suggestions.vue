@@ -16,7 +16,10 @@ function onItemClick(id: number) {
 </script>
 
 <template>
-  <div v-if="items.length > 0" class="pt-[120px] flex flex-col items-center">
+  <div
+    v-if="items.length > 0"
+    class="pt-5 xl:pt-[120px] flex flex-col items-center"
+  >
     <h2 class="text-[21px] leading-[1.4] text-center">
       Ми підготували для вас щось особливе
     </h2>
@@ -24,7 +27,9 @@ function onItemClick(id: number) {
       Товари які можуть вам сподобатись
     </h2>
   </div>
-  <div class="flex flex-col lg:flex-row items-center pt-[60px] pb-5 gap-[30px]">
+  <div
+    class="flex flex-col lg:flex-row items-center pt-5 xl:pt-[60px] pb-5 gap-[30px]"
+  >
     <template v-for="(item, index) in items" :key="item.id">
       <ItemCard :item-info="item" @click="onItemClick" />
       <div

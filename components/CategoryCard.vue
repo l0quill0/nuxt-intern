@@ -27,7 +27,7 @@ const imageUrl = `${config.public.bucketUrl}${image}`;
       :placeholder="'/no-image.png'"
     />
     <h3
-      class="absolute text-accent-300 font-medium text-[24px] bottom-0 self-center"
+      class="absolute text-black font-medium text-[24px] bottom-0 self-center"
     >
       {{ name }}
     </h3>
