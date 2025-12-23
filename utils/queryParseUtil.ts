@@ -18,6 +18,5 @@ export function parseQueryParam<T = string, R extends boolean = false>({
     !value || (!Array.isArray(value) && !/^[1-9]\d*$/.test(value))
       ? def
       : transformer?.(value) ?? def;
-
-  return result as T;
+  return (result as T) || (value as T);
 }

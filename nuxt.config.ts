@@ -26,4 +26,9 @@ export default defineNuxtConfig({
       },
     ],
   },
+  ui: {
+    theme: {
+      colors: ["main", "success", "error"],
+    },
+  },
 });

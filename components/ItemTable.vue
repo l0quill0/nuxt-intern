@@ -81,7 +81,7 @@ const tableColumns: TableColumn<TableRow>[] = [
 </script>
 
 <template>
-  <div class="flex flex-col items-center grow">
+  <div class="flex flex-col items-center grow w-full">
     <CatalogFilters />
     <UTable
       :loading="pending"
@@ -89,29 +89,29 @@ const tableColumns: TableColumn<TableRow>[] = [
       @select="(e, row) => onItemClick(row.original.id)"
       :columns="tableColumns"
       empty="Товарів не знайдено"
-      class="w-full grow"
+      class="w-full grow p-2.5 lg:p-0"
       :ui="{
-        th: 'text-[#333333]',
+        th: 'text-main-400',
         tbody:
-          '[&>tr]:data-[selectable=true]:hover:bg-stone-300 [&>tr]:data-[selectable=true]:duration-300 [&>tr]:border-b-0 [&>tr]:border-t [&>tr]:hover:cursor-pointer',
-        td: 'text-[#333333] max-w-28',
+          '[&>tr]:data-[selectable=true]:hover:bg-accent-100 [&>tr]:data-[selectable=true]:duration-300 [&>tr]:border-b-0 [&>tr]:border-t [&>tr]:hover:cursor-pointer',
+        td: 'text-main-400 max-w-28',
       }"
     >
       <template #controls-cell="{ row }">
-        <div class="flex gap-1.5 max-w-[180px]">
+        <div class="flex gap-1.5 max-w-[180px] lg:flex-row flex-col">
           <UButton
             v-if="!row.original.isRemoved"
             @click.stop
             @click="openUpdateModal(row.original.id)"
-            class="rounded-none"
             color="success"
+            class="flex justify-center"
             >Оновити</UButton
           >
           <UButton
             v-if="!row.original.isRemoved"
             @click.stop
-            class="rounded-none"
             color="error"
+            class="flex justify-center"
             @click="() => onRemoveClick(row.original.id)"
           >
             Видалити
@@ -119,8 +119,8 @@ const tableColumns: TableColumn<TableRow>[] = [
           <UButton
             v-if="row.original.isRemoved"
             @click.stop
-            class="rounded-none"
             color="success"
+            class="flex justify-center"
             @click="() => onReturnClick(row.original.id)"
           >
             Повернути
@@ -146,17 +146,15 @@ const tableColumns: TableColumn<TableRow>[] = [
       </template>
     </UTable>
     <UPagination
+      color="main"
+      active-color="main"
       :page="page"
       :items-per-page="pageSize"
       :total="total"
       @update:page="onPageChange"
       class="pt-2.5 pb-2.5"
       :ui="{
-        item: 'rounded-none bg-transparent active:bg-transparent active:text-[#333333] hover:text-white  hover:bg-[#333333] text-[#333333] ring-0 aria-[current=page]:bg-[#333333] aria-[current=page]:text-white duration:300',
-        first: 'rounded-none bg-[#333333] disabled:bg-gray-500 ring-0',
-        last: 'rounded-none bg-[#333333] disabled:bg-gray-500 ring-0',
-        next: 'rounded-none bg-[#333333] disabled:bg-gray-500 ring-0',
-        prev: 'rounded-none bg-[#333333] disabled:bg-gray-500 ring-0',
+        item: 'aria-[current=page]:text-white duration:300',
       }"
     />
   </div>

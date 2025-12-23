@@ -39,23 +39,39 @@ function onLoadMoreClick() {
 </script>
 
 <template>
-  <div class="w-full flex flex-col items-center pt-[100px]">
+  <div
+    class="w-full flex flex-col items-center pt-5 lg:pt-[50px] xl:pt-[100px]"
+  >
     <CatalogFilters />
-    <div class="flex gap-x-[30px] pt-[60px] pb-[60px] flex-wrap max-w-[1110px]">
-      <h2 v-if="items.length === 0" class="text-3xl font-bold text-[#333333]">
-        Товарів не знайдено
-      </h2>
+    <h2
+      v-if="items.length === 0"
+      class="text-3xl font-bold w-full text-center pt-[60px]"
+    >
+      Товарів не знайдено
+    </h2>
+    <div
+      class="xl:gap-x-[30px] pt-[60px] pb-[60px] max-w-[1110px] grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 lg:gap-x-[15px]"
+    >
       <template v-for="(item, index) in items" :key="item.id">
         <ItemCard :item-info="item" @click="onItemClick" />
         <div
+          v-if="index + 1 !== items.length"
+          class="w-full h-px bg-accent-100 lg:hidden"
+        ></div>
+        <div
+          v-if="(index + 1) % 2 === 0 && index + 1 !== items.length"
+          class="w-full h-px bg-accent-100 my-[15px] hidden lg:block xl:hidden col-span-full"
+        ></div>
+        <div
           v-if="(index + 1) % 3 === 0 && index + 1 !== items.length"
-          class="w-full h-px bg-[#D6D6D6] my-[30px]"
+          class="w-full h-px bg-accent-100 my-[30px] hidden xl:block col-span-full"
         ></div>
       </template>
     </div>
     <UButton
       v-if="page < totalPages"
-      class="rounded-none text-white bg-[#333333] font-medium text-[18px] pt-[15px] pb-[15px] pl-[35px] pr-[35px] hover:bg-gray-500 border border-white active:bg-[#333333] duration-300"
+      color="main"
+      class="font-medium text-[18px] pt-[15px] pb-[15px] pl-[35px] pr-[35px] border border-white text-white"
       @click="onLoadMoreClick"
       >Завантажи ще</UButton
     >

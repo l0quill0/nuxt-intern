@@ -18,7 +18,7 @@ const imageUrl = `${config.public.bucketUrl}${image}`;
 
 <template>
   <div
-    class="w-[350px] h-[440px] flex flex-col items-center p-[35px] hover:border hover: border-[#333333] hover:cursor-pointer"
+    class="w-[350px] h-[440px] flex flex-col items-center p-[35px] hover:border bg-accent-50 hover:border-main-400 hover:cursor-pointer"
     @click="() => emit('click', id)"
   >
     <NuxtImg
@@ -27,13 +27,16 @@ const imageUrl = `${config.public.bucketUrl}${image}`;
       class="h-[220px] w-[280px] object-cover"
       :placeholder="'/no-image.png'"
     />
-    <span class="mt-auto">{{ category.name }}</span>
-    <h1 class="font-semibold text-2xl mt-2.5 mb-[15px] text-[#333333]">
+    <span class="mt-auto">{{
+      category.name.charAt(0).toUpperCase() + category.name.slice(1)
+    }}</span>
+    <h1 class="font-semibold text-2xl mt-2.5 mb-[15px]">
       {{ title }}
     </h1>
     <UButton
-      class="w-fit rounded-none bg-[#333333] text-white pt-2.5 pb-2.5 pr-5 pl-5 text-[18px] hover:bg-gray-500 border border-white active:bg-[#333333] duration-300"
-      >{{ `${price} ₴` }}</UButton
+      color="main"
+      class="w-fit text-white pt-2.5 pb-2.5 pr-5 pl-5 text-[18px] border-white"
+      >{{ `${price.toFixed(2)} ₴` }}</UButton
     >
   </div>
 </template>

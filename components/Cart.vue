@@ -2,6 +2,7 @@
 import type { TableColumn } from "@nuxt/ui";
 import { addToCart, clearCart, getCart, removeFromCart } from "~/api/cartApi";
 import { createOrder } from "~/api/orderApi";
+import { PublicDynamicRoutes } from "~/enums/routes.enum";
 
 const config = useRuntimeConfig();
 const toast = useToast();
@@ -81,71 +82,94 @@ type tableRow = {
 
 const tableColumns: TableColumn<tableRow>[] = [
   { accessorKey: "title", header: "Товар" },
-  { accessorKey: "image", header: "" },
+  { accessorKey: "image", header: "Фото" },
   { accessorKey: "quantity", header: "Кількість" },
-  { accessorKey: "total", header: "Ціна" },
+  { accessorKey: "total", header: "Загалом" },
 ];
 </script>
 
 <template>
-  <div class="w-full h-full flex flex-col">
-    <UTable
-      :data="parsedData"
-      :columns="tableColumns"
-      :ui="{
-        th: 'bg-[#333333] ',
-        td: 'text-[#333333] text-xl',
-        tr: 'border-b border-[#D6D6D6]',
-        tbody: 'border-0',
-        separator: 'hidden',
-      }"
-      class="w-full h-full"
-      empty="Кошик пустий"
-    >
-      <template #image-cell="{ row }">
-        <NuxtImg
-          :key="row.original.id"
-          :src="row.original.image"
-          @error=""
-          class="w-[75px] h-[75px]"
-          :placeholder="'/no-image.png'"
-        />
-      </template>
-      <template #quantity-cell="{ row }">
-        <UButton
-          @click="onRemoveClick(row.original.id)"
-          class="mr-2 bg-transparent hover:bg-transparent hover:border-[#333333] border border-transparent active:bg-[#333333] active:text-[#f0f0f0]"
-          >-</UButton
-        >
-        <span>{{
-          `${row.original.quantity} * ${row.original.price.toFixed(2)} ₴`
-        }}</span>
-        <UButton
-          @click="onAddClick(row.original.id)"
-          class="ml-2 bg-transparent hover:bg-transparent hover:border-[#333333] border border-transparent active:bg-[#333333] active:text-[#f0f0f0]"
-          >+</UButton
-        >
-      </template>
-      <template #total-cell="{ row }">
-        <span>{{ `${row.original.total.toFixed(2)} ₴` }}</span>
-      </template>
-    </UTable>
-    <div class="flex items-center justify-end gap-4 p-2.5">
-      <span class="text-2xl text-[#333333] tracking-widest">
-        {{ `${totalOrder.toFixed(2)} ₴` }}
-      </span>
-      <UButton
-        @click="onCreateClick"
-        class="bg-[#333333] border border-[#333333] pt-2.5 pb-2.5 pl-5 pr-5 hover:bg-gray-500 active:bg-gray-600 text-white disabled:bg-gray-500 duration-300"
-        :disabled="isSendDisabled"
-        >Створити замовлення</UButton
+  <UModal
+    title="cart"
+    description="cart"
+    :ui="{
+      content: 'ring-0',
+      overlay: 'bg-[#f0f0f0b2]',
+    }"
+    class="h-screen w-10/12 lg:min-w-fit"
+  >
+    <template #content>
+      <div
+        class="flex flex-col bg-accent-50 lg:min-h-[700px] lg:min-w-[1100px] h-full w-full justify-between"
       >
-      <UButton
-        @click="onClearClick"
-        class="bg-[#F9F9F9] border border-[#333333] pt-2.5 pb-2.5 pl-5 pr-5 hover:bg-gray-500 active:bg-gray-600 duration-300 disabled:bg-slate-300"
-        :disabled="isSendDisabled"
-        >Очистити кошик</UButton
-      >
-    </div>
-  </div>
+        <UTable
+          :data="parsedData"
+          :columns="tableColumns"
+          :ui="{
+            th: 'bg-main-400 ',
+            td: 'text-main-400 text-xl',
+            tr: 'border-b border-accent-100 pl-2.5',
+            tbody: 'border-0 ',
+            separator: 'hidden',
+          }"
+          class="w-full h-full"
+          empty="Кошик пустий"
+        >
+          <template #image-cell="{ row }">
+            <NuxtImg
+              :key="row.original.id"
+              :src="row.original.image"
+              @error=""
+              class="w-[50px] h-[50px]"
+              :placeholder="'/no-image.png'"
+            />
+          </template>
+          <template #quantity-cell="{ row }">
+            <UButton
+              variant="ghost"
+              color="main"
+              @click="onRemoveClick(row.original.id)"
+              class="mr-2"
+              >-</UButton
+            >
+            <span>{{
+              `${row.original.quantity} * ${row.original.price.toFixed(2)} ₴`
+            }}</span>
+            <UButton
+              variant="ghost"
+              color="main"
+              @click="onAddClick(row.original.id)"
+              class="ml-2"
+              >+</UButton
+            >
+          </template>
+          <template #total-cell="{ row }">
+            <span>{{ `${row.original.total.toFixed(2)} ₴` }}</span>
+          </template>
+        </UTable>
+        <div class="flex items-center justify-end gap-4 p-2.5 w-full flex-wrap">
+          <span class="text-2xl tracking-widest">
+            {{ `${totalOrder.toFixed(2)} ₴` }}
+          </span>
+          <div class="flex gap-[5px] lg:gap-4">
+            <UButton
+              color="main"
+              @click="onCreateClick"
+              class="pt-2.5 pb-2.5 lg:pl-5 lg:pr-5 text-white"
+              :disabled="isSendDisabled"
+              >Створити замовлення</UButton
+            >
+            <UButton
+              color="main"
+              variant="outline"
+              @click="onClearClick"
+              class="pt-2.5 pb-2.5 lg:pl-5 lg:pr-5"
+              :disabled="isSendDisabled"
+              >Очистити кошик</UButton
+            >
+          </div>
+        </div>
+      </div>
+    </template>
+  </UModal>
 </template>

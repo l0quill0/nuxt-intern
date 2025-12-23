@@ -22,27 +22,30 @@ watch(
 </script>
 
 <template>
-  <div class="w-fit flex flex-col items-end gap-2.5 pt-[50px] h-full">
-    <div class="flex gap-2.5 items-center">
+  <div
+    class="w-full lg:w-fit flex flex-col items-center lg:items-end gap-2.5 pt-5 lg:pt-[50px] h-full"
+  >
+    <div
+      class="flex gap-2.5 justify-between lg:justify-end items-center w-full pl-5 pr-5 lg:p-0"
+    >
       <UCheckbox
         v-model="showRemoved"
         label="Включити видалені"
         :ui="{
-          label: 'text-[#333333]',
+          label: 'text-main-400',
           base: 'rounded-none hover:cursor-pointer',
-          indicator: 'bg-[#333333] text-white ',
+          indicator: 'bg-main-400 text-white ',
         }"
       />
       <UModal
         title="createItem"
         description="createItem"
         :ui="{
-          content: 'bg-[#f0f0f0] rounded-none ring-[#333333] w-full',
           overlay: 'bg-[#f0f0f0b2]',
         }"
         :dismissible="isDismissible"
       >
-        <UButton class="w-fit" color="success">Створити товар</UButton>
+        <UButton color="success">Створити товар</UButton>
         <template #content>
           <CreateItemForm @uploading="onItemSubmit" />
         </template>

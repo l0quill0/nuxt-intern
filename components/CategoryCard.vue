@@ -17,7 +17,7 @@ const imageUrl = `${config.public.bucketUrl}${image}`;
 
 <template>
   <div
-    class="relative flex flex-col w-[350px] border border-transparent hover:border-[#333333] hover:cursor-pointer"
+    class="relative flex flex-col w-[350px] border border-transparent hover:border-main-400 p-1 hover:cursor-pointer"
     @click="() => emit('click', slug)"
   >
     <NuxtImg
@@ -27,7 +27,7 @@ const imageUrl = `${config.public.bucketUrl}${image}`;
       :placeholder="'/no-image.png'"
     />
     <h3
-      class="absolute text-white font-medium text-[24px] bottom-0 self-center"
+      class="absolute text-accent-300 font-medium text-[24px] bottom-0 self-center"
     >
       {{ name }}
     </h3>

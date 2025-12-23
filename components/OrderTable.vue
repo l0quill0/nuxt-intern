@@ -87,12 +87,12 @@ const tableColumns: TableColumn<tableRow>[] = [
         icon: "i-lucide-chevron-down",
         variant: "ghost",
         square: true,
-        class: "rounded-none hover:bg-transparent active:bg-transparent",
+        class: "hover:bg-transparent active:bg-transparent",
         ui: {
           leadingIcon: [
             "transition-transform",
             row.getIsExpanded() ? "duration-200 rotate-180" : "",
-            "text-[#333333]",
+            "text-main-400",
           ],
         },
         onClick: () => row.toggleExpanded(),
@@ -110,7 +110,7 @@ const tableColumns: TableColumn<tableRow>[] = [
               : "i-lucide-arrow-down-wide-narrow"
             : "i-lucide-arrow-up-down",
         class:
-          "rounded-none bg-transparent hover:bg-transparent active:bg-transparent font-bold p-0 hover:text-gray-500 duration-300",
+          "bg-transparent hover:bg-transparent active:bg-transparent font-bold p-0 hover:text-accent-300",
         onClick: () => onSortClick(column.id),
         label: "№",
       });
@@ -127,7 +127,7 @@ const tableColumns: TableColumn<tableRow>[] = [
               : "i-lucide-arrow-down-wide-narrow"
             : "i-lucide-arrow-up-down",
         class:
-          "rounded-none bg-transparent hover:bg-transparent active:bg-transparent font-bold p-0 hover:text-gray-500 duration-300",
+          "bg-transparent hover:bg-transparent active:bg-transparent font-bold p-0 hover:text-accent-300",
         onClick: () => onSortClick(column.id),
         label: "Статус",
       });
@@ -144,7 +144,7 @@ const tableColumns: TableColumn<tableRow>[] = [
               : "i-lucide-arrow-down-wide-narrow"
             : "i-lucide-arrow-up-down",
         class:
-          "rounded-none bg-transparent hover:bg-transparent active:bg-transparent font-bold p-0 hover:text-gray-500 duration-300",
+          "bg-transparent hover:bg-transparent active:bg-transparent font-bold p-0 hover:text-accent-300",
         onClick: () => onSortClick(column.id),
         label: "Сума",
       });
@@ -161,7 +161,7 @@ const tableColumns: TableColumn<tableRow>[] = [
               : "i-lucide-arrow-down-wide-narrow"
             : "i-lucide-arrow-up-down",
         class:
-          "rounded-none bg-transparent hover:bg-transparent active:bg-transparent font-bold p-0 hover:text-gray-500 duration-300",
+          "bg-transparent hover:bg-transparent active:bg-transparent font-bold p-0 hover:text-accent-300",
         onClick: () => onSortClick(column.id),
         label: "Створено",
       });
@@ -178,7 +178,7 @@ const tableColumns: TableColumn<tableRow>[] = [
             h(UButton, {
               color: "success",
               label: "Підтвердити",
-              class: "rounded-none",
+              class: "flex justify-center",
               onClick: () => onConfirmClick(row.original.id),
             })
           );
@@ -186,13 +186,17 @@ const tableColumns: TableColumn<tableRow>[] = [
           h(UButton, {
             color: "error",
             label: "Скасувати",
-            class: "rounded-none",
+            class: "flex justify-center",
             onClick: () => onCancelClick(row.original.id),
           })
         );
       }
 
-      return h("div", { class: "flex gap-[10px]" }, buttons);
+      return h(
+        "div",
+        { class: "flex gap-[10px] lg:flex-row flex-col" },
+        buttons
+      );
     },
   },
 ];
@@ -218,14 +222,14 @@ const orderItemColumns: TableColumn<itemTableRow>[] = [
 </script>
 
 <template>
-  <div class="flex flex-col items-center w-[900px] grow">
+  <div class="flex flex-col items-center lg:w-[900px] grow w-full p-2.5">
     <UTable
       :data="parsedData"
       :columns="tableColumns"
       :loading="pending"
       :ui="{
-        th: 'pl-0 text-[#333333] ',
-        td: 'text-[#333333] ',
+        th: 'pl-0 text-main-400 ',
+        td: 'text-main-400 ',
       }"
       class="w-full grow"
       empty="Замовлень не знайдено"
@@ -235,10 +239,10 @@ const orderItemColumns: TableColumn<itemTableRow>[] = [
           :data="row.original.items"
           :columns="orderItemColumns"
           :ui="{
-            td: 'break-all whitespace-normal text-[#333333]',
-            th: 'bg-[#333333] text-white font-bold',
+            td: 'break-all whitespace-normal text-main-400',
+            th: 'bg-main-400 text-white font-bold',
             tbody:
-              '[&>tr]:data-[selectable=true]:hover:bg-stone-300 [&>tr]:data-[selectable=true]:duration-300 [&>tr]:border-b-0 [&>tr]:border-t [&>tr]:hover:cursor-pointer',
+              '[&>tr]:data-[selectable=true]:hover:bg-accent-100 [&>tr]:data-[selectable=true]:duration-300 [&>tr]:border-b-0 [&>tr]:border-t [&>tr]:hover:cursor-pointer',
           }"
           @select="(e, row) => onItemClick(row.original.id)"
           empty="Товарів не знайдено"
@@ -279,17 +283,15 @@ const orderItemColumns: TableColumn<itemTableRow>[] = [
       </template>
     </UTable>
     <UPagination
+      color="main"
+      active-color="main"
       v-model:page="pagination.page"
       :items-per-page="pagination.pageSize"
       :total="orders?.meta.totalItems"
       @update:page="onPageChange"
       class="pt-2.5 pb-2.5"
       :ui="{
-        item: 'rounded-none bg-transparent active:bg-transparent active:text-[#333333] hover:text-white  hover:bg-[#333333] text-[#333333] ring-0 aria-[current=page]:bg-[#333333] aria-[current=page]:text-white duration:300',
-        first: 'rounded-none bg-[#333333] disabled:bg-gray-500 ring-0',
-        last: 'rounded-none bg-[#333333] disabled:bg-gray-500 ring-0',
-        next: 'rounded-none bg-[#333333] disabled:bg-gray-500 ring-0',
-        prev: 'rounded-none bg-[#333333] disabled:bg-gray-500 ring-0',
+        item: 'aria-[current=page]:text-white duration:300',
       }"
     />
   </div>

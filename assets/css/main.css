@@ -34,16 +34,35 @@
   font-display: swap;
 }
 
-@theme {
+@theme static {
   --font-sans: "Gilroy", system-ui, sans-serif;
+
+  --color-accent-50: #f0f0f0;
+  --color-accent-100: #d6d6d6;
+  --color-accent-300: #979797;
+
+  --color-main-50: #f7f7f7;
+  --color-main-100: #ededed;
+  --color-main-200: #d1d1d1;
+  --color-main-300: #9e9e9e;
+  --color-main-400: #333333;
+  --color-main-500: #2b2b2b;
+  --color-main-600: #242424;
+  --color-main-700: #1e1e1e;
+  --color-main-800: #181818;
+  --color-main-900: #121212;
+  --color-main-950: #0b0b0b;
 }
 
 html,
 body,
 #__nuxt {
-  background-color: #f0f0f0;
+  background-color: var(--color-accent-50);
+  color: var(--color-main-400);
   font-family: "Gilroy", sans-serif;
+  max-width: 100vw;
 }
+
 :disabled {
   cursor: default !important;
 }
@@ -57,7 +76,7 @@ body,
 }
 
 [data-slot="wrapper"] [data-slot="root"] [data-slot="icon"] {
-  @apply text-[#333333];
+  @apply text-main-400;
 }
 
 [data-slot="increment"] [data-slot="base"] {

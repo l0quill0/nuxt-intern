@@ -47,7 +47,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     :state="state"
     :validate-on="['blur']"
     @submit="onSubmit"
-    class="flex flex-col items-center justify-center bg-[#333333] p-10 pb-3 min-h-1/3 min-w-[250px] gap-3"
+    class="bg-main-400 p-10 gap-5"
   >
     <h2 class="font-bold text-2xl text-white">Авторизація</h2>
     <UFormField label="Email" name="email">
@@ -78,15 +78,12 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
           /> </template
       ></UInput>
     </UFormField>
-    <UButton
-      type="submit"
-      class="hover:bg-slate-500 active:bg-gray-700 rounded-none bg-white text-[#333333] disabled:bg-gray-400 duration-300"
-      :disabled="hasErrors"
+    <UButton type="submit" color="success" :disabled="hasErrors"
       >Авторизуватись</UButton
     >
     <NuxtLink
       :to="PublicRoutes.REGISTER"
-      class="text-white hover:underline active:text-gray-700 duration-300"
+      class="text-white hover:underline active:text-main-300 duration-300"
       >Зареєструватись</NuxtLink
     >
   </UForm>

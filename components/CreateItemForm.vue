@@ -72,7 +72,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     :state="state"
     :validate-on="['blur']"
     @submit="onSubmit"
-    class="flex flex-col items-center justify-center min-w-[250px] p-4 bg-[#333333] gap-2.5"
+    class="p-4 bg-main-400 gap-2.5"
   >
     <h2 class="font-bold text-2xl text-white">Створення товару</h2>
     <UFormField label="Назва товару" name="title" class="w-full">
@@ -100,9 +100,9 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         class="w-full"
         :ui="{
           base: 'bg-transparent! rounded-none ring-white focus-visible:ring-white aria-invalid:ring-error aria-invalid:focus-visible:ring-error',
-          content: 'rounded-none bg-[#333333] ring-white',
+          content: 'rounded-none bg-main-400 ring-white',
           input: 'border-white ',
-          item: 'before:rounded-none data-highlighted:bg-gray-500',
+          item: 'before:rounded-none data-highlighted:bg-main-300',
           trailingIcon: 'text-white',
         }"
         :search-input="{
@@ -126,22 +126,22 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       <UProgress
         animation="swing"
         v-model="isUploading"
-        color="neutral"
-        :ui="{ base: 'rounded-none bg-[#333333]', indicator: 'rounded-none' }"
+        color="main"
+        :ui="{ base: 'bg-accent-50' }"
       />
       <UFileUpload
         label="Фото товару"
         name="image"
         v-model="state.image"
-        class="w-full bg-white"
+        class="w-full"
         :ui="{
-          base: 'bg-white border-none rounded-none',
-          label: 'text-black',
+          base: 'bg-white hover:bg-accent-50',
+          label: 'text-main-400',
         }"
       />
     </UFormField>
     <UButton
-      class="hover:bg-gray-500 active:bg-gray-700 rounded-none bg-white text-[#333333] disabled:bg-gray-400"
+      color="success"
       type="submit"
       :disabled="hasErrors || isUploading === null"
     >

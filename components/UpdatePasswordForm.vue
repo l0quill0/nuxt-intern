@@ -34,6 +34,9 @@ const state = reactive<Schema>({
   confirmPassword: "",
 });
 
+const validation = computed(() => schema.safeParse(state));
+const hasErrors = computed(() => !validation.value.success);
+
 const showOldPassword = ref(false);
 const showNewPassword = ref(false);
 const isDismissable = ref(true);
@@ -60,21 +63,21 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     description="PasswordUpdate"
     title="PasswordUpdate"
     :ui="{
-      content: 'rounded-none',
       overlay: 'bg-[#f0f0f0b2]',
     }"
+    class="lg:w-fit"
     :dismissible="isDismissable"
   >
     <template #content>
       <UForm
         :schema="schema"
         :state="state"
-        class="flex flex-col items-center justify-center min-w-[250px] p-10 bg-[#333333] gap-2.5"
+        class="p-10 bg-main-400 gap-2.5"
         @submit="onSubmit"
       >
-        <UFormField label="Старий пароль" name="oldPassword">
+        <UFormField label="Старий пароль" name="oldPassword" class="w-full">
           <UInput
-            class="w-[250px]"
+            class="w-full"
             v-model="state.oldPassword"
             :type="showOldPassword ? 'text' : 'password'"
             :ui="{
@@ -91,9 +94,9 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
               /> </template
           ></UInput>
         </UFormField>
-        <UFormField label="Новий пароль" name="newPassword">
+        <UFormField label="Новий пароль" name="newPassword" class="w-full">
           <UInput
-            class="w-[250px]"
+            class="w-full"
             v-model="state.newPassword"
             :type="showNewPassword ? 'text' : 'password'"
             :ui="{
@@ -110,16 +113,22 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
               /> </template
           ></UInput>
         </UFormField>
-        <UFormField label="Пітдверження паролю" name="confirmPassword">
+        <UFormField
+          label="Пітдверження паролю"
+          name="confirmPassword"
+          class="w-full"
+        >
           <UInput
-            class="w-[250px]"
+            class="w-full"
             :type="showNewPassword ? 'text' : 'password'"
             v-model="state.confirmPassword"
             :ui="{
               base: 'bg-transparent! rounded-none ring-white focus-visible:ring-white aria-invalid:ring-error aria-invalid:focus-visible:ring-error',
             }"
         /></UFormField>
-        <UButton color="success" type="submit">Змінити пароль</UButton>
+        <UButton color="success" type="submit" :disabled="hasErrors"
+          >Змінити пароль</UButton
+        >
       </UForm>
     </template>
   </UModal>

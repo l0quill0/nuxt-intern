@@ -1,6 +1,6 @@
 <template>
-  <div class="w-full h-screen">
-    <UApp :toaster="{ ui: { base: 'rounded-none bg-[#333333]' } }">
+  <div class="w-full min-h-screen h-screen">
+    <UApp :toaster="{ ui: { base: 'rounded-none bg-main-400' } }">
       <NuxtLayout>
         <NuxtRouteAnnouncer />
         <NuxtPage />

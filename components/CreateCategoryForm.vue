@@ -52,7 +52,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     :schema="schema"
     :state="state"
     :validate-on="['blur']"
-    class="flex flex-col items-center justify-center bg-[#333333] p-4 gap-2.5"
+    class="bg-main-400 p-4 gap-2.5"
     @submit="onSubmit"
   >
     <h2 class="font-bold text-2xl text-white">Створення категорії</h2>
@@ -60,8 +60,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       <UProgress
         animation="swing"
         v-model="isUploading"
-        color="neutral"
-        :ui="{ base: 'rounded-none bg-[#333333]', indicator: 'rounded-none' }"
+        color="main"
+        :ui="{ base: 'bg-accent-50' }"
       />
       <UFileUpload
         label="Фото категорії"
@@ -69,8 +69,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         v-model="state.image"
         class="w-full bg-white"
         :ui="{
-          base: 'bg-white border-none rounded-none',
-          label: 'text-black',
+          base: 'bg-white hover:bg-accent-50',
+          label: 'text-main-400',
         }"
       />
     </UFormField>
@@ -85,7 +85,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     </UFormField>
     <UButton
       type="submit"
-      class="hover:bg-gray-500 active:bg-gray-700 rounded-none bg-white text-[#333333] disabled:bg-gray-400"
+      color="success"
       :disabled="hasErrors || isUploading === null"
       >Створити</UButton
     >

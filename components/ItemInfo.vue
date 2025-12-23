@@ -49,51 +49,55 @@ async function addToCartClick() {
 </script>
 
 <template>
-  <div class="flex justify-center items-center gap-[30px]">
+  <div class="flex justify-center items-center gap-[30px] flex-col lg:flex-row">
     <NuxtImg
       :key="props.itemInfo.id"
       :src="imageLink"
-      class="w-[540px] h-[580px] object-cover"
+      class="lg:w-[540px] lg:h-[580px] object-cover"
       :placeholder="'/no-image.png'"
     />
     <div
-      class="w-[540px] h-[580px] flex flex-col border border-[#D6D6D6] p-2.5"
+      class="lg:w-[540px] lg:h-[580px] lg:flex-row w-full flex flex-col border border-accent-100 p-2.5"
     >
       <div
-        class="w-full h-full border border-[#D6D6D6] flex flex-col pl-[30px] pr-[30px] pt-10 pb-10 gap-[30px]"
+        class="w-full h-full border border-accent-100 flex flex-col pl-[30px] pr-[30px] pt-10 pb-10 gap-[30px]"
       >
-        <h3 class="text-2xl text-[#333333] tracking-widest">
+        <h3 class="text-2xl tracking-widest">
           {{ props.itemInfo.title }}
         </h3>
-        <span class="text-[#979797] text-[14px] leading-[150%]">{{
+        <span class="text-accent-300 text-[14px] leading-[150%]">{{
           `Категорія: ${props.itemInfo.category?.name}`
         }}</span>
-        <div class="w-full h-px bg-[#D6D6D6]"></div>
+        <div class="w-full h-px bg-accent-100"></div>
         <span class="h-full text-[14px] leading-[150%] wrap-break-word">{{
           props.itemInfo.description
         }}</span>
-        <span
-          class="text-[24px] tracking-wider uppercase font-semibold text-[#333333]"
-          >{{ `${props.itemInfo.price?.toFixed(2)} ₴` }}</span
-        >
+        <span class="text-[24px] tracking-wider uppercase font-semibold">{{
+          `${props.itemInfo.price?.toFixed(2)} ₴`
+        }}</span>
         <div
-          class="flex items-center gap-[30px]"
+          class="flex items-start gap-[15px] lg:items-center lg:gap-[30px] flex-col lg:flex-row"
           v-if="!props.itemInfo.isRemoved"
         >
           <UButton
             v-if="user && token"
-            class="rounded-none bg-[#333333] border border-white pt-2.5 pb-2.5 pl-5 pr-5 hover:bg-gray-500 active:bg-gray-600 text-white duration-300"
+            color="main"
+            class="border border-white pt-2.5 pb-2.5 pl-5 pr-5 text-white text-[18px]"
             @click="addToCartClick"
             >Додати у кошик</UButton
           >
           <UButton
-            class="rounded-none bg-[#F9F9F9] border border-[#333333] pt-2.5 pb-2.5 pl-5 pr-5 hover:bg-slate-300 active:bg-gray-600 duration-300"
+            variant="outline"
+            color="main"
+            class="pt-2.5 pb-2.5 pl-5 pr-5 text-[18px]"
             v-if="user && token && !props.itemInfo.isInFavourite"
             @click="onFavouriteAddClick"
             >Додати у улюблене</UButton
           >
           <UButton
-            class="rounded-none bg-[#F9F9F9] border border-[#333333] pt-2.5 pb-2.5 pl-5 pr-5 hover:bg-slate-300 active:bg-gray-600 duration-300"
+            variant="outline"
+            color="main"
+            class="pt-2.5 pb-2.5 pl-5 pr-5 text-[18px]"
             v-if="user && token && props.itemInfo.isInFavourite"
             @click="onFavouriteRemoveClick"
             >Прибрати з улюбленого</UButton

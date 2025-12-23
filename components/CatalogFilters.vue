@@ -58,19 +58,21 @@ watch(priceMaxDebounced, (value) => {
 </script>
 
 <template>
-  <div class="w-max flex gap-[30px]">
+  <div
+    class="w-full justify-center flex flex-wrap gap-1.5 lg:gap-[30px] p-2.5 lg:p-0"
+  >
     <USelect
       :items="categoryItems.map((i) => i)"
-      class="w-40 text-[#333333] border-b border-[#D6D6D6]"
+      class="lg:w-40 text-main-400 border-b border-accent-100 w-full"
       trailing-icon="custom:chevron"
       :ui="{
         base: 'rounded-none bg-transparent h-[34px] pl-0 ',
-        placeholder: 'w-fit text-[#333333] ',
+        placeholder: 'w-fit text-main-400 ',
         content: 'rounded-none bg-white ring-0',
-        item: 'text-[#333333] hover:bg-[#333333] hover:text-white before:rounded-none',
+        item: 'text-main-400 hover:bg-main-400 hover:text-white before:rounded-none',
         trailing: 'pr-0',
         trailingIcon:
-          'group-data-[state=open]:rotate-180 transition-transform duration-200 text-[#333333] w-3 h-2.5',
+          'group-data-[state=open]:rotate-180 transition-transform duration-200 text-main-400 w-3 h-2.5',
       }"
       variant="none"
       placeholder="Категорії"
@@ -79,63 +81,67 @@ watch(priceMaxDebounced, (value) => {
       v-model="pagination.category"
     >
     </USelect>
-    <USelect
-      class="w-40 text-[#333333] border-b border-[#D6D6D6]"
-      trailing-icon="custom:chevron"
-      :ui="{
-        base: 'rounded-none bg-transparent h-[34px] pl-0 ',
-        placeholder: 'w-fit text-[#333333]',
-        content: 'rounded-none bg-white ring-0',
-        item: 'text-[#333333] hover:bg-[#333333] hover:text-white before:rounded-none',
-        trailing: 'pr-0',
-        trailingIcon:
-          'group-data-[state=open]:rotate-180 transition-transform duration-200 text-[#333333] w-3 h-2.5',
-      }"
-      variant="none"
-      placeholder="Сортувати за"
-      :items="sortFieldItems"
-      v-model="pagination.sortBy"
-      @change="onSortByChange"
-    />
-    <USelect
-      class="w-40 text-[#333333] border-b border-[#D6D6D6]"
-      trailing-icon="custom:chevron"
-      :ui="{
-        base: 'rounded-none bg-transparent h-[34px] pl-0 ',
-        placeholder: 'w-fit text-[#333333]',
-        content: 'rounded-none bg-white ring-0',
-        item: 'text-[#333333] hover:bg-[#333333] hover:text-white before:rounded-none',
-        trailing: 'pr-0',
-        trailingIcon:
-          'group-data-[state=open]:rotate-180 transition-transform duration-200 text-[#333333] w-3 h-2.5',
-      }"
-      variant="none"
-      placeholder="Порядок"
-      :disabled="!pagination.sortBy"
-      :items="sortOrderItems[pagination.sortBy as keyof typeof sortOrderItems]"
-      v-model="pagination.sortOrder"
-    />
-    <UInput
-      class="w-40 text-[#333333] border-b border-[#D6D6D6] no-spinner"
-      :ui="{
-        base: 'rounded-none bg-transparent h-[34px] text-[#333333] pl-0',
-      }"
-      variant="none"
-      placeholder="Ціна від"
-      v-model="priceMin"
-      @beforeinput="formatToFloat"
-    />
-    <UInput
-      class="w-40 text-[#333333] border-b border-[#D6D6D6] no-spinner"
-      :ui="{
-        base: 'rounded-none bg-transparent h-[34px] text-[#333333] pl-0',
-      }"
-      type="text"
-      variant="none"
-      placeholder="Ціна до"
-      v-model="priceMax"
-      @beforeinput="formatToFloat"
-    />
+    <div class="flex justify-center gap-2.5 lg:gap-[30px] w-full lg:w-fit">
+      <USelect
+        class="lg:w-40 text-main-400 border-b border-accent-100 max-w-1/2 grow"
+        trailing-icon="custom:chevron"
+        :ui="{
+          base: 'rounded-none bg-transparent h-[34px] pl-0 ',
+          placeholder: 'w-fit text-main-400',
+          content: 'rounded-none bg-white ring-0',
+          item: 'text-main-400 hover:bg-main-400 hover:text-white before:rounded-none',
+          trailing: 'pr-0',
+          trailingIcon:
+            'group-data-[state=open]:rotate-180 transition-transform duration-200 text-main-400 w-3 h-2.5',
+        }"
+        variant="none"
+        placeholder="Сортувати за"
+        :items="sortFieldItems"
+        v-model="pagination.sortBy"
+        @change="onSortByChange"
+      />
+      <USelect
+        class="lg:w-40 text-main-400 border-b border-accent-100 max-w-1/2 grow"
+        trailing-icon="custom:chevron"
+        :ui="{
+          base: 'rounded-none bg-transparent h-[34px] pl-0 ',
+          placeholder: 'w-fit text-main-400',
+          content: 'rounded-none bg-white ring-0',
+          item: 'text-main-400 hover:bg-main-400 hover:text-white before:rounded-none',
+          trailing: 'pr-0',
+          trailingIcon:
+            'group-data-[state=open]:rotate-180 transition-transform duration-200 text-main-400 w-3 h-2.5',
+        }"
+        variant="none"
+        placeholder="Порядок"
+        :disabled="!pagination.sortBy"
+        :items="sortOrderItems[pagination.sortBy as keyof typeof sortOrderItems]"
+        v-model="pagination.sortOrder"
+      />
+    </div>
+    <div div class="flex justify-center gap-2.5 lg:gap-[30px] w-full lg:w-fit">
+      <UInput
+        class="lg:w-40 text-main-400 border-b border-accent-100 no-spinner max-w-1/2 grow"
+        :ui="{
+          base: 'rounded-none bg-transparent h-[34px] text-main-400 pl-0',
+        }"
+        variant="none"
+        placeholder="Ціна від"
+        v-model="priceMin"
+        @beforeinput="formatToFloat"
+      />
+      <UInput
+        class="lg:w-40 text-main-400 border-b border-accent-100 no-spinner max-w-1/2 grow"
+        :ui="{
+          base: 'rounded-none bg-transparent h-[34px] text-main-400 pl-0',
+        }"
+        type="text"
+        variant="none"
+        placeholder="Ціна до"
+        v-model="priceMax"
+        @beforeinput="formatToFloat"
+      />
+    </div>
   </div>
 </template>
 

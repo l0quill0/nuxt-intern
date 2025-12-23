@@ -13,8 +13,10 @@ const onCategoryClick = (category: string) => {
 </script>
 
 <template>
-  <h2 class="text-3xl font-bold text-[#333333] pt-12">До каталогу!</h2>
-  <div class="flex flex-wrap gap-[30px] max-w-[1110px] pt-[55px]">
+  <h2 class="text-3xl font-bold pt-12">До каталогу!</h2>
+  <div
+    class="flex flex-col lg:flex-row flex-wrap gap-[30px] max-w-[1110px] pt-[55px] lg:justify-evenly xl:justify-normal"
+  >
     <CategoryCard
       v-if="categories?.data"
       v-for="category in categories.data"

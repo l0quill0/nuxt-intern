@@ -15,8 +15,10 @@ const onItemUpdate = async () => {
 </script>
 
 <template>
-  <div class="w-full flex flex-col items-center pt-[135px]">
-    <div class="max-w-[1110px] w-max flex flex-col items-center" v-if="item">
+  <div
+    class="flex flex-col items-center pt-[25px] lg:pt-[135px] pl-2.5 pr-2.5 lg:pl-0 lg:pr-0 max-w-full"
+  >
+    <div class="flex flex-col" v-if="item">
       <ItemInfo :item-info="item" @updateInfo="onItemUpdate" />
       <Suggestions :item-id="itemId" />
     </div>

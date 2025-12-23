@@ -14,7 +14,16 @@ const { data: response, refresh } = await getCategoryById(props.id);
 
 const category = computed(() => response.value || ({} as ICategory));
 const validation = computed(() => schema.safeParse(state));
-const hasErrors = computed(() => !validation.value.success);
+const hasErrors = computed(
+  () =>
+    !validation.value.success ||
+    (checkForChange({
+      initialState: category.value,
+      newState: state,
+      omitKeys: ["image"],
+    }) &&
+      !state.image)
+);
 
 const isDismissable = ref(true);
 const isUploading = ref<number | null>(0);
@@ -36,17 +45,6 @@ const state = reactive<Partial<Schema>>({
 });
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  if (
-    checkForChange({
-      initialState: category.value,
-      newState: event.data,
-      omitKeys: ["image"],
-    }) &&
-    !state.image
-  ) {
-    toast.add({ title: "Змін не знайдено", color: "error" });
-    return;
-  }
   try {
     isUploading.value = null;
     isDismissable.value = false;
@@ -71,7 +69,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     description="CategoryUpdate"
     title="CategoryUpdate"
     :ui="{
-      content: 'rounded-none',
       overlay: 'bg-[#f0f0f0b2]',
     }"
     :dismissible="isDismissable"
@@ -82,25 +79,22 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         @submit="onSubmit"
         :schema="schema"
         :state="state"
-        class="flex flex-col items-center justify-center min-w-[250px] p-4 bg-[#333333] gap-2.5"
+        class="p-4 bg-main-400 gap-2.5"
       >
         <UFormField label="Фото категорії" name="image" class="w-full">
           <UProgress
             animation="swing"
             v-model="isUploading"
-            color="neutral"
-            :ui="{
-              base: 'rounded-none bg-[#333333]',
-              indicator: 'rounded-none',
-            }" />
+            color="main"
+            :ui="{ base: 'bg-accent-50' }" />
           <UFileUpload
             label="Фото категорії"
             name="image"
             v-model="state.image"
-            class="w-full bg-white"
+            class="w-full"
             :ui="{
-              base: 'bg-white border-none rounded-none',
-              label: 'text-black',
+              base: 'bg-white hover:bg-accent-50',
+              label: 'text-main-400',
             }"
         /></UFormField>
         <UFormField label="Назва" name="name" class="w-full">
@@ -114,7 +108,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         </UFormField>
         <UButton
           type="submit"
-          class="rounded-none"
           color="success"
           :disabled="hasErrors || isUploading === null"
           >Оновити</UButton

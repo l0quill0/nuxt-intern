@@ -5,10 +5,11 @@ import { updateMe } from "~/api/userApi";
 import type { IUser } from "~/types/user.type";
 
 const userStore = useUserStore();
-const isEditing = ref(false);
-const form = ref();
 const user = userStore.getUser() as IUser;
 const toast = useToast();
+
+const isEditing = ref(false);
+const form = ref();
 
 const schema = zod.object({
   email: zod.email("Невірний формат").optional(),
@@ -59,7 +60,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     :schema="schema"
     :state="state"
     @submit="onSubmit"
-    class="flex flex-col justify-center items-center gap-3 bg-[#333333] min-w-[250px] p-5"
+    class="gap-3 p-5"
   >
     <h2 class="font-bold text-2xl text-white">Мій профіль</h2>
     <div class="flex gap-6">
@@ -86,22 +87,14 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       <UButton
         @click="isEditing = true"
         :disabled="isEditing"
-        class="hover:bg-slate-300 active:bg-gray-700 rounded-none bg-white text-[#333333] duration-300 disabled:bg-slate-100"
+        class="text-white bg-main-300 hover:bg-main-200 disabled:bg-main-100 active:bg-main-200"
         >Редагувати</UButton
       >
-      <UButton
-        @click="() => onCancel()"
-        color="error"
-        class="rounded-none duration-300"
-        :disabled="!isEditing"
+      <UButton @click="() => onCancel()" color="error" :disabled="!isEditing"
         >Скасувати</UButton
       >
     </div>
-    <UButton
-      type="submit"
-      :disabled="!isEditing"
-      class="rounded-none"
-      color="success"
+    <UButton type="submit" :disabled="!isEditing" color="success"
       >Зберегти</UButton
     >
   </UForm>

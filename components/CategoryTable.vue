@@ -65,7 +65,10 @@ const onRemoveClick = async (id: number) => {
   <div v-if="isDeleting" class="w-full h-full flex items-center justify-center">
     <span class="loading loading-spinner loading-xl h-[100px] w-[100px]"></span>
   </div>
-  <div class="flex flex-col items-center grow w-full" v-if="!isDeleting">
+  <div
+    class="flex flex-col items-center grow w-full pl-2.5 pr-2.5 lg:p-0"
+    v-if="!isDeleting"
+  >
     <UTable
       :loading="pending"
       :data="response?.data"
@@ -73,10 +76,10 @@ const onRemoveClick = async (id: number) => {
       empty="Категорій не знайдено"
       class="w-full grow"
       :ui="{
-        th: 'text-[#333333]',
+        th: 'text-main-400',
         tbody:
-          '[&>tr]:data-[selectable=true]:hover:bg-stone-300 [&>tr]:data-[selectable=true]:duration-300 [&>tr]:border-b-0 [&>tr]:border-t [&>tr]hover:cursor-pointer',
-        td: 'text-[#333333] max-w-16',
+          '[&>tr]:data-[selectable=true]:hover:bg-accent-100 [&>tr]:data-[selectable=true]:duration-300 [&>tr]:border-b-0 [&>tr]:border-t [&>tr]hover:cursor-pointer',
+        td: 'text-main-400 lg:max-w-16',
       }"
     >
       <template #image-cell="{ row }">
@@ -88,18 +91,18 @@ const onRemoveClick = async (id: number) => {
         />
       </template>
       <template #controls-cell="{ row }">
-        <div class="flex gap-1.5 max-w-[180px]">
+        <div class="flex gap-1.5 max-w-[180px] flex-col lg:flex-row">
           <UButton
             v-if="!row.original.immutable"
             @click="openUpdateModalOpen(row.original.id, row.original.name)"
-            class="rounded-none"
             color="success"
+            class="flex justify-center"
             >Оновити</UButton
           >
           <UButton
             v-if="!row.original.immutable"
-            class="rounded-none"
             color="error"
+            class="flex justify-center"
             @click="() => onRemoveClick(row.original.id)"
             >Видалити</UButton
           >
@@ -107,17 +110,15 @@ const onRemoveClick = async (id: number) => {
       </template>
     </UTable>
     <UPagination
+      color="main"
+      active-color="main"
       :page="pagination.page"
       :items-per-page="pagination.pageSize"
       :total="total"
       @update:page="onPageChange"
       class="pt-2.5 pb-2.5"
       :ui="{
-        item: 'rounded-none bg-transparent active:bg-transparent active:text-[#333333] hover:text-white  hover:bg-[#333333] text-[#333333] ring-0 aria-[current=page]:bg-[#333333] aria-[current=page]:text-white duration:300',
-        first: 'rounded-none bg-[#333333] disabled:bg-gray-500 ring-0',
-        last: 'rounded-none bg-[#333333] disabled:bg-gray-500 ring-0',
-        next: 'rounded-none bg-[#333333] disabled:bg-gray-500 ring-0',
-        prev: 'rounded-none bg-[#333333] disabled:bg-gray-500 ring-0',
+        item: 'aria-[current=page]:text-white duration:300',
       }"
     />
   </div>
