@@ -1,7 +1,5 @@
 import type { IUser } from "~/types/user.type";
 
-const config = useRuntimeConfig();
-
 export const useUserStore = defineStore("userStore", {
   state: () => ({
     user: null as null | IUser,
@@ -10,6 +8,7 @@ export const useUserStore = defineStore("userStore", {
     async fetchUser() {
       const token = useTokenStore().getToken();
       if (!token) return;
+      const config = useRuntimeConfig();
 
       const user = await $fetch<IUser>(`${config.public.apiUrl}/user/me`, {
         method: "GET",
