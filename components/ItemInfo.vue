@@ -22,6 +22,7 @@ const imageLink = `${config.public.bucketUrl}${props.itemInfo.image}`;
 async function onFavouriteAddClick() {
   try {
     await addFavourites(props.itemInfo.id);
+    await refreshNuxtData("count");
     emit("updateInfo");
     toast.add({ title: "Додано до улюбленого", color: "success" });
   } catch (error) {
@@ -31,6 +32,7 @@ async function onFavouriteAddClick() {
 async function onFavouriteRemoveClick() {
   try {
     await removeFavourites(props.itemInfo.id);
+    await refreshNuxtData("count");
     emit("updateInfo");
     toast.add({ title: "Видалено з улюбленого", color: "success" });
   } catch (error) {
@@ -41,6 +43,7 @@ async function onFavouriteRemoveClick() {
 async function addToCartClick() {
   try {
     await addToCart(props.itemInfo.id);
+    await refreshNuxtData("count");
     toast.add({ title: "Додано до кошика", color: "success" });
   } catch (error) {
     toast.add({ title: error as string, color: "error" });

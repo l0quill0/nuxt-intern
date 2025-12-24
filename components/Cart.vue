@@ -55,6 +55,7 @@ async function onRemoveClick(id: number) {
   try {
     await removeFromCart(id, 1);
     await refresh();
+    await refreshNuxtData("count");
   } catch (error) {
     toast.add({ title: error as string, color: "error" });
   }
@@ -64,6 +65,7 @@ async function onCreateClick() {
   try {
     await createOrder();
     await refresh();
+    await refreshNuxtData("count");
     await refreshNuxtData("orderPagination");
     toast.add({ title: "Замовлення створено", color: "success" });
   } catch (error) {

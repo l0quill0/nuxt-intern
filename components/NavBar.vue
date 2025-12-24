@@ -2,6 +2,7 @@
 import { ShoppingCart } from "lucide-vue-next";
 import { PublicRoutes, UserRoutes } from "~/enums/routes.enum";
 import Cart from "./Cart.vue";
+import { getCount } from "~/api/userApi";
 
 const overlay = useOverlay();
 const modal = overlay.create(Cart);
@@ -20,6 +21,10 @@ const route = useRoute();
 const search = ref(pagination.value.search);
 const searchDebounced = debouncedRef(search, 500);
 
+const { data: response } = await getCount();
+
+const favCount = computed(() => response.value?.favCount);
+const cartCount = computed(() => response.value?.cartCount);
 const isMenuActive = computed(() => user && userToken);
 
 const menuOpen = ref(false);
@@ -59,18 +64,26 @@ watch(searchDebounced, (value) => {
           route.fullPath.startsWith('/admin/items')
         "
       />
-      <UButton
-        variant="link"
-        class="p-0 w-6 h-6 flex justify-center group"
-        @click="openCart"
-        v-if="user && userToken"
-      >
-        <ShoppingCart
-          class="text-white group-hover:text-main-300 w-4 h-4 duration-300"
-          fill="currentColor"
-          stroke="none"
-        />
-      </UButton>
+      <div class="relative">
+        <UButton
+          variant="link"
+          class="p-0 w-6 h-6 flex justify-center group"
+          @click="openCart"
+          v-if="user && userToken"
+        >
+          <ShoppingCart
+            class="text-white group-hover:text-main-300 w-4 h-4 duration-300"
+            fill="currentColor"
+            stroke="none"
+          />
+        </UButton>
+        <div
+          v-if="user && userToken && cartCount"
+          class="flex items-center justify-center bg-accent-300 text-main-400 rounded-full text-[8px] aspect-square px-1 bottom-[-25%] right-[-25%] absolute"
+        >
+          <span class="leading-0">{{ cartCount }}</span>
+        </div>
+      </div>
       <UButton
         variant="link"
         class="p-0 w-6 h-6 justify-center group xl:hidden"
@@ -136,17 +149,25 @@ watch(searchDebounced, (value) => {
         <div
           class="bg-accent-50 w-full h-px border-b-accent-50 xl:hidden"
         ></div>
-        <NuxtLink
-          class="p-0 xl:w-6 xl:h-6 w-[50px] h-[50px] flex justify-center items-center group"
-          :to="UserRoutes.FAVOURITE"
-          @click="() => (menuOpen = false)"
-          v-if="user && userToken"
-        >
-          <UIcon
-            name="custom:heart"
-            class="xl:w-4 xl:h-4 w-[50px] h-[50px] text-white group-hover:text-main-300 duration-300"
-          />
-        </NuxtLink>
+        <div class="relative">
+          <NuxtLink
+            class="p-0 xl:w-6 xl:h-6 w-[50px] h-[50px] flex justify-center items-center group"
+            :to="UserRoutes.FAVOURITE"
+            @click="() => (menuOpen = false)"
+            v-if="user && userToken"
+          >
+            <UIcon
+              name="custom:heart"
+              class="xl:w-4 xl:h-4 w-[50px] h-[50px] text-white group-hover:text-main-300 duration-300"
+            />
+          </NuxtLink>
+          <div
+            v-if="user && userToken && favCount"
+            class="flex items-center justify-center bg-accent-300 text-main-400 rounded-full text-[8px] aspect-square px-1 bottom-[-25%] right-0 absolute"
+          >
+            <span>{{ favCount }}</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>

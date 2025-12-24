@@ -52,7 +52,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     :schema="schema"
     :state="state"
     :validate-on="['blur']"
-    class="bg-main-400 p-4 gap-2.5"
+    class="bg-main-400 p-4 gap-2.5 h-fit"
     @submit="onSubmit"
   >
     <h2 class="font-bold text-2xl text-white">Створення категорії</h2>

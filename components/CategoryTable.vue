@@ -82,6 +82,11 @@ const onRemoveClick = async (id: number) => {
         td: 'text-main-400 lg:max-w-16',
       }"
     >
+      <template #name-cell="{ row }">
+        {{
+          row.original.name.charAt(0).toUpperCase() + row.original.name.slice(1)
+        }}
+      </template>
       <template #image-cell="{ row }">
         <NuxtImg
           :key="row.original.id"

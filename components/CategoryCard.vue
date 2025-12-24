@@ -27,9 +27,9 @@ const imageUrl = `${config.public.bucketUrl}${image}`;
       :placeholder="'/no-image.png'"
     />
     <h3
-      class="absolute text-black font-medium text-[24px] bottom-0 self-center"
+      class="absolute font-medium text-[24px] bottom-0 self-center text-black"
     >
-      {{ name }}
+      {{ name.charAt(0).toUpperCase() + name.slice(1) }}
     </h3>
   </div>
 </template>

@@ -31,6 +31,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     tokenStore.setToken(response.access_token);
     await userStore.fetchUser();
     toast.add({ title: "Авторизація успішна", color: "success", ui: {} });
+    await refreshNuxtData("count");
     navigateTo(PublicRoutes.HOME);
   } catch (error) {
     toast.add({

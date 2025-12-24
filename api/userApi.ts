@@ -38,3 +38,10 @@ export async function removeFavourites(itemId: number) {
     method: "DELETE",
   });
 }
+
+export async function getCount() {
+  return useApi<{ favCount: number; cartCount: number }>("/user/count", {
+    method: "GET",
+    key: "count",
+  });
+}
