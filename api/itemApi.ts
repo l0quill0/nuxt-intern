@@ -27,32 +27,32 @@ export async function updateItem(itemId: number, payload: IUpdateItem) {
   if (payload.image) formData.append("file", payload.image);
   if (payload.category) formData.append("category", payload.category);
 
-  return useNuxtApp().$api(`item/${itemId}`, {
+  return useNuxtApp().$api(`/item/${itemId}`, {
     method: "PATCH",
     body: formData,
   });
 }
 
 export async function restoreItem(id: number) {
-  return useNuxtApp().$api(`item/return/${id}`, {
+  return useNuxtApp().$api(`/item/return/${id}`, {
     method: "PATCH",
   });
 }
 
 export async function removeItem(id: number) {
-  return useNuxtApp().$api(`item/${id}`, {
+  return useNuxtApp().$api(`/item/${id}`, {
     method: "DELETE",
   });
 }
 
 export function getItemById(id: number) {
-  return useApi<IItem & { isInFavourite: boolean }>(`item/${id}`, {
+  return useApi<IItem & { isInFavourite: boolean }>(`/item/${id}`, {
     method: "GET",
   });
 }
 
 export function getPaginatedItems(queryOptions: Ref<IItemQuery>) {
-  return useApi<IPaginatedItems>(`item`, {
+  return useApi<IPaginatedItems>(`/item`, {
     method: "GET",
     query: queryOptions,
     key: "items-paginated",
@@ -60,7 +60,7 @@ export function getPaginatedItems(queryOptions: Ref<IItemQuery>) {
 }
 
 export function getSuggestedItems(itemId: number, itemCount: number = 3) {
-  return useApi<IItem[]>(`item/suggestions`, {
+  return useApi<IItem[]>(`/item/suggestions`, {
     method: "GET",
     query: { itemId: itemId, itemCount: itemCount },
   });
