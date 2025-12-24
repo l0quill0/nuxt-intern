@@ -1,5 +1,7 @@
 import type { IUser } from "~/types/user.type";
 
+const config = useRuntimeConfig();
+
 export const useUserStore = defineStore("userStore", {
   state: () => ({
     user: null as null | IUser,
@@ -9,7 +11,7 @@ export const useUserStore = defineStore("userStore", {
       const token = useTokenStore().getToken();
       if (!token) return;
 
-      const user = await $fetch<IUser>("http://localhost:3000/user/me", {
+      const user = await $fetch<IUser>(`${config.public.apiUrl}/user/me`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
