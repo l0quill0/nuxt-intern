@@ -28,6 +28,7 @@ function onItemClick(id: number) {
     </h2>
   </div>
   <UCarousel
+    v-if="items.length > 0"
     v-slot="{ item }"
     :items="items"
     loop
