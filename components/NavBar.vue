@@ -79,7 +79,7 @@ watch(searchDebounced, (value) => {
         </UButton>
         <div
           v-if="user && userToken && cartCount"
-          class="flex items-center justify-center bg-accent-300 text-main-400 rounded-full text-[8px] aspect-square px-1 bottom-[-25%] right-[-25%] absolute"
+          class="flex items-center justify-center bg-orange-600 text-white rounded-full text-[8px] aspect-square w-5 bottom-[-40%] right-[-40%] absolute font-bold"
         >
           <span class="leading-0">{{ cartCount }}</span>
         </div>
@@ -163,7 +163,7 @@ watch(searchDebounced, (value) => {
           </NuxtLink>
           <div
             v-if="user && userToken && favCount"
-            class="flex items-center justify-center bg-accent-300 text-main-400 rounded-full text-[8px] aspect-square px-1 bottom-[-25%] right-0 absolute"
+            class="flex items-center justify-center bg-orange-600 text-white rounded-full text-[8px] aspect-square w-5 bottom-[-40%] right-[-40%] absolute font-bold"
           >
             <span>{{ favCount }}</span>
           </div>

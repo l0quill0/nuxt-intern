@@ -52,11 +52,13 @@ async function addToCartClick() {
 </script>
 
 <template>
-  <div class="flex justify-center items-center gap-[30px] flex-col lg:flex-row">
+  <div
+    class="flex justify-center items-center gap-[30px] flex-col lg:flex-row w-full lg:px-2.5 xl:p-0"
+  >
     <NuxtImg
       :key="props.itemInfo.id"
       :src="imageLink"
-      class="lg:w-[540px] lg:h-[580px] object-cover"
+      class="lg:w-[540px] lg:h-[580px] w-full object-cover"
       :placeholder="'/no-image.png'"
     />
     <div

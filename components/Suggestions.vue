@@ -6,7 +6,7 @@ const props = defineProps({
   itemId: { type: Number, required: true },
 });
 
-const { data: response } = getSuggestedItems(props.itemId);
+const { data: response } = getSuggestedItems(props.itemId, 6);
 
 const items = computed(() => response.value ?? []);
 
@@ -27,15 +27,22 @@ function onItemClick(id: number) {
       Товари які можуть вам сподобатись
     </h2>
   </div>
-  <div
-    class="flex flex-col lg:flex-row items-center pt-5 xl:pt-[60px] pb-5 gap-[30px]"
+  <UCarousel
+    v-slot="{ item }"
+    :items="items"
+    loop
+    arrows
+    dots
+    wheel-gestures
+    class=""
+    :ui="{
+      container: 'xl:max-w-[1110px] md:max-w-[690px] max-w-[350px]',
+      item: 'xl:basis-1/3 md:basis-1/2',
+      next: 'bg-main-400 hover:bg-main-400/75 ring-0 hidden md:inline-flex',
+      prev: 'bg-main-400 hover:bg-main-400/75 ring-0 hidden md:inline-flex',
+      dot: 'bg-main-300 data-[state=active]:bg-main-400',
+    }"
   >
-    <template v-for="(item, index) in items" :key="item.id">
-      <ItemCard :item-info="item" @click="onItemClick" />
-      <div
-        v-if="index + 1 !== items.length"
-        class="w-full h-px bg-accent-100 my-[30px] lg:hidden"
-      ></div>
-    </template>
-  </div>
+    <ItemCard :item-info="item" @click="onItemClick" />
+  </UCarousel>
 </template>
