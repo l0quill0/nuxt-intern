@@ -33,6 +33,7 @@ const schema = zod.object({
     .string("Введіть назву категорії")
     .min(3, "Мінімум 3 символи")
     .max(10, "Максимум 10 символів")
+    .toLowerCase()
     .optional(),
   image: zod.instanceof(File, { message: "Додайте фото категорії" }).optional(),
 });

@@ -69,7 +69,7 @@ watch(searchDebounced, (value) => {
           variant="link"
           class="p-0 w-6 h-6 flex justify-center group"
           @click="openCart"
-          v-if="user && userToken"
+          v-if="user && userToken && route.fullPath !== UserRoutes.CREATEORDER"
         >
           <ShoppingCart
             class="text-white group-hover:text-main-300 w-4 h-4 duration-300"
@@ -78,7 +78,12 @@ watch(searchDebounced, (value) => {
           />
         </UButton>
         <div
-          v-if="user && userToken && cartCount"
+          v-if="
+            user &&
+            userToken &&
+            cartCount &&
+            route.fullPath !== UserRoutes.CREATEORDER
+          "
           class="flex items-center justify-center bg-orange-600 text-white rounded-full text-[8px] aspect-square w-5 bottom-[-40%] right-[-40%] absolute font-bold"
         >
           <span class="leading-0">{{ cartCount }}</span>

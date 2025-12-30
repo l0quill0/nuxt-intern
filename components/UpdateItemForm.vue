@@ -133,10 +133,17 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
             }"
             :search-input="{
               placeholder: 'Пошук...',
+              ui: {
+                base: 'placeholder:text-white',
+              },
             }"
             value-key="value"
             v-model="state.category"
-          />
+          >
+            <template #empty>
+              <span class="text-white">Нічого не знайдено</span>
+            </template></USelectMenu
+          >
         </UFormField>
         <UFormField label="Опис товару" name="description" class="w-full">
           <UTextarea

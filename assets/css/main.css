@@ -86,7 +86,3 @@ body,
 [data-slot="decrement"] [data-slot="base"] {
   @apply text-white hover:text-gray-300 active:text-gray-500;
 }
-
-[data-slot="focusScope"] [data-slot="root"] [data-slot="input"] {
-  @apply placeholder:text-white;
-}

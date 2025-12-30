@@ -1,93 +1,49 @@
 <script setup lang="ts">
-import type { TableColumn } from "@nuxt/ui";
-import { addToCart, clearCart, getCart, removeFromCart } from "~/api/cartApi";
-import { createOrder } from "~/api/orderApi";
-import { PublicDynamicRoutes } from "~/enums/routes.enum";
+import { clearCart, getCart } from "~/api/cartApi";
+import {
+  PublicDynamicRoutes,
+  PublicRoutes,
+  UserRoutes,
+} from "~/enums/routes.enum";
 
-const config = useRuntimeConfig();
 const toast = useToast();
+const modal = useOverlay();
 
-const parsedData = ref<tableRow[]>([]);
-const totalOrder = ref(0);
-const isSendDisabled = ref(true);
+const { data: cart, refresh } = await getCart();
 
-const { data, refresh } = await getCart();
-
-watch(
-  data,
-  (newData) => {
-    if (newData) {
-      parsedData.value = newData.items.map((item) => ({
-        id: item.id,
-        title: item.title,
-        image: `${config.public.bucketUrl}${item.image}`,
-        quantity: item.quantity,
-        price: item.price,
-        total: item.quantity * item.price,
-      }));
-      totalOrder.value = newData.total;
-      isSendDisabled.value = !parsedData.value.length;
-    }
-  },
-  { immediate: true }
+const totalOrder = computed(
+  () =>
+    cart.value?.items.reduce((acc, item) => {
+      return acc + item.price * item.quantity;
+    }, 0) ?? 0
 );
+
+const isSendEnabled = computed(() => cart.value && cart.value.items.length > 0);
+
+async function onDataUpdate() {
+  await refresh();
+  await refreshNuxtData("count");
+}
 
 async function onClearClick() {
   try {
     await clearCart();
-    totalOrder.value = 0;
-    await refresh();
-  } catch (error) {
-    toast.add({ title: error as string, color: "error" });
-  }
-}
-
-async function onAddClick(id: number) {
-  try {
-    await addToCart(id);
-    await refresh();
-  } catch (error) {
-    toast.add({ title: error as string, color: "error" });
-  }
-}
-
-async function onRemoveClick(id: number) {
-  try {
-    await removeFromCart(id, 1);
     await refresh();
     await refreshNuxtData("count");
   } catch (error) {
     toast.add({ title: error as string, color: "error" });
   }
+}
+
+async function onItemClick(id: number) {
+  modal.closeAll();
+  navigateTo(`${PublicDynamicRoutes.ITEM}${id}`);
 }
 
 async function onCreateClick() {
-  try {
-    await createOrder();
-    await refresh();
-    await refreshNuxtData("count");
-    await refreshNuxtData("orderPagination");
-    toast.add({ title: "Замовлення створено", color: "success" });
-  } catch (error) {
-    toast.add({ title: error as string, color: "error" });
-  }
+  modal.closeAll();
+  navigateTo(UserRoutes.CREATEORDER);
 }
-
-type tableRow = {
-  id: number;
-  title: string;
-  image: string;
-  quantity: number;
-  price: number;
-  total: number;
-};
-
-const tableColumns: TableColumn<tableRow>[] = [
-  { accessorKey: "title", header: "Товар" },
-  { accessorKey: "image", header: "Фото" },
-  { accessorKey: "quantity", header: "Кількість" },
-  { accessorKey: "total", header: "Загалом" },
-];
 </script>
 
 <template>
@@ -104,51 +60,13 @@ const tableColumns: TableColumn<tableRow>[] = [
       <div
         class="flex flex-col bg-accent-50 lg:min-h-[700px] lg:min-w-[1100px] h-full w-full justify-between"
       >
-        <UTable
-          :data="parsedData"
-          :columns="tableColumns"
-          :ui="{
-            th: 'bg-main-400 ',
-            td: 'text-main-400 text-xl',
-            tr: 'border-b border-accent-100 pl-2.5',
-            tbody: 'border-0 ',
-            separator: 'hidden',
-          }"
-          class="w-full h-full"
-          empty="Кошик пустий"
-        >
-          <template #image-cell="{ row }">
-            <NuxtImg
-              :key="row.original.id"
-              :src="row.original.image"
-              @error=""
-              class="w-[50px] h-[50px]"
-              :placeholder="'/no-image.png'"
-            />
-          </template>
-          <template #quantity-cell="{ row }">
-            <UButton
-              variant="ghost"
-              color="main"
-              @click="onRemoveClick(row.original.id)"
-              class="mr-2"
-              >-</UButton
-            >
-            <span>{{
-              `${row.original.quantity} * ${row.original.price.toFixed(2)} ₴`
-            }}</span>
-            <UButton
-              variant="ghost"
-              color="main"
-              @click="onAddClick(row.original.id)"
-              class="ml-2"
-              >+</UButton
-            >
-          </template>
-          <template #total-cell="{ row }">
-            <span>{{ `${row.original.total.toFixed(2)} ₴` }}</span>
-          </template>
-        </UTable>
+        <OrderItemTable
+          v-if="cart"
+          :items="cart.items"
+          :qunatity-controls="true"
+          @data-update="onDataUpdate"
+          @item-click="onItemClick"
+        />
         <div class="flex items-center justify-end gap-4 p-2.5 w-full flex-wrap">
           <span class="text-2xl tracking-widest">
             {{ `${totalOrder.toFixed(2)} ₴` }}
@@ -158,7 +76,7 @@ const tableColumns: TableColumn<tableRow>[] = [
               color="main"
               @click="onCreateClick"
               class="pt-2.5 pb-2.5 lg:pl-5 lg:pr-5 text-white"
-              :disabled="isSendDisabled"
+              :disabled="!isSendEnabled"
               >Створити замовлення</UButton
             >
             <UButton
@@ -166,7 +84,7 @@ const tableColumns: TableColumn<tableRow>[] = [
               variant="outline"
               @click="onClearClick"
               class="pt-2.5 pb-2.5 lg:pl-5 lg:pr-5"
-              :disabled="isSendDisabled"
+              :disabled="!isSendEnabled"
               >Очистити кошик</UButton
             >
           </div>

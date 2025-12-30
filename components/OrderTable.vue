@@ -3,11 +3,10 @@ import type { TableColumn } from "@nuxt/ui";
 import dayjs from "dayjs";
 import { cancelOrder, confirmOrder, getOrders } from "~/api/orderApi";
 import { PublicDynamicRoutes } from "~/enums/routes.enum";
-import type { IItem } from "~/types/item.type";
+import type { IOrderItem } from "~/types/order.item.type";
 import { OrderStatus } from "~/types/order.status.enum";
 
 const UButton = resolveComponent("UButton");
-const config = useRuntimeConfig();
 const toast = useToast();
 
 const { pagination } = useOrderPagination();
@@ -33,10 +32,9 @@ type tableRow = {
   total: number;
   status: OrderStatus;
   createdAt: string;
-  items: (IItem & { quantity: number })[];
+  postOffice: string | null;
+  items: IOrderItem[];
 };
-
-type itemTableRow = IItem & { quantity: number };
 
 const onItemClick = (itemId: number) => {
   navigateTo(`${PublicDynamicRoutes.ITEM}${itemId}`);
@@ -168,6 +166,10 @@ const tableColumns: TableColumn<tableRow>[] = [
     },
   },
   {
+    accessorKey: "postOffice",
+    header: "Відділення",
+  },
+  {
     id: "actions",
     header: "Дії",
     cell: ({ row }) => {
@@ -200,29 +202,12 @@ const tableColumns: TableColumn<tableRow>[] = [
     },
   },
 ];
-
-const orderItemColumns: TableColumn<itemTableRow>[] = [
-  {
-    accessorKey: "title",
-    header: "Назва",
-  },
-  {
-    accessorKey: "image",
-    header: "",
-  },
-  {
-    accessorKey: "price",
-    header: "Ціна",
-  },
-  {
-    accessorKey: "quantity",
-    header: "Кількість",
-  },
-];
 </script>
 
 <template>
-  <div class="flex flex-col items-center lg:w-[900px] grow w-full p-2.5">
+  <div
+    class="flex flex-col items-center lg:w-[900px] xl:w-fit grow w-full p-2.5"
+  >
     <UTable
       :data="parsedData"
       :columns="tableColumns"
@@ -235,30 +220,11 @@ const orderItemColumns: TableColumn<itemTableRow>[] = [
       empty="Замовлень не знайдено"
     >
       <template #expanded="{ row }">
-        <UTable
-          :data="row.original.items"
-          :columns="orderItemColumns"
-          :ui="{
-            td: 'break-all whitespace-normal text-main-400',
-            th: 'bg-main-400 text-white font-bold',
-            tbody:
-              '[&>tr]:data-[selectable=true]:hover:bg-accent-100 [&>tr]:data-[selectable=true]:duration-300 [&>tr]:border-b-0 [&>tr]:border-t [&>tr]:hover:cursor-pointer',
-          }"
-          @select="(e, row) => onItemClick(row.original.id)"
-          empty="Товарів не знайдено"
-        >
-          <template #image-cell="{ row }">
-            <NuxtImg
-              :key="row.original.id"
-              :src="`${config.public.bucketUrl}${row.original.image}`"
-              class="w-[75px] h-[75px]"
-              :placeholder="'/no-image.png'"
-            />
-          </template>
-          <template #price-cell="{ row }">
-            <span>{{ row.original.price.toFixed(2) }}</span>
-          </template>
-        </UTable>
+        <OrderItemTable
+          :items="row.original.items"
+          :qunatity-controls="false"
+          @item-click="onItemClick"
+        />
       </template>
       <template #id-cell="{ row }">
         <span>{{ `№${row.original.id}` }}</span>
@@ -280,6 +246,9 @@ const orderItemColumns: TableColumn<itemTableRow>[] = [
       </template>
       <template #createdAt-cell="{ row }">
         <span>{{ row.original.createdAt }}</span>
+      </template>
+      <template #postOffice-cell="{ row }">
+        <span class="text-wrap">{{ row.original.postOffice }}</span>
       </template>
     </UTable>
     <UPagination

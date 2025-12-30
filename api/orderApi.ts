@@ -16,9 +16,10 @@ export async function getOrderById(id: number) {
   });
 }
 
-export async function createOrder() {
+export async function createOrder(postOffice: string) {
   return useNuxtApp().$api(`/order/send`, {
     method: "PATCH",
+    body: { postOffice },
   });
 }
 

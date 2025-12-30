@@ -8,7 +8,7 @@ const toast = useToast();
 
 const schema = zod
   .object({
-    email: zod.email("Введіть email"),
+    email: zod.email("Введіть email").toLowerCase(),
     name: zod.string("Введіть ім'я").min(3, "Мінімум 3 символів"),
     password: zod.string("Введіть пароль").min(6, "Мінімум 6 символів"),
     confirmPassword: zod

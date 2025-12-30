@@ -5,7 +5,7 @@ import { login } from "~/api/authApi";
 import { PublicRoutes } from "~/enums/routes.enum";
 
 const schema = zod.object({
-  email: zod.email("Введіть email"),
+  email: zod.email("Введіть email").toLowerCase(),
   password: zod.string("Введіть пароль").min(6, "Мінімум 6 символів"),
 });
 

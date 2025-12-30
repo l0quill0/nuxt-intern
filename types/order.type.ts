@@ -1,9 +1,10 @@
-import type { IItem } from "./item.type";
+import type { IOrderItem } from "./order.item.type";
 
 export interface IOrder {
   id: number;
   status: string;
   total: number;
   createdAt: Date;
-  items: (IItem & { quantity: number })[];
+  postOffice: string | null;
+  items: IOrderItem[];
 }
