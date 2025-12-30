@@ -1,9 +1,11 @@
-import { includes, values } from "lodash";
+import pkg from "lodash";
 import { AdminRoutes, PublicRoutes, UserRoutes } from "~/enums/routes.enum";
 
 export default defineNuxtRouteMiddleware((to) => {
   const userStore = useUserStore();
   const tokenStore = useTokenStore();
+
+  const { values, includes } = pkg;
 
   const userRoutes = values(UserRoutes) as string[];
   const adminRoutes = values(AdminRoutes) as string[];
