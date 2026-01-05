@@ -5,6 +5,10 @@ import { getPostOffices } from "~/api/postApi";
 import { Regions } from "~/types/region.enum";
 import type { FormSubmitEvent } from "@nuxt/ui";
 
+const props = defineProps({
+  hasItems: { type: Boolean, required: true },
+});
+
 const schema = zod.object({
   region: zod.string("Оберіть область"),
   postOffice: zod.string("Оберіть пункт видачі"),
@@ -30,7 +34,7 @@ const toast = useToast();
 const user = useUserStore().getUser();
 
 const validation = computed(() => schema.safeParse(state));
-const hasErrors = computed(() => !validation.value.success);
+const hasErrors = computed(() => !validation.value.success || !props.hasItems);
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
   try {

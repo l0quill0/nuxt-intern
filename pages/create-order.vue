@@ -12,6 +12,10 @@ const onDataUpdate = async () => {
 const onItemClick = async (id: number) => {
   navigateTo(`${PublicDynamicRoutes.ITEM}${id}`);
 };
+
+const hasItems = computed(
+  () => (order.value && order.value.items.length > 0) ?? false
+);
 </script>
 
 <template>
@@ -25,6 +29,6 @@ const onItemClick = async (id: number) => {
       @data-update="onDataUpdate"
       @item-click="onItemClick"
     />
-    <CreateOrderForm @order-sent="onDataUpdate" />
+    <CreateOrderForm @order-sent="onDataUpdate" :has-items="hasItems" />
   </div>
 </template>
