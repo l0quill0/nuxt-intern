@@ -4,7 +4,18 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
-  modules: ["@nuxt/ui", "@pinia/nuxt", "@nuxt/image", "@vueuse/nuxt"],
+  modules: [
+    "@nuxt/ui",
+    "@pinia/nuxt",
+    "@nuxt/image",
+    "@vueuse/nuxt",
+    "@nuxtjs/i18n",
+  ],
+  i18n: {
+    langDir: "../locales/",
+    defaultLocale: "ua",
+    locales: [{ code: "ua", name: "Ukrainian", file: "ua.json" }],
+  },
   css: ["./assets/css/main.css"],
   vite: {
     plugins: [tailwindcss()],

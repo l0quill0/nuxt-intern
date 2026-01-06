@@ -10,16 +10,10 @@ export function getOrders(orderQuery: Ref<IOrderQuery>) {
   });
 }
 
-export async function getOrderById(id: number) {
-  return useApi<IOrder>(`/order/${id}`, {
-    method: "GET",
-  });
-}
-
-export async function createOrder(postOffice: string) {
+export async function createOrder(officeId: number) {
   return useNuxtApp().$api(`/order/send`, {
     method: "PATCH",
-    body: { postOffice },
+    body: { postOffice: officeId },
   });
 }
 

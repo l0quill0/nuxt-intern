@@ -4,7 +4,11 @@ export interface IOrder {
   id: number;
   status: string;
   total: number;
-  createdAt: Date;
-  postOffice: string | null;
+  createdAt: string;
+  postOffice: {
+    name: string;
+    settlement: string;
+    region: string;
+  };
   items: IOrderItem[];
 }

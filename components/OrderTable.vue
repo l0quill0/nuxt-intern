@@ -4,7 +4,8 @@ import dayjs from "dayjs";
 import { cancelOrder, confirmOrder, getOrders } from "~/api/orderApi";
 import { PublicDynamicRoutes } from "~/enums/routes.enum";
 import type { IOrderItem } from "~/types/order.item.type";
-import { OrderStatus } from "~/types/order.status.enum";
+import { OrderStatus } from "~/enums/order.status.enum";
+import type { IOrder } from "~/types/order.type";
 
 const UButton = resolveComponent("UButton");
 const toast = useToast();
@@ -27,14 +28,7 @@ const sortAsc = ref(true);
 
 const user = useUserStore().getUser();
 
-type tableRow = {
-  id: number;
-  total: number;
-  status: OrderStatus;
-  createdAt: string;
-  postOffice: string | null;
-  items: IOrderItem[];
-};
+type tableRow = IOrder;
 
 const onItemClick = (itemId: number) => {
   navigateTo(`${PublicDynamicRoutes.ITEM}${itemId}`);
@@ -248,7 +242,12 @@ const tableColumns: TableColumn<tableRow>[] = [
         <span>{{ row.original.createdAt }}</span>
       </template>
       <template #postOffice-cell="{ row }">
-        <span class="text-wrap">{{ row.original.postOffice }}</span>
+        <span class="text-wrap" v-if="row.original.postOffice.name">{{
+          `${row.original.postOffice.name}, ${$t(
+            `${row.original.postOffice.region}.${row.original.postOffice.settlement}`
+          )}`
+        }}</span>
+        <div v-else></div>
       </template>
     </UTable>
     <UPagination
