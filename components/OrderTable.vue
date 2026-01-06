@@ -190,7 +190,7 @@ const tableColumns: TableColumn<tableRow>[] = [
 
       return h(
         "div",
-        { class: "flex gap-[10px] lg:flex-row flex-col" },
+        { class: "flex gap-[10px] lg:flex-row flex-col lg:justify-end" },
         buttons
       );
     },
