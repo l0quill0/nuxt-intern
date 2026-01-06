@@ -57,6 +57,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
     await refreshNuxtData("orderPagiantion");
     state.postOffice = undefined;
     state.region = undefined;
+    state.settlement = undefined;
     toast.add({ title: "Замволення створено", color: "success" });
     emit("orderSent");
   } catch (error) {

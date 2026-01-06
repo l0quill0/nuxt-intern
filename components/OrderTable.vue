@@ -200,7 +200,7 @@ const tableColumns: TableColumn<tableRow>[] = [
 
 <template>
   <div
-    class="flex flex-col items-center lg:w-[900px] xl:w-fit grow w-full p-2.5"
+    class="flex flex-col items-center lg:w-[900px] xl:w-fit xl:min-w-2/3 grow w-full p-2.5"
   >
     <UTable
       :data="parsedData"
