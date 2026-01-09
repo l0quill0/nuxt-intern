@@ -4,4 +4,5 @@ export interface IUser {
   role: string;
   email: string;
   createdAt: string;
+  authMethod: { name: string }[];
 }

@@ -22,3 +22,10 @@ export async function register(payload: IRegisterData) {
     body: payload,
   });
 }
+
+export async function loginGoogle(paylod: { email: string; name: string }) {
+  return useNuxtApp().$api<{ access_token: string }>(`/auth/google`, {
+    method: "POST",
+    body: paylod,
+  });
+}

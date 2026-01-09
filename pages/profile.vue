@@ -1,12 +1,27 @@
 <script setup lang="ts">
+import CreatePasswordForm from "~/components/CreatePasswordForm.vue";
 import UpdatePasswordForm from "~/components/UpdatePasswordForm.vue";
 
 const overlay = useOverlay();
 const modal = overlay.create(UpdatePasswordForm);
+const addPasswordModal = overlay.create(CreatePasswordForm);
+const { user } = storeToRefs(useUserStore());
+const hasPassword = computed(() =>
+  user.value?.authMethod.find((m) => m.name === "BASIC")
+);
 
 const onOpenModalClick = () => {
   modal.open();
 };
+
+const onCreatePassClick = () => {
+  addPasswordModal.open();
+};
+
+watch(
+  () => useUserStore().user,
+  () => {}
+);
 </script>
 
 <template>
@@ -15,8 +30,11 @@ const onOpenModalClick = () => {
   >
     <div class="flex flex-col items-center gap-2.5 bg-main-400 h-fit p-5 w-fit">
       <ProfileInfo />
-      <UButton color="success" @click="onOpenModalClick"
+      <UButton color="success" @click="onOpenModalClick" v-if="hasPassword"
         >Змінити пароль</UButton
+      >
+      <UButton color="success" @click="onCreatePassClick" v-else
+        >Створити пароль</UButton
       >
     </div>
     <div

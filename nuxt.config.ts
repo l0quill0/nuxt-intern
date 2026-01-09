@@ -3,13 +3,14 @@ import tailwindcss from "@tailwindcss/vite";
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
-  devtools: { enabled: true },
+  devtools: false,
   modules: [
     "@nuxt/ui",
     "@pinia/nuxt",
     "@nuxt/image",
     "@vueuse/nuxt",
     "@nuxtjs/i18n",
+    "nuxt-google-auth",
   ],
   i18n: {
     langDir: "../locales/",
@@ -41,5 +42,10 @@ export default defineNuxtConfig({
     theme: {
       colors: ["main", "success", "error"],
     },
+  },
+  googleAuth: {
+    clientId: process.env.NUXT_PUBLIC_GOOGLE_CLIENT_ID,
+    autoLoadScript: true,
+    enableServerVerify: true,
   },
 });

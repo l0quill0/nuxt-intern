@@ -21,6 +21,13 @@ export async function updatePassword(oldPassword: string, newPassword: string) {
   });
 }
 
+export async function addPassword(password: string) {
+  return useNuxtApp().$api("/user/add-password", {
+    method: "PATCH",
+    body: { password },
+  });
+}
+
 export async function getFavourites() {
   return useApi<{ userId: number; items: IItem[] }>("/favourite", {
     method: "GET",
