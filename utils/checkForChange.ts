@@ -1,4 +1,6 @@
-import { every, has, isEqual, isUndefined, omit, omitBy } from "lodash";
+import pkg from "lodash";
+
+const { every, has, isEqual, isUndefined, omit, omitBy } = pkg;
 
 interface args {
   initialState: Object;
