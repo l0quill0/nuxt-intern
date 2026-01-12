@@ -48,7 +48,7 @@ function onLoadMoreClick() {
       Товарів не знайдено
     </h2>
     <div
-      class="xl:gap-x-7.5 px-15 max-w-277.5 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 lg:gap-x-3.75"
+      class="xl:gap-x-7.5 py-15 max-w-277.5 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 lg:gap-x-3.75"
     >
       <template v-for="(item, index) in items" :key="item.id">
         <ItemCard :item-info="item" @click="onItemClick" />

@@ -65,7 +65,7 @@ async function addToCartClick() {
       class="lg:w-135 lg:h-145 lg:flex-row w-full flex flex-col border border-accent-100 p-2.5"
     >
       <div
-        class="w-full h-full border border-accent-100 flex flex-col py-7.5 pt-10 pb-10 gap-7.5"
+        class="w-full h-full border border-accent-100 flex flex-col px-7.5 pt-10 pb-10 gap-7.5"
       >
         <h3 class="text-2xl tracking-widest">
           {{ props.itemInfo.title }}
