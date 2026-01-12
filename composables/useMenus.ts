@@ -1,5 +1,5 @@
 import { AdminRoutes, PublicRoutes, UserRoutes } from "~/enums/routes.enum";
-import type { IUser } from "~/types/user.type";
+import type { IUser } from "~/types/auth.types";
 
 export const useMenus = () => {
   const tokenStore = useTokenStore();

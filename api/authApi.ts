@@ -1,5 +1,4 @@
-import type { ILoginData } from "~/types/login.type";
-import type { IRegisterData } from "~/types/register.type";
+import type { ILoginData, IRegisterData } from "~/types/auth.types";
 
 export async function login(payload: ILoginData) {
   const config = useRuntimeConfig();

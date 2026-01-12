@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ICategory } from "~/types/category.type";
+import type { ICategory } from "~/types/category.types";
 const config = useRuntimeConfig();
 
 const props = defineProps<{
@@ -17,13 +17,13 @@ const imageUrl = `${config.public.bucketUrl}${image}`;
 
 <template>
   <div
-    class="relative flex flex-col w-[350px] border border-transparent hover:border-main-400 p-1 hover:cursor-pointer"
+    class="relative flex flex-col w-87.5 border border-transparent hover:border-main-400 p-1 hover:cursor-pointer"
     @click="() => emit('click', slug)"
   >
     <NuxtImg
       :key="id"
       :src="imageUrl"
-      class="w-[350px] h-[280px] object-cover"
+      class="w-87.5 h-70 object-cover"
       :placeholder="'/no-image.png'"
     />
     <h3

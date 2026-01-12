@@ -13,7 +13,7 @@ function onItemClick(id: number) {
   <div class="w-full flex flex-col items-center">
     <h2 class="text-3xl font-bold pt-12" v-if="data?.items.length">Улюблене</h2>
     <div
-      class="max-w-[1110px] w-full flex flex-col items-center pt-2.5 lg:pt-[30px] gap-2.5 lg:gap-[50px]"
+      class="max-w-277.5 w-full flex flex-col items-center pt-2.5 lg:pt-7.5 gap-2.5 lg:gap-12.5"
     >
       <div class="flex flex-col items-center">
         <h1
@@ -35,7 +35,7 @@ function onItemClick(id: number) {
       />
       <div
         v-if="data?.items"
-        class="xl:gap-x-[30px] pt-[60px] pb-[60px] max-w-[1110px] grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 lg:gap-x-[15px]"
+        class="xl:gap-x-7.5 px-15 max-w-277.5 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 lg:gap-x-3.75"
       >
         <template v-for="(item, index) in data.items" :key="item.id">
           <ItemCard :item-info="item" @click="onItemClick" />
@@ -45,11 +45,11 @@ function onItemClick(id: number) {
           ></div>
           <div
             v-if="(index + 1) % 2 === 0 && index + 1 !== data.items.length"
-            class="w-full h-px bg-accent-100 my-[15px] hidden lg:block xl:hidden col-span-full"
+            class="w-full h-px bg-accent-100 my-3.75 hidden lg:block xl:hidden col-span-full"
           ></div>
           <div
             v-if="(index + 1) % 3 === 0 && index + 1 !== data.items.length"
-            class="w-full h-px bg-accent-100 my-[30px] hidden xl:block col-span-full"
+            class="w-full h-px bg-accent-100 my-3.75 hidden xl:block col-span-full"
           ></div>
         </template>
       </div>

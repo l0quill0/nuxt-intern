@@ -17,7 +17,7 @@ watch(debouncedSearch, (value) => {
 
 <template>
   <div
-    class="w-full flex flex-col grow items-end pt-5 gap-[25px] lg:pt-[50px] lg:pl-5 lg:pr-5 xl:pl-0 xl:pr-0 max-w-[1110px]"
+    class="w-full flex flex-col grow items-end pt-5 gap-6.25 lg:pt-12.5 lg:pl-5 lg:pr-5 xl:pl-0 xl:pr-0 max-w-277.5"
   >
     <h2 class="text-3xl font-bold self-center">Категорії</h2>
     <div
@@ -26,7 +26,7 @@ watch(debouncedSearch, (value) => {
       <UInput
         class="w-40 text-main-400 border-b border-accent-100 no-spinner"
         :ui="{
-          base: 'rounded-none bg-transparent h-[34px] text-main-400 pl-0',
+          base: 'rounded-none bg-transparent h-8.5 text-main-400 pl-0',
         }"
         variant="none"
         placeholder="Пошук..."

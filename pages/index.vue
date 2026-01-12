@@ -15,7 +15,7 @@ const onCategoryClick = (category: string) => {
 <template>
   <h2 class="text-3xl font-bold pt-12">До каталогу!</h2>
   <div
-    class="flex flex-col lg:flex-row flex-wrap gap-[30px] max-w-[1110px] pt-[55px] lg:justify-evenly xl:justify-normal"
+    class="flex flex-col lg:flex-row flex-wrap gap-7.5 max-w-277.5 pt-13.75 lg:justify-evenly xl:justify-normal"
   >
     <CategoryCard
       v-if="categories?.data"

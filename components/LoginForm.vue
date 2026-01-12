@@ -53,7 +53,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     <h2 class="font-bold text-2xl text-white">Авторизація</h2>
     <UFormField label="Email" name="email">
       <UInput
-        class="w-[250px]"
+        class="w-62.5"
         v-model="state.email"
         :ui="{
           base: 'bg-transparent! rounded-none ring-white focus-visible:ring-white aria-invalid:ring-error aria-invalid:focus-visible:ring-error',
@@ -62,7 +62,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     </UFormField>
     <UFormField label="Пароль" name="password">
       <UInput
-        class="w-[250px]"
+        class="w-62.5"
         :type="showPassword ? 'text' : 'password'"
         v-model="state.password"
         :ui="{

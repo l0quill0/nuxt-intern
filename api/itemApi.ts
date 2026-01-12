@@ -1,8 +1,10 @@
-import type { ICreateItem } from "~/types/item.create.type";
-import type { IItemQuery } from "~/types/item.query";
-import type { IItem } from "~/types/item.type";
-import type { IPaginatedItems } from "~/types/items.paginated";
-import type { IUpdateItem } from "~/types/update.item";
+import type {
+  IItem,
+  ICreateItem,
+  IUpdateItem,
+  IItemQuery,
+  IPaginatedItems,
+} from "~/types/item.types";
 
 export async function createItem(payload: ICreateItem) {
   const formData = new FormData();

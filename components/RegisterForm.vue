@@ -61,12 +61,12 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     :state="state"
     @submit="onSubmit"
     :validate-on="['blur']"
-    class="bg-main-400 p-10 min-w-[250px] gap-3"
+    class="bg-main-400 p-10 min-w-62.5 gap-3"
   >
     <h2 class="font-bold text-2xl text-white">Реестрація</h2>
     <UFormField label="Ім'я" name="name">
       <UInput
-        class="w-[250px]"
+        class="w-62.5"
         v-model="state.name"
         :ui="{
           base: 'bg-transparent! rounded-none ring-white focus-visible:ring-white aria-invalid:ring-error aria-invalid:focus-visible:ring-error',
@@ -75,7 +75,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     </UFormField>
     <UFormField label="Email" name="email">
       <UInput
-        class="w-[250px]"
+        class="w-62.5"
         v-model="state.email"
         :ui="{
           base: 'bg-transparent! rounded-none ring-white focus-visible:ring-white aria-invalid:ring-error aria-invalid:focus-visible:ring-error',
@@ -84,7 +84,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     </UFormField>
     <UFormField label="Пароль" name="password">
       <UInput
-        class="w-[250px]"
+        class="w-62.5"
         v-model="state.password"
         :type="showPassword ? 'text' : 'password'"
         :ui="{
@@ -103,7 +103,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     </UFormField>
     <UFormField label="Пітдверження паролю" name="confirmPassword">
       <UInput
-        class="w-[250px]"
+        class="w-62.5"
         :type="showPassword ? 'text' : 'password'"
         v-model="state.confirmPassword"
         :ui="{

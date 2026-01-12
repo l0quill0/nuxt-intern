@@ -16,7 +16,7 @@ const onItemUpdate = async () => {
 
 <template>
   <div
-    class="flex flex-col items-center pt-[25px] lg:pt-[135px] pl-2.5 pr-2.5 lg:pl-0 lg:pr-0 w-full"
+    class="flex flex-col items-center pt-6.25 lg:pt-33.75 pl-2.5 pr-2.5 lg:pl-0 lg:pr-0 w-full"
   >
     <div class="flex flex-col items-center" v-if="item">
       <ItemInfo :item-info="item" @updateInfo="onItemUpdate" />

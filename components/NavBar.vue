@@ -40,7 +40,7 @@ watch(searchDebounced, (value) => {
 
 <template>
   <div
-    class="w-full min-h-[110px] xl:pl-56 xl:pr-56 mx-auto flex items-center justify-between p-5 bg-main-400 sticky top-0 z-10"
+    class="w-full min-h-27.5 xl:pl-56 xl:pr-56 mx-auto flex items-center justify-between p-5 bg-main-400 sticky top-0 z-10"
   >
     <NuxtLink
       :to="PublicRoutes.HOME"
@@ -51,12 +51,12 @@ watch(searchDebounced, (value) => {
     <div class="flex gap-5 xl:gap-10 justify-center items-center">
       <UInput
         placeholder="Пошук"
-        class="text-white w-[90px] p-0"
+        class="text-white w-22.5 p-0"
         icon="custom:search"
         variant="none"
         :ui="{
           base: 'placeholder-white! h-6 text-[14px]! duration-300',
-          leadingIcon: 'text-white w-[18px] h-[18px] p-0',
+          leadingIcon: 'text-white w-4.5 h-4.5 p-0',
         }"
         v-model="search"
         v-if="
@@ -113,7 +113,7 @@ watch(searchDebounced, (value) => {
           "
           :to="PublicRoutes.LOGIN"
           @click="() => (menuOpen = false)"
-          class="hover:underline hover:text-main-300 text-white p-0 h-[21px] text-sm duration-300"
+          class="hover:underline hover:text-main-300 text-white p-0 h-5.25 text-sm duration-300"
         >
           Вхід/Регистрація
         </NuxtLink>
@@ -156,14 +156,14 @@ watch(searchDebounced, (value) => {
         ></div>
         <div class="relative">
           <NuxtLink
-            class="p-0 xl:w-6 xl:h-6 w-[50px] h-[50px] flex justify-center items-center group"
+            class="p-0 xl:w-6 xl:h-6 w-12.5 h-12.5 flex justify-center items-center group"
             :to="UserRoutes.FAVOURITE"
             @click="() => (menuOpen = false)"
             v-if="user && userToken"
           >
             <UIcon
               name="custom:heart"
-              class="xl:w-4 xl:h-4 w-[50px] h-[50px] text-white group-hover:text-main-300 duration-300"
+              class="xl:w-4 xl:h-4 w-12.5 h-12.5 text-white group-hover:text-main-300 duration-300"
             />
           </NuxtLink>
           <div

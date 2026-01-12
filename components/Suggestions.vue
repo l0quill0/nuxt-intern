@@ -16,14 +16,11 @@ function onItemClick(id: number) {
 </script>
 
 <template>
-  <div
-    v-if="items.length > 0"
-    class="pt-5 xl:pt-[120px] flex flex-col items-center"
-  >
+  <div v-if="items.length > 0" class="pt-5 xl:pt-30 flex flex-col items-center">
     <h2 class="text-[21px] leading-[1.4] text-center">
       Ми підготували для вас щось особливе
     </h2>
-    <h2 class="pt-[15px] text-3xl font-bold text-center">
+    <h2 class="pt-3.75 text-3xl font-bold text-center">
       Товари які можуть вам сподобатись
     </h2>
   </div>
@@ -37,7 +34,7 @@ function onItemClick(id: number) {
     wheel-gestures
     class=""
     :ui="{
-      container: 'xl:max-w-[1110px] md:max-w-[690px] max-w-[350px]',
+      container: 'xl:max-w-277.5 md:max-w-172.5 max-w-87.5',
       item: 'xl:basis-1/3 md:basis-1/2',
       next: 'bg-main-400 hover:bg-main-400/75 ring-0 hidden md:inline-flex',
       prev: 'bg-main-400 hover:bg-main-400/75 ring-0 hidden md:inline-flex',

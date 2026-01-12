@@ -20,7 +20,7 @@ const hasItems = computed(
 
 <template>
   <div
-    class="flex w-[80%] gap-[30px] pt-[30px] flex-col items-center xl:flex-row xl:items-start"
+    class="flex w-[80%] gap-7.5 pt-7.5 flex-col items-center xl:flex-row xl:items-start"
   >
     <OrderItemTable
       v-if="order"

@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import { clearCart, getCart } from "~/api/cartApi";
-import {
-  PublicDynamicRoutes,
-  PublicRoutes,
-  UserRoutes,
-} from "~/enums/routes.enum";
+import { PublicDynamicRoutes, UserRoutes } from "~/enums/routes.enum";
 
 const toast = useToast();
 const modal = useOverlay();
@@ -58,7 +54,7 @@ async function onCreateClick() {
   >
     <template #content>
       <div
-        class="flex flex-col bg-accent-50 lg:min-h-[700px] lg:min-w-[1100px] h-full w-full justify-between"
+        class="flex flex-col bg-accent-50 lg:min-h-175 lg:min-w-275 h-full w-full justify-between"
       >
         <OrderItemTable
           v-if="cart"
@@ -71,7 +67,7 @@ async function onCreateClick() {
           <span class="text-2xl tracking-widest">
             {{ `${totalOrder.toFixed(2)} ₴` }}
           </span>
-          <div class="flex gap-[5px] lg:gap-4">
+          <div class="flex gap-1.25 lg:gap-4">
             <UButton
               color="main"
               @click="onCreateClick"

@@ -23,7 +23,7 @@ watch(
 
 <template>
   <div
-    class="w-full lg:w-fit flex flex-col items-center lg:items-end gap-2.5 pt-5 lg:pt-[50px] h-full"
+    class="w-full lg:w-fit flex flex-col items-center lg:items-end gap-2.5 pt-5 lg:pt-12.5 h-full"
   >
     <div
       class="flex gap-2.5 justify-between lg:justify-end items-center w-full px-2.5 lg:p-0"

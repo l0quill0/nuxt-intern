@@ -1,4 +1,4 @@
-import type { IItemQuery } from "~/types/item.query";
+import type { IItemQuery } from "~/types/item.types";
 
 export const useItemPagination = () => {
   const route = useRoute();

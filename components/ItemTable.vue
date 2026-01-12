@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { TableColumn } from "@nuxt/ui";
 import { getPaginatedItems, removeItem, restoreItem } from "~/api/itemApi";
-import type { IItem } from "~/types/item.type";
+import type { IItem } from "~/types/item.types";
 import UpdateItemForm from "./UpdateItemForm.vue";
 import { PublicDynamicRoutes } from "~/enums/routes.enum";
 
@@ -98,7 +98,7 @@ const tableColumns: TableColumn<TableRow>[] = [
       }"
     >
       <template #controls-cell="{ row }">
-        <div class="flex gap-1.5 max-w-[180px] lg:flex-row flex-col">
+        <div class="flex gap-1.5 max-w-45 lg:flex-row flex-col">
           <UButton
             v-if="!row.original.isRemoved"
             @click.stop
@@ -131,7 +131,7 @@ const tableColumns: TableColumn<TableRow>[] = [
         <NuxtImg
           :key="row.original.id"
           :src="`${config.public.bucketUrl}${row.original.image}`"
-          class="w-[75px] h-[75px]"
+          class="w-18.75 h-18.75"
           :placeholder="'/no-image.png'"
         />
       </template>

@@ -1,5 +1,5 @@
-import type { IItem } from "~/types/item.type";
-import type { IUser } from "~/types/user.type";
+import type { IItem } from "~/types/item.types";
+import type { IUser } from "~/types/auth.types";
 
 export async function getMe() {
   return useApi<IUser>("/user/me", {

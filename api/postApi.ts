@@ -1,4 +1,4 @@
-import type { IPostOffice } from "~/types/post.office.type";
+import type { IPostOffice } from "~/types/postOffice.types";
 
 export async function getRegions() {
   return useApi<{ id: number; name: string }[]>(`/post/regions`, {

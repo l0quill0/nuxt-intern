@@ -59,14 +59,14 @@ watch(priceMaxDebounced, (value) => {
 
 <template>
   <div
-    class="w-full justify-center flex flex-wrap gap-1.5 lg:gap-[30px] p-2.5 lg:p-0"
+    class="w-full justify-center flex flex-wrap gap-1.5 lg:gap-7.5 p-2.5 lg:p-0"
   >
     <USelect
       :items="categoryItems.map((i) => i)"
-      class="lg:w-40 text-main-400 border-b border-accent-100 w-full"
+      class="lg:w-40 text-main-400 border-b border-accent-100 w-full hover:cursor-pointer"
       trailing-icon="custom:chevron"
       :ui="{
-        base: 'rounded-none bg-transparent h-[34px] pl-0 ',
+        base: 'rounded-none bg-transparent h-8.5 pl-0 ',
         placeholder: 'w-fit text-main-400 ',
         content: 'rounded-none bg-white ring-0',
         item: 'text-main-400 hover:bg-main-400 hover:text-white before:rounded-none',
@@ -81,12 +81,12 @@ watch(priceMaxDebounced, (value) => {
       v-model="pagination.category"
     >
     </USelect>
-    <div class="flex justify-center gap-2.5 lg:gap-[30px] w-full lg:w-fit">
+    <div class="flex justify-center gap-2.5 lg:gap-7.5 w-full lg:w-fit">
       <USelect
-        class="lg:w-40 text-main-400 border-b border-accent-100 max-w-1/2 grow"
+        class="lg:w-40 text-main-400 border-b border-accent-100 max-w-1/2 grow hover:cursor-pointer"
         trailing-icon="custom:chevron"
         :ui="{
-          base: 'rounded-none bg-transparent h-[34px] pl-0 ',
+          base: 'rounded-none bg-transparent h-8.5 pl-0 ',
           placeholder: 'w-fit text-main-400',
           content: 'rounded-none bg-white ring-0',
           item: 'text-main-400 hover:bg-main-400 hover:text-white before:rounded-none',
@@ -101,10 +101,10 @@ watch(priceMaxDebounced, (value) => {
         @change="onSortByChange"
       />
       <USelect
-        class="lg:w-40 text-main-400 border-b border-accent-100 max-w-1/2 grow"
+        class="lg:w-40 text-main-400 border-b border-accent-100 max-w-1/2 grow hover:cursor-pointer"
         trailing-icon="custom:chevron"
         :ui="{
-          base: 'rounded-none bg-transparent h-[34px] pl-0 ',
+          base: 'rounded-none bg-transparent h-8.5 pl-0 ',
           placeholder: 'w-fit text-main-400',
           content: 'rounded-none bg-white ring-0',
           item: 'text-main-400 hover:bg-main-400 hover:text-white before:rounded-none',
@@ -119,11 +119,11 @@ watch(priceMaxDebounced, (value) => {
         v-model="pagination.sortOrder"
       />
     </div>
-    <div div class="flex justify-center gap-2.5 lg:gap-[30px] w-full lg:w-fit">
+    <div div class="flex justify-center gap-2.5 lg:gap-7.5 w-full lg:w-fit">
       <UInput
         class="lg:w-40 text-main-400 border-b border-accent-100 no-spinner max-w-1/2 grow"
         :ui="{
-          base: 'rounded-none bg-transparent h-[34px] text-main-400 pl-0',
+          base: 'rounded-none bg-transparent h-8.5 text-main-400 pl-0',
         }"
         variant="none"
         placeholder="Ціна від"
@@ -133,7 +133,7 @@ watch(priceMaxDebounced, (value) => {
       <UInput
         class="lg:w-40 text-main-400 border-b border-accent-100 no-spinner max-w-1/2 grow"
         :ui="{
-          base: 'rounded-none bg-transparent h-[34px] text-main-400 pl-0',
+          base: 'rounded-none bg-transparent h-8.5 text-main-400 pl-0',
         }"
         type="text"
         variant="none"

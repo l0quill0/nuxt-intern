@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { TableColumn } from "@nuxt/ui";
 import { addToCart, removeFromCart } from "~/api/cartApi";
-import type { IOrderItem } from "~/types/order.item.type";
+import type { IOrderItem } from "~/types/order.types";
 
 const props = defineProps<{ items: IOrderItem[]; qunatityControls: boolean }>();
 const emit = defineEmits<{
@@ -80,7 +80,7 @@ async function onRemoveClick(id: number) {
         :key="row.original.id"
         :src="row.original.image"
         @error=""
-        class="w-[50px] h-[50px]"
+        class="w-12.5 h-12.5"
         :placeholder="'/no-image.png'"
       />
     </template>

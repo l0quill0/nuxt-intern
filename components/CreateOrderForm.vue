@@ -123,7 +123,7 @@ watch(
           }"
           color="main"
           :ui="{
-            base: 'rounded-none bg-transparent h-[34px] pl-0 text-main-400 ring-0',
+            base: 'rounded-none bg-transparent h-8.5 pl-0 text-main-400 ring-0',
             placeholder: 'w-fit text-main-400 ',
             content: 'rounded-none bg-accent-50 ring-0',
             item: 'text-main-400 hover:bg-main-400 hover:text-white before:rounded-none',
@@ -156,7 +156,7 @@ watch(
           }"
           color="main"
           :ui="{
-            base: 'rounded-none bg-transparent h-[34px] pl-0 text-main-400 ring-0',
+            base: 'rounded-none bg-transparent h-8.5 pl-0 text-main-400 ring-0',
             placeholder: 'w-fit text-main-400 ',
             content: 'rounded-none bg-accent-50 ring-0',
             item: 'text-main-400 hover:bg-main-400 hover:text-white before:rounded-none',
@@ -190,7 +190,7 @@ watch(
           }"
           color="main"
           :ui="{
-            base: 'rounded-none bg-transparent h-[34px] pl-0 text-main-400 ring-0',
+            base: 'rounded-none bg-transparent h-8.5 pl-0 text-main-400 ring-0',
             placeholder: 'w-fit text-main-400 ',
             content: 'rounded-none bg-accent-50 ring-0',
             item: 'text-main-400 hover:bg-main-400 hover:text-white before:rounded-none',

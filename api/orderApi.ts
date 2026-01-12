@@ -1,6 +1,4 @@
-import type { IOrderQuery } from "~/types/order.query";
-import type { IOrder } from "~/types/order.type";
-import type { IOrdersPaginated } from "~/types/orders.paginated";
+import type { IOrdersPaginated, IOrderQuery } from "~/types/order.types";
 
 export function getOrders(orderQuery: Ref<IOrderQuery>) {
   return useApi<IOrdersPaginated>("/order", {

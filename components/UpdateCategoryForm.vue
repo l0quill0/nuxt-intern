@@ -2,7 +2,7 @@
 import type { FormSubmitEvent } from "@nuxt/ui";
 import * as zod from "zod";
 import { getCategoryById, updateCategory } from "~/api/categoryApi";
-import type { ICategory } from "~/types/category.type";
+import type { ICategory } from "~/types/category.types";
 
 const props = defineProps({
   id: { type: Number, required: true },

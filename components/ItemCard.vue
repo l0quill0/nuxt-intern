@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { IItem } from "~/types/item.type";
+import type { IItem } from "~/types/item.types";
 
 const props = defineProps<{
   itemInfo: IItem;
@@ -18,19 +18,19 @@ const imageUrl = `${config.public.bucketUrl}${image}`;
 
 <template>
   <div
-    class="w-[350px] h-[440px] flex flex-col items-center p-[35px] hover:border bg-accent-50 hover:border-main-400 hover:cursor-pointer"
+    class="w-87.5 h-110 flex flex-col items-center p-8.75 hover:border bg-accent-50 hover:border-main-400 hover:cursor-pointer"
     @click="() => emit('click', id)"
   >
     <NuxtImg
       :key="id"
       :src="imageUrl"
-      class="h-[220px] w-[280px] object-cover"
+      class="h-55 w-70 object-cover"
       :placeholder="'/no-image.png'"
     />
     <span class="mt-auto">{{
       category.name.charAt(0).toUpperCase() + category.name.slice(1)
     }}</span>
-    <h1 class="font-semibold text-2xl mt-2.5 mb-[15px]">
+    <h1 class="font-semibold text-2xl mt-2.5 mb-3.75">
       {{ title }}
     </h1>
     <UButton

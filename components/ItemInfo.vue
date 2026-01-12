@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { getItemById } from "~/api/itemApi";
 import { addFavourites, removeFavourites } from "~/api/userApi";
 import { addToCart } from "~/api/cartApi";
-import type { IItem } from "~/types/item.type";
+import type { IItem } from "~/types/item.types";
+
 const props = defineProps<{
   itemInfo: IItem & { isInFavourite: boolean };
 }>();
@@ -53,19 +53,19 @@ async function addToCartClick() {
 
 <template>
   <div
-    class="flex justify-center items-center gap-[30px] flex-col lg:flex-row w-full lg:px-2.5 xl:p-0"
+    class="flex justify-center items-center gap-7.5 flex-col lg:flex-row w-full lg:px-2.5 xl:p-0"
   >
     <NuxtImg
       :key="props.itemInfo.id"
       :src="imageLink"
-      class="lg:w-[540px] lg:h-[580px] w-full object-cover"
+      class="lg:w-135 lg:h-145 w-full object-cover"
       :placeholder="'/no-image.png'"
     />
     <div
-      class="lg:w-[540px] lg:h-[580px] lg:flex-row w-full flex flex-col border border-accent-100 p-2.5"
+      class="lg:w-135 lg:h-145 lg:flex-row w-full flex flex-col border border-accent-100 p-2.5"
     >
       <div
-        class="w-full h-full border border-accent-100 flex flex-col pl-[30px] pr-[30px] pt-10 pb-10 gap-[30px]"
+        class="w-full h-full border border-accent-100 flex flex-col py-7.5 pt-10 pb-10 gap-7.5"
       >
         <h3 class="text-2xl tracking-widest">
           {{ props.itemInfo.title }}
@@ -81,7 +81,7 @@ async function addToCartClick() {
           `${props.itemInfo.price?.toFixed(2)} ₴`
         }}</span>
         <div
-          class="flex items-start gap-[15px] lg:items-center lg:gap-[30px] flex-col lg:flex-row"
+          class="flex items-start gap-3.75 lg:items-center lg:gap-7.5 flex-col lg:flex-row"
           v-if="!props.itemInfo.isRemoved"
         >
           <UButton

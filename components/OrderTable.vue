@@ -3,9 +3,8 @@ import type { TableColumn } from "@nuxt/ui";
 import dayjs from "dayjs";
 import { cancelOrder, confirmOrder, getOrders } from "~/api/orderApi";
 import { PublicDynamicRoutes } from "~/enums/routes.enum";
-import type { IOrderItem } from "~/types/order.item.type";
 import { OrderStatus } from "~/enums/order.status.enum";
-import type { IOrder } from "~/types/order.type";
+import type { IOrder } from "~/types/order.types";
 
 const UButton = resolveComponent("UButton");
 const toast = useToast();
@@ -200,7 +199,7 @@ const tableColumns: TableColumn<tableRow>[] = [
 
 <template>
   <div
-    class="flex flex-col items-center lg:w-[900px] xl:w-fit xl:min-w-2/3 grow w-full p-2.5"
+    class="flex flex-col items-center lg:w-225 xl:w-fit xl:min-w-2/3 grow w-full p-2.5"
   >
     <UTable
       :data="parsedData"

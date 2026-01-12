@@ -1,7 +1,7 @@
 <script setup lang="tsx">
 import { getPaginatedItems } from "~/api/itemApi";
 import { PublicDynamicRoutes } from "~/enums/routes.enum";
-import type { IItem } from "~/types/item.type";
+import type { IItem } from "~/types/item.types";
 
 const { pagination, isInfiniteScroll } = useItemPagination();
 
@@ -39,18 +39,16 @@ function onLoadMoreClick() {
 </script>
 
 <template>
-  <div
-    class="w-full flex flex-col items-center pt-5 lg:pt-[50px] xl:pt-[100px]"
-  >
+  <div class="w-full flex flex-col items-center pt-5 lg:pt-12.5 xl:pt-25">
     <CatalogFilters />
     <h2
       v-if="items.length === 0"
-      class="text-3xl font-bold w-full text-center pt-[60px]"
+      class="text-3xl font-bold w-full text-center pt-15"
     >
       Товарів не знайдено
     </h2>
     <div
-      class="xl:gap-x-[30px] pt-[60px] pb-[60px] max-w-[1110px] grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 lg:gap-x-[15px]"
+      class="xl:gap-x-7.5 px-15 max-w-277.5 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 lg:gap-x-3.75"
     >
       <template v-for="(item, index) in items" :key="item.id">
         <ItemCard :item-info="item" @click="onItemClick" />
@@ -60,18 +58,18 @@ function onLoadMoreClick() {
         ></div>
         <div
           v-if="(index + 1) % 2 === 0 && index + 1 !== items.length"
-          class="w-full h-px bg-accent-100 my-[15px] hidden lg:block xl:hidden col-span-full"
+          class="w-full h-px bg-accent-100 my-3.75 hidden lg:block xl:hidden col-span-full"
         ></div>
         <div
           v-if="(index + 1) % 3 === 0 && index + 1 !== items.length"
-          class="w-full h-px bg-accent-100 my-[30px] hidden xl:block col-span-full"
+          class="w-full h-px bg-accent-100 my-3.75 hidden xl:block col-span-full"
         ></div>
       </template>
     </div>
     <UButton
       v-if="page < totalPages"
       color="main"
-      class="font-medium text-[18px] pt-[15px] pb-[15px] pl-[35px] pr-[35px] border border-white text-white"
+      class="font-medium text-[18px] px-3.75 py-8.75 border border-white text-white"
       @click="onLoadMoreClick"
       >Завантажи ще</UButton
     >

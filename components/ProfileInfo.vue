@@ -2,7 +2,7 @@
 import type { FormSubmitEvent } from "@nuxt/ui";
 import * as zod from "zod";
 import { updateMe } from "~/api/userApi";
-import type { IUser } from "~/types/user.type";
+import type { IUser } from "~/types/auth.types";
 
 const userStore = useUserStore();
 const user = userStore.getUser() as IUser;

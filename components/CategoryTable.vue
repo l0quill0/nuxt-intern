@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { TableColumn } from "@nuxt/ui";
 import { deleteCategory, getPaginatedCategories } from "~/api/categoryApi";
-import type { ICategory } from "~/types/category.type";
+import type { ICategory } from "~/types/category.types";
 import UpdateCategoryForm from "./UpdateCategoryForm.vue";
 
 const config = useRuntimeConfig();
@@ -63,7 +63,7 @@ const onRemoveClick = async (id: number) => {
 
 <template>
   <div v-if="isDeleting" class="w-full h-full flex items-center justify-center">
-    <span class="loading loading-spinner loading-xl h-[100px] w-[100px]"></span>
+    <span class="loading loading-spinner loading-xl h-25 w-25"></span>
   </div>
   <div
     class="flex flex-col items-center grow w-full pl-2.5 pr-2.5 lg:p-0"
@@ -92,11 +92,11 @@ const onRemoveClick = async (id: number) => {
           :key="row.original.id"
           :src="`${config.public.bucketUrl}${row.original.image}`"
           :placeholder="'/no-image.png'"
-          class="w-[50px] h-[50px]"
+          class="w-12.5 h-12.5"
         />
       </template>
       <template #controls-cell="{ row }">
-        <div class="flex gap-1.5 max-w-[180px] flex-col lg:flex-row">
+        <div class="flex gap-1.5 max-w-45 flex-col lg:flex-row">
           <UButton
             v-if="!row.original.immutable"
             @click="openUpdateModalOpen(row.original.id, row.original.name)"
