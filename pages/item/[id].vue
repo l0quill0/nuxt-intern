@@ -75,6 +75,7 @@ watch(
           @comment-deleted="onCommentChange"
         />
       </div>
+      <h2 v-else class="font-semibold text-xl mt-5 mb-1">Коментарі відсутні</h2>
       <UButton
         color="main"
         class="text-white"
@@ -82,7 +83,6 @@ watch(
         v-if="hasNextPage"
         >Завантажити ще</UButton
       >
-      <h2 v-else class="font-semibold text-xl mt-5 mb-1">Коментарі відсутні</h2>
     </div>
   </div>
 </template>
