@@ -1,9 +1,10 @@
-import type {
-  IItem,
-  ICreateItem,
-  IUpdateItem,
-  IItemQuery,
-  IPaginatedItems,
+import {
+  type IItem,
+  type ICreateItem,
+  type IUpdateItem,
+  type IItemQuery,
+  type IPaginatedItems,
+  type ICommentPaginated,
 } from "~/types/item.types";
 
 export async function createItem(payload: ICreateItem) {
@@ -65,5 +66,27 @@ export function getSuggestedItems(itemId: number, itemCount: number = 3) {
   return useApi<IItem[]>(`/item/suggestions`, {
     method: "GET",
     query: { itemId: itemId, itemCount: itemCount },
+  });
+}
+
+export function addComment(
+  itemId: number,
+  body: { text: string; score: number }
+) {
+  return useNuxtApp().$api(`item/comment/${itemId}`, { method: "POST", body });
+}
+
+export function getComments(itemId: number, page: Ref<number>) {
+  return useApi<ICommentPaginated>(`item/comments/${itemId}`, {
+    method: "GET",
+    query: {
+      page,
+    },
+  });
+}
+
+export function deleteComment(commId: number) {
+  return useNuxtApp().$api(`item/comment/${commId}`, {
+    method: "DELETE",
   });
 }

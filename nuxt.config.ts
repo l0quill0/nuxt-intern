@@ -11,6 +11,7 @@ export default defineNuxtConfig({
     "@vueuse/nuxt",
     "@nuxtjs/i18n",
     "nuxt-google-auth",
+    "nuxt-rating",
   ],
   i18n: {
     langDir: "../locales/",

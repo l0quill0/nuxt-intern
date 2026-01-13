@@ -22,6 +22,7 @@
     "lucide-vue-next": "^0.555.0",
     "nuxt": "^4.2.1",
     "nuxt-google-auth": "^0.1.1",
+    "nuxt-rating": "^0.1.6",
     "pinia": "^3.0.4",
     "tailwindcss": "^4.1.17",
     "vue": "^3.5.25",

@@ -36,3 +36,16 @@ export interface IPaginatedItems {
   data: IItem[];
   meta: IPaginationMeta;
 }
+
+export interface IComment {
+  id: number;
+  user: string;
+  userId: number;
+  text: string;
+  score: number;
+}
+
+export interface ICommentPaginated {
+  items: IComment[];
+  meta: IPaginationMeta;
+}
