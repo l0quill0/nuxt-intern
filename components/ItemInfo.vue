@@ -70,9 +70,15 @@ async function addToCartClick() {
         <h3 class="text-2xl tracking-widest">
           {{ props.itemInfo.title }}
         </h3>
+
         <span class="text-accent-300 text-[14px] leading-[150%]">{{
           `Категорія: ${props.itemInfo.category?.name}`
         }}</span>
+        <div class="flex gap-2 items-start">
+          <p>{{ Number(props.itemInfo.score?.avg).toFixed(1) }}</p>
+          <NuxtRating :rating-value="Number(props.itemInfo.score?.avg)" />
+          <p>{{ `(${props.itemInfo.score?.count})` }}</p>
+        </div>
         <div class="w-full h-px bg-accent-100"></div>
         <span class="h-full text-[14px] leading-[150%] wrap-break-word">{{
           props.itemInfo.description

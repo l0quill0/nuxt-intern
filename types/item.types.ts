@@ -7,6 +7,7 @@ export interface IItem {
   image: string;
   price: number;
   isRemoved: boolean;
+  score?: { count: number; avg: number };
   category: { name: string; slug?: string };
 }
 
