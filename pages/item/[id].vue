@@ -31,6 +31,7 @@ const onItemUpdate = async () => {
 
 const onCommentChange = async () => {
   page.value = 1;
+  await refresh();
   await refreshComm();
 };
 
