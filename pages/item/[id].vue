@@ -59,6 +59,7 @@ watch(
     <div class="flex flex-col items-center gap-2.5" v-if="item">
       <ItemInfo :item-info="item" @updateInfo="onItemUpdate" />
       <Suggestions :item-id="itemId" />
+      <h2 class="font-bold text-2xl mt-10 mb-1">Коментарі</h2>
       <CreateComment
         :item-id="itemId"
         @comment-create="onCommentChange"
@@ -81,6 +82,7 @@ watch(
         v-if="hasNextPage"
         >Завантажити ще</UButton
       >
+      <h2 v-else class="font-semibold text-xl mt-5 mb-1">Коментарі відсутні</h2>
     </div>
   </div>
 </template>

@@ -16,7 +16,7 @@ function onItemClick(id: number) {
 </script>
 
 <template>
-  <div v-if="items.length > 0" class="pt-5 xl:pt-30 flex flex-col items-center">
+  <div v-if="items.length > 0" class="pt-5 xl:pt-10 flex flex-col items-center">
     <h2 class="text-[21px] leading-[1.4] text-center">
       Ми підготували для вас щось особливе
     </h2>
