@@ -69,7 +69,7 @@ function onLoadMoreClick() {
     <UButton
       v-if="page < totalPages"
       color="main"
-      class="font-medium text-[18px] px-3.75 py-8.75 border border-white text-white"
+      class="font-medium text-[18px] py-3.75 px-8.75 border border-white text-white"
       @click="onLoadMoreClick"
       >Завантажи ще</UButton
     >

@@ -1,3 +1,8 @@
+import {
+  AdminRoutes,
+  PublicDynamicRoutes,
+  PublicRoutes,
+} from "~/enums/routes.enum";
 import type { IItemQuery } from "~/types/item.types";
 
 export const useItemPagination = () => {
@@ -91,7 +96,17 @@ export const useItemPagination = () => {
     () => route.path,
     (newPath, oldPath) => {
       if (enabled) {
-        oldPath === "/" ? clearQuery(true) : clearQuery(false);
+        if (oldPath === "/") clearQuery(true);
+        if (
+          oldPath === AdminRoutes.ITEMS &&
+          !newPath.includes(PublicDynamicRoutes.ITEM)
+        )
+          clearQuery(false);
+        if (
+          newPath === AdminRoutes.ITEMS &&
+          !oldPath.includes(PublicDynamicRoutes.ITEM)
+        )
+          clearQuery(false);
       }
     }
   );

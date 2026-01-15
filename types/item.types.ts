@@ -8,7 +8,7 @@ export interface IItem {
   price: number;
   isRemoved: boolean;
   score?: { count: number; avg: number };
-  category: { name: string; slug?: string };
+  category: { name: string; slug: string };
 }
 
 export interface ICreateItem {

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { IItem } from "~/types/item.types";
+import { Scale, Check } from "lucide-vue-next";
 
 const props = defineProps<{
   itemInfo: IItem;
@@ -10,17 +11,39 @@ const emit = defineEmits<{
 }>();
 
 const config = useRuntimeConfig();
+const compStore = useCompStore();
+
+const isComp = computed(() => compStore.isInStore(props.itemInfo.id));
 
 const { title, image, category, price, id } = props.itemInfo;
 
 const imageUrl = `${config.public.bucketUrl}${image}`;
+
+function onCompClick() {
+  if (isComp.value) {
+    compStore.removeItem(props.itemInfo.id, props.itemInfo.category.slug);
+  } else {
+    compStore.addItem(
+      props.itemInfo.category.slug,
+      props.itemInfo.category.name,
+      props.itemInfo.id
+    );
+  }
+}
 </script>
 
 <template>
   <div
-    class="w-87.5 h-110 flex flex-col items-center p-8.75 hover:border bg-accent-50 hover:border-main-400 hover:cursor-pointer"
+    class="w-87.5 h-110 flex flex-col items-center p-8.75 hover:border bg-accent-50 hover:border-main-400 hover:cursor-pointer relative group"
     @click="() => emit('click', id)"
   >
+    <UButton
+      variant="ghost"
+      class="absolute right-2.5 top-5 text-main-400 hover:bg-transparent hover:text-main-300 duration-300 xl:opacity-0 group-hover:opacity-100 transition-opacity ease-in active:bg-transparent"
+      @click="onCompClick"
+      @click.stop
+      ><Scale /><Check class="absolute bottom-0 right-0 h-4 w-4" v-if="isComp"
+    /></UButton>
     <NuxtImg
       :key="id"
       :src="imageUrl"

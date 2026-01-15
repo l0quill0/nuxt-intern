@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ShoppingCart } from "lucide-vue-next";
+import { ShoppingCart, Scale } from "lucide-vue-next";
 import { PublicRoutes, UserRoutes } from "~/enums/routes.enum";
 import Cart from "./Cart.vue";
 import { getCount } from "~/api/userApi";
@@ -12,6 +12,7 @@ const { pagination } = useItemPagination();
 
 const tokenStore = useTokenStore();
 const userStore = useUserStore();
+const compStore = useCompStore();
 
 const { userToken } = storeToRefs(tokenStore);
 const { user } = storeToRefs(userStore);
@@ -26,6 +27,7 @@ const { data: response } = await getCount();
 const favCount = computed(() => response.value?.favCount);
 const cartCount = computed(() => response.value?.cartCount);
 const isMenuActive = computed(() => user && userToken);
+const compCount = computed(() => compStore.count);
 
 const menuOpen = ref(false);
 
@@ -154,23 +156,41 @@ watch(searchDebounced, (value) => {
         <div
           class="bg-accent-50 w-full h-px border-b-accent-50 xl:hidden"
         ></div>
-        <div class="relative">
-          <NuxtLink
-            class="p-0 xl:w-6 xl:h-6 w-12.5 h-12.5 flex justify-center items-center group"
-            :to="UserRoutes.FAVOURITE"
-            @click="() => (menuOpen = false)"
-            v-if="user && userToken"
-          >
-            <UIcon
-              name="custom:heart"
-              class="xl:w-4 xl:h-4 w-12.5 h-12.5 text-white group-hover:text-main-300 duration-300"
-            />
-          </NuxtLink>
-          <div
-            v-if="user && userToken && favCount"
-            class="flex items-center justify-center bg-orange-600 text-white rounded-full text-[8px] aspect-square w-5 bottom-[-40%] right-[-40%] absolute font-bold"
-          >
-            <span>{{ favCount }}</span>
+        <div class="flex flex-row gap-7.5">
+          <div class="relative" v-if="user && userToken">
+            <NuxtLink
+              class="p-0 xl:w-6 xl:h-6 w-12.5 h-12.5 flex justify-center items-center group"
+              :to="UserRoutes.FAVOURITE"
+              @click="() => (menuOpen = false)"
+            >
+              <UIcon
+                name="custom:heart"
+                class="xl:w-4 xl:h-4 w-12.5 h-12.5 text-white group-hover:text-main-300 duration-300"
+              />
+            </NuxtLink>
+            <div
+              v-if="favCount"
+              class="flex items-center justify-center bg-orange-600 text-white rounded-full xl:text-[8px] aspect-square xl:w-5 w-8 text-[14px] bottom-[-40%] right-[-40%] absolute font-bold"
+            >
+              <span>{{ favCount }}</span>
+            </div>
+          </div>
+          <div class="relative">
+            <NuxtLink
+              class="p-0 xl:w-6 xl:h-6 w-12.5 h-12.5 flex justify-center items-center group"
+              :to="PublicRoutes.COMPARISON"
+              @click="() => (menuOpen = false)"
+            >
+              <Scale
+                class="xl:w-4 xl:h-4 w-12.5 h-12.5 text-white group-hover:text-main-300 duration-300"
+              />
+            </NuxtLink>
+            <div
+              v-if="compCount"
+              class="flex items-center justify-center bg-orange-600 text-white rounded-full xl:text-[8px] aspect-square xl:w-5 w-8 text-[14px] bottom-[-40%] right-[-40%] absolute font-bold"
+            >
+              <span>{{ compCount }}</span>
+            </div>
           </div>
         </div>
       </div>

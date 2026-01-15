@@ -60,7 +60,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
     <UFormField class="w-full h-20" name="text"
       ><UTextarea
         v-model="state.text"
-        :placeholder="'Залиште коментар'"
+        :placeholder="'Залиште відгук...'"
         variant="none"
         class="w-full h-20"
         :ui="{

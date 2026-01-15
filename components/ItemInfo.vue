@@ -2,6 +2,7 @@
 import { addFavourites, removeFavourites } from "~/api/userApi";
 import { addToCart } from "~/api/cartApi";
 import type { IItem } from "~/types/item.types";
+import { Scale, Check, Heart, HeartCrack } from "lucide-vue-next";
 
 const props = defineProps<{
   itemInfo: IItem & { isInFavourite: boolean };
@@ -16,25 +17,19 @@ const toast = useToast();
 
 const user = useUserStore().getUser();
 const token = useTokenStore().getToken();
+const compStore = useCompStore();
+
+const isComp = computed(() => compStore.isInStore(props.itemInfo.id));
 
 const imageLink = `${config.public.bucketUrl}${props.itemInfo.image}`;
 
-async function onFavouriteAddClick() {
+async function onFavClick() {
   try {
-    await addFavourites(props.itemInfo.id);
+    props.itemInfo.isInFavourite
+      ? await removeFavourites(props.itemInfo.id)
+      : await addFavourites(props.itemInfo.id);
     await refreshNuxtData("count");
     emit("updateInfo");
-    toast.add({ title: "Додано до улюбленого", color: "success" });
-  } catch (error) {
-    toast.add({ title: error as string, color: "error" });
-  }
-}
-async function onFavouriteRemoveClick() {
-  try {
-    await removeFavourites(props.itemInfo.id);
-    await refreshNuxtData("count");
-    emit("updateInfo");
-    toast.add({ title: "Видалено з улюбленого", color: "success" });
   } catch (error) {
     toast.add({ title: error as string, color: "error" });
   }
@@ -47,6 +42,18 @@ async function addToCartClick() {
     toast.add({ title: "Додано до кошика", color: "success" });
   } catch (error) {
     toast.add({ title: error as string, color: "error" });
+  }
+}
+
+function onCompClick() {
+  if (isComp.value) {
+    compStore.removeItem(props.itemInfo.id, props.itemInfo.category.slug);
+  } else {
+    compStore.addItem(
+      props.itemInfo.category.slug,
+      props.itemInfo.category.name,
+      props.itemInfo.id
+    );
   }
 }
 </script>
@@ -87,32 +94,37 @@ async function addToCartClick() {
           `${props.itemInfo.price?.toFixed(2)} ₴`
         }}</span>
         <div
-          class="flex items-start gap-3.75 lg:items-center lg:gap-7.5 flex-col lg:flex-row"
+          class="flex items-start gap-3.75 lg:items-center lg:gap-7.5 flex-row justify-between w-full"
           v-if="!props.itemInfo.isRemoved"
         >
           <UButton
             v-if="user && token"
             color="main"
-            class="border border-white pt-2.5 pb-2.5 pl-5 pr-5 text-white text-[18px]"
+            class="border border-white py-2.5 px-5 text-white text-[18px]"
             @click="addToCartClick"
             >Додати у кошик</UButton
           >
-          <UButton
-            variant="outline"
-            color="main"
-            class="pt-2.5 pb-2.5 pl-5 pr-5 text-[18px]"
-            v-if="user && token && !props.itemInfo.isInFavourite"
-            @click="onFavouriteAddClick"
-            >Додати у улюблене</UButton
-          >
-          <UButton
-            variant="outline"
-            color="main"
-            class="pt-2.5 pb-2.5 pl-5 pr-5 text-[18px]"
-            v-if="user && token && props.itemInfo.isInFavourite"
-            @click="onFavouriteRemoveClick"
-            >Прибрати з улюбленого</UButton
-          >
+          <div class="flex flex-row gap-2 h-full ml-auto">
+            <UButton
+              variant="ghost"
+              color="main"
+              class="relative hover:bg-transparent active:bg-transparent hover:text-main-300 duration-300 h-full"
+              v-if="user && token"
+              @click="onFavClick"
+              ><Heart
+                v-if="!itemInfo.isInFavourite"
+                class="w-8 h-8" /><HeartCrack v-else class="w-8 h-8"
+            /></UButton>
+            <UButton
+              variant="ghost"
+              color="main"
+              class="relative hover:bg-transparent active:bg-transparent hover:text-main-300 duration-300 h-full"
+              @click="onCompClick"
+              ><Scale class="w-8 h-8" /><Check
+                class="absolute bottom-0 right-0 h-6 w-6"
+                v-if="isComp"
+            /></UButton>
+          </div>
         </div>
       </div>
     </div>

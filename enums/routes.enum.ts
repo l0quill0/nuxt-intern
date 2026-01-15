@@ -3,10 +3,12 @@ export enum PublicRoutes {
   LOGIN = "/login",
   REGISTER = "/register",
   CATALOG = "/catalog",
+  COMPARISON = "/comparison",
 }
 
 export enum PublicDynamicRoutes {
   ITEM = "/item/",
+  COMPARISON = "/comparison/",
 }
 
 export enum UserRoutes {
