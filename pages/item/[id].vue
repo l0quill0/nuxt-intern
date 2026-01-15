@@ -60,7 +60,9 @@ watch(
     <div class="flex flex-col items-center gap-2.5" v-if="item">
       <ItemInfo :item-info="item" @updateInfo="onItemUpdate" />
       <Suggestions :item-id="itemId" />
-      <h2 class="font-bold text-2xl mt-10 mb-1" v-if="comments">Відгуки</h2>
+      <h2 class="font-bold text-2xl mt-10 mb-1" v-if="comments || user">
+        Відгуки
+      </h2>
       <CreateComment
         :item-id="itemId"
         @comment-create="onCommentChange"
