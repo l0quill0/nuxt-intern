@@ -21,7 +21,7 @@ const compStore = useCompStore();
       ></div>
     </template>
   </div>
-  <div v-else class="flex flex-col items-center text-2xl font-semibold">
+  <div v-else class="flex flex-col items-center text-2xl font-semibold pt-15">
     <p>Немає товарів для порівняння</p>
     <NuxtLink
       :to="PublicRoutes.CATALOG"
