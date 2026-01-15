@@ -5,6 +5,7 @@ import { PublicRoutes } from "~/enums/routes.enum";
 const toast = useToast();
 const tokenStore = useTokenStore();
 const userStore = useUserStore();
+const compStore = useCompStore();
 
 const onVerified = async ({
   email,
@@ -21,6 +22,7 @@ const onVerified = async ({
       await userStore.fetchUser();
       toast.add({ title: "Авторизація успішна", color: "success" });
       refreshNuxtData("count");
+      compStore.clearAll();
       navigateTo(PublicRoutes.HOME);
     } catch (error) {
       toast.add({ title: error as string, color: "error" });
