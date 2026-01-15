@@ -19,6 +19,7 @@ const state = reactive<Partial<Schema>>({
 const toast = useToast();
 const tokenStore = useTokenStore();
 const userStore = useUserStore();
+const compStore = useCompStore();
 
 const showPassword = ref(false);
 
@@ -32,6 +33,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     await userStore.fetchUser();
     toast.add({ title: "Авторизація успішна", color: "success", ui: {} });
     await refreshNuxtData("count");
+    compStore.clearAll();
     navigateTo(PublicRoutes.HOME);
   } catch (error) {
     toast.add({

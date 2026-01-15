@@ -4,6 +4,7 @@ import type { IUser } from "~/types/auth.types";
 export const useMenus = () => {
   const tokenStore = useTokenStore();
   const userStore = useUserStore();
+  const compStore = useCompStore();
   const { userToken } = storeToRefs(tokenStore);
   const { user } = storeToRefs(userStore);
   const toast = useToast();
@@ -18,8 +19,9 @@ export const useMenus = () => {
       label: "Вийти",
       icon: "i-lucide-log-out",
       onSelect: () => {
-        useTokenStore().clearToken();
-        useUserStore().clearUser();
+        tokenStore.clearToken();
+        userStore.clearUser();
+        compStore.clearAll();
         navigateTo(PublicRoutes.HOME);
         toast.add({ title: "Вихід успішний", color: "success" });
       },
@@ -54,8 +56,9 @@ export const useMenus = () => {
       label: "Вийти",
       icon: "i-lucide-log-out",
       onSelect: () => {
-        useTokenStore().setToken("");
-        useUserStore().setUser({} as IUser);
+        tokenStore.setToken("");
+        userStore.setUser({} as IUser);
+        compStore.clearAll();
         navigateTo(PublicRoutes.HOME);
         toast.add({ title: "Вихід успішний", color: "success" });
       },
