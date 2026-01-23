@@ -7,7 +7,7 @@ const modal = overlay.create(UpdatePasswordForm);
 const addPasswordModal = overlay.create(CreatePasswordForm);
 const { user } = storeToRefs(useUserStore());
 const hasPassword = computed(() =>
-  user.value?.authMethod.find((m) => m.name === "BASIC")
+  user.value?.authFlow.find((m) => m === "BASIC"),
 );
 
 const onOpenModalClick = () => {
@@ -20,7 +20,7 @@ const onCreatePassClick = () => {
 
 watch(
   () => useUserStore().user,
-  () => {}
+  () => {},
 );
 </script>
 

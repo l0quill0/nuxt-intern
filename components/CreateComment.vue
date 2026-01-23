@@ -9,7 +9,7 @@ const emit = defineEmits<{
 
 import type { FormSubmitEvent } from "@nuxt/ui";
 import * as zod from "zod";
-import { addComment } from "~/api/itemApi";
+import { addComment } from "~/api/productApi";
 
 const toast = useToast();
 

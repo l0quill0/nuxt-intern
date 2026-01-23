@@ -2,7 +2,7 @@
 import type { FormSubmitEvent } from "@nuxt/ui";
 import * as zod from "zod";
 import { getCategories } from "~/api/categoryApi";
-import { createItem } from "~/api/itemApi";
+import { createProduct } from "~/api/productApi";
 
 const emit = defineEmits<{ (e: "uploading", isDismissable: boolean): void }>();
 const toast = useToast();
@@ -37,7 +37,7 @@ const categoryItems = computed<{ label: string; value: string }[]>(
     categories.value?.map((c) => ({
       label: c.name.charAt(0).toUpperCase() + c.name.slice(1),
       value: c.slug,
-    })) ?? []
+    })) ?? [],
 );
 
 const validation = computed(() => schema.safeParse(state));
@@ -48,7 +48,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   try {
     emit("uploading", true);
     isUploading.value = null;
-    await createItem(event.data);
+    await createProduct(event.data);
     state.title = undefined;
     state.description = undefined;
     state.price = undefined;

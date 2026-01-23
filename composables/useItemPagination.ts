@@ -3,7 +3,7 @@ import {
   PublicDynamicRoutes,
   PublicRoutes,
 } from "~/enums/routes.enum";
-import type { IItemQuery } from "~/types/item.types";
+import type { IProductQuery } from "~/types/product.types";
 
 export const useItemPagination = () => {
   const route = useRoute();
@@ -11,14 +11,15 @@ export const useItemPagination = () => {
 
   const enabled = computed(
     () =>
-      route.path.startsWith("/catalog") || route.path.startsWith("/admin/items")
+      route.path.startsWith("/catalog") ||
+      route.path.startsWith("/admin/items"),
   );
 
   const { query } = route;
 
   const isInfiniteScroll = useState("infinite-scroll", () => false);
 
-  const pagination = useState<IItemQuery>("itemPagination", () => ({
+  const pagination = useState<IProductQuery>("itemPagination", () => ({
     page: parseQueryParam({
       value: query.page,
       transformer: Number,
@@ -48,7 +49,7 @@ export const useItemPagination = () => {
   const clearQuery = (keepCategory: boolean) => {
     Object.keys(pagination.value).forEach((k) => {
       if (keepCategory && k === "category") return;
-      pagination.value[k as keyof IItemQuery] = undefined;
+      pagination.value[k as keyof IProductQuery] = undefined;
     });
   };
 
@@ -61,14 +62,14 @@ export const useItemPagination = () => {
       clean = Object.fromEntries(
         Object.entries(pagination.value).filter(
           ([_, v]) =>
-            v !== undefined && v !== "" && _ !== "page" && _ !== "pageSize"
-        )
+            v !== undefined && v !== "" && _ !== "page" && _ !== "pageSize",
+        ),
       );
     } else {
       clean = Object.fromEntries(
         Object.entries(pagination.value).filter(
-          ([_, v]) => v !== undefined && v !== ""
-        )
+          ([_, v]) => v !== undefined && v !== "",
+        ),
       );
     }
 
@@ -90,7 +91,7 @@ export const useItemPagination = () => {
         pagination.value.page = undefined;
         pagination.value.pageSize = undefined;
       }
-    }
+    },
   );
   watch(
     () => route.path,
@@ -108,7 +109,7 @@ export const useItemPagination = () => {
         )
           clearQuery(false);
       }
-    }
+    },
   );
   onMounted(() => enabled && updateQuery());
 

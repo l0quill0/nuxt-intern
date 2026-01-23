@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { PublicDynamicRoutes, PublicRoutes } from "~/enums/routes.enum";
-import type { IItem } from "~/types/item.types";
 import { Trash } from "lucide-vue-next";
+import type { IProductWithScore } from "~/types/product.types";
 
-const props = defineProps<{ items: IItem[] }>();
+const props = defineProps<{ items: IProductWithScore[] }>();
 const emit = defineEmits<{
   (e: "itemRemove", id: number): void;
 }>();

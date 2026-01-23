@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import type { IComment } from "~/types/item.types";
+import type { IComment } from "~/types/product.types";
 import { Trash } from "lucide-vue-next";
-import { deleteComment } from "~/api/itemApi";
-
+import { deleteComment } from "~/api/productApi";
 const emit = defineEmits<{
   (e: "commentDeleted"): void;
 }>();
@@ -10,11 +9,11 @@ const emit = defineEmits<{
 const user = useUserStore().getUser();
 const toast = useToast();
 
-const props = defineProps<{ comment: IComment }>();
+const props = defineProps<{ comment: IComment; productId: number }>();
 
 const onDeleteClick = async (id: number) => {
   try {
-    await deleteComment(id);
+    await deleteComment(props.productId, id);
     emit("commentDeleted");
     toast.add({ title: "Видалено", color: "success" });
   } catch (error) {
@@ -28,9 +27,9 @@ const onDeleteClick = async (id: number) => {
     <div class="flex gap-1.5">
       <p>{{ Number(comment.score).toFixed(1) }}</p>
       <NuxtRating :rating-value="Number(comment.score)" />
-      <p>{{ comment.user }}</p>
+      <p>{{ comment.author.name }}</p>
       <UButton
-        v-if="comment.userId === user?.id || user?.role === 'ADMIN'"
+        v-if="comment.author.id === user?.id || user?.role === 'ADMIN'"
         variant="ghost"
         class="p-0 w-3.5 h-3.5 self-center ml-auto opacity-0 group-hover:opacity-100 transition-opacity ease-in hover:bg-transparent"
         @click="onDeleteClick(comment.id)"

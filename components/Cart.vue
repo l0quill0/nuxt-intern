@@ -1,18 +1,14 @@
 <script setup lang="ts">
-import { clearCart, getCart } from "~/api/cartApi";
+import { getActive, updateOrder } from "~/api/orderApi";
 import { PublicDynamicRoutes, UserRoutes } from "~/enums/routes.enum";
+import type { IOrder } from "~/types/order.types";
 
 const toast = useToast();
 const modal = useOverlay();
 
-const { data: cart, refresh } = await getCart();
+const { data: response, refresh } = await getActive();
 
-const totalOrder = computed(
-  () =>
-    cart.value?.items.reduce((acc, item) => {
-      return acc + item.price * item.quantity;
-    }, 0) ?? 0
-);
+const cart = computed(() => response.value ?? ({} as IOrder));
 
 const isSendEnabled = computed(() => cart.value && cart.value.items.length > 0);
 
@@ -23,7 +19,7 @@ async function onDataUpdate() {
 
 async function onClearClick() {
   try {
-    await clearCart();
+    await updateOrder(cart.value.id, { items: [] });
     await refresh();
     await refreshNuxtData("count");
   } catch (error) {
@@ -58,6 +54,7 @@ async function onCreateClick() {
       >
         <OrderItemTable
           v-if="cart"
+          :order-id="cart.id"
           :items="cart.items"
           :qunatity-controls="true"
           @data-update="onDataUpdate"
@@ -65,7 +62,7 @@ async function onCreateClick() {
         />
         <div class="flex items-center justify-end gap-4 p-2.5 w-full flex-wrap">
           <span class="text-2xl tracking-widest">
-            {{ `${totalOrder.toFixed(2)} ₴` }}
+            {{ `${cart?.total.toFixed(2)} ₴` }}
           </span>
           <div class="flex gap-1.25 lg:gap-4">
             <UButton

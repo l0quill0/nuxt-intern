@@ -15,9 +15,13 @@ pagination.value.pageSize = 8;
 
 const { data: response, pending, refresh } = getPaginatedCategories(pagination);
 
-const total = computed(() => response.value?.meta.totalItems ?? 0);
+const total = computed(() =>
+  response.value?.totalPages && pagination.value.pageSize
+    ? response.value.totalPages * pagination.value.pageSize
+    : 0,
+);
 
-const totalPages = computed(() => response.value?.meta.totalPages ?? 0);
+const totalPages = computed(() => response.value?.totalPages ?? 0);
 
 const isDeleting = ref(false);
 
@@ -38,8 +42,8 @@ const tableColumns: TableColumn<TableRow>[] = [
   },
 ];
 
-const openUpdateModalOpen = (id: number, name: string) => {
-  updateModal.open({ id });
+const openUpdateModalOpen = (slug: string) => {
+  updateModal.open({ slug });
 };
 
 const onPageChange = (page: number) => {
@@ -47,10 +51,10 @@ const onPageChange = (page: number) => {
   pagination.value.page = page;
 };
 
-const onRemoveClick = async (id: number) => {
+const onRemoveClick = async (slug: string) => {
   try {
     isDeleting.value = true;
-    await deleteCategory(id);
+    await deleteCategory(slug);
     await refresh();
     toast.add({ title: "Категорія видалена", color: "success" });
     isDeleting.value = false;
@@ -71,7 +75,7 @@ const onRemoveClick = async (id: number) => {
   >
     <UTable
       :loading="pending"
-      :data="response?.data"
+      :data="response?.items"
       :columns="tableColumns"
       empty="Категорій не знайдено"
       class="w-full grow"
@@ -98,17 +102,15 @@ const onRemoveClick = async (id: number) => {
       <template #controls-cell="{ row }">
         <div class="flex gap-1.5 max-w-45 flex-col lg:flex-row">
           <UButton
-            v-if="!row.original.immutable"
-            @click="openUpdateModalOpen(row.original.id, row.original.name)"
+            @click="openUpdateModalOpen(row.original.slug)"
             color="success"
             class="flex justify-center"
             >Оновити</UButton
           >
           <UButton
-            v-if="!row.original.immutable"
             color="error"
             class="flex justify-center"
-            @click="() => onRemoveClick(row.original.id)"
+            @click="() => onRemoveClick(row.original.slug)"
             >Видалити</UButton
           >
         </div>

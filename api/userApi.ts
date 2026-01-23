@@ -1,23 +1,35 @@
-import type { IItem } from "~/types/item.types";
-import type { IUser } from "~/types/auth.types";
+import {
+  type IUpdatePassword,
+  type IUpdateUser,
+  type IUser,
+  type IUserSelectionCount,
+} from "~/types/auth.types";
+import { type IProduct } from "~/types/product.types";
 
-export async function getMe() {
+export function getMe() {
   return useApi<IUser>("/user/me", {
     method: "GET",
   });
 }
 
-export async function updateMe(email?: string, name?: string) {
-  return useNuxtApp().$api<IUser>("/user/update-me", {
-    method: "PATCH",
-    body: { email, name },
+export async function getCount() {
+  return useApi<IUserSelectionCount>("/user/count", {
+    method: "GET",
+    key: "count",
   });
 }
 
-export async function updatePassword(oldPassword: string, newPassword: string) {
+export function updateMe(data: IUpdateUser) {
+  return useNuxtApp().$api("/user/update-me", {
+    method: "PATCH",
+    body: data,
+  });
+}
+
+export async function updatePassword(data: IUpdatePassword) {
   return useNuxtApp().$api("/user/update-password", {
     method: "PATCH",
-    body: { oldPassword, newPassword },
+    body: data,
   });
 }
 
@@ -29,7 +41,7 @@ export async function addPassword(password: string) {
 }
 
 export async function getFavourites() {
-  return useApi<{ userId: number; items: IItem[] }>("/favourite", {
+  return useApi<IProduct[]>("/favourite", {
     method: "GET",
   });
 }
@@ -43,12 +55,5 @@ export async function addFavourites(itemId: number) {
 export async function removeFavourites(itemId: number) {
   return useNuxtApp().$api(`/favourite/${itemId}`, {
     method: "DELETE",
-  });
-}
-
-export async function getCount() {
-  return useApi<{ favCount: number; cartCount: number }>("/user/count", {
-    method: "GET",
-    key: "count",
   });
 }

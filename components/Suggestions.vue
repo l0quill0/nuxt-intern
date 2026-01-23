@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { getSuggestedItems } from "~/api/itemApi";
+import { getSuggestedProducts } from "~/api/productApi";
 import { PublicDynamicRoutes } from "~/enums/routes.enum";
 
 const props = defineProps({
-  itemId: { type: Number, required: true },
+  productId: { type: Number, required: true },
 });
 
-const { data: response } = getSuggestedItems(props.itemId, 6);
+const { data: response } = getSuggestedProducts(props.productId, 6);
 
-const items = computed(() => response.value ?? []);
+const products = computed(() => response.value ?? []);
 
 function onItemClick(id: number) {
   navigateTo(`${PublicDynamicRoutes.ITEM}${id}`);
@@ -16,7 +16,10 @@ function onItemClick(id: number) {
 </script>
 
 <template>
-  <div v-if="items.length > 0" class="pt-5 xl:pt-10 flex flex-col items-center">
+  <div
+    v-if="products.length > 0"
+    class="pt-5 xl:pt-10 flex flex-col items-center"
+  >
     <h2 class="text-[21px] leading-[1.4] text-center">
       Ми підготували для вас щось особливе
     </h2>
@@ -25,9 +28,9 @@ function onItemClick(id: number) {
     </h2>
   </div>
   <UCarousel
-    v-if="items.length > 0"
-    v-slot="{ item }"
-    :items="items"
+    v-if="products.length > 0"
+    v-slot="{ item: product }"
+    :items="products"
     loop
     arrows
     dots
@@ -41,6 +44,6 @@ function onItemClick(id: number) {
       dot: 'bg-main-300 data-[state=active]:bg-main-400',
     }"
   >
-    <ItemCard :item-info="item" @click="onItemClick" />
+    <ItemCard :product-info="product" @click="onItemClick" />
   </UCarousel>
 </template>

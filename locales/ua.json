@@ -1,4 +1,9 @@
 {
+  "orderStatus": {
+    "PENDING": "Підтвержене",
+    "CANCELED": "Скасоване",
+    "COMPLETE": "Виконане"
+  },
   "region": {
     "Dnipropetrovska oblast": "Дніпропетровська область",
     "Volynska oblast": "Волинська область",

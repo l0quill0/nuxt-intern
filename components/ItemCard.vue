@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { IItem } from "~/types/item.types";
 import { Scale, Check } from "lucide-vue-next";
+import type { IProduct } from "~/types/product.types";
 
 const props = defineProps<{
-  itemInfo: IItem;
+  productInfo: IProduct;
 }>();
 
 const emit = defineEmits<{
@@ -13,21 +13,17 @@ const emit = defineEmits<{
 const config = useRuntimeConfig();
 const compStore = useCompStore();
 
-const isComp = computed(() => compStore.isInStore(props.itemInfo.id));
+const { title, image, category, price, id } = props.productInfo;
 
-const { title, image, category, price, id } = props.itemInfo;
+const isComp = computed(() => compStore.isInStore(id));
 
 const imageUrl = `${config.public.bucketUrl}${image}`;
 
 function onCompClick() {
   if (isComp.value) {
-    compStore.removeItem(props.itemInfo.id, props.itemInfo.category.slug);
+    compStore.removeItem(id, category.slug);
   } else {
-    compStore.addItem(
-      props.itemInfo.category.slug,
-      props.itemInfo.category.name,
-      props.itemInfo.id
-    );
+    compStore.addItem(category.slug, category.name, id);
   }
 }
 </script>

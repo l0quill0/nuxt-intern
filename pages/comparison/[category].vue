@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { IItem } from "~/types/item.types";
+import type { IProductWithScore } from "~/types/product.types";
 
 const route = useRoute();
 const category = route.params.category;
@@ -13,11 +13,11 @@ const { data: items } = await useAsyncData(
     if (!list?.items.length) return [];
 
     const promises = list.items.map((id) =>
-      useNuxtApp().$api<IItem>(`item/${id}`, { method: "GET" })
+      useNuxtApp().$api<IProductWithScore>(`/product/${id}`, { method: "GET" }),
     );
 
     return await Promise.all(promises);
-  }
+  },
 );
 
 const onItemRemove = (id: number) => {

@@ -1,30 +1,34 @@
-import type { ILoginData, IRegisterData } from "~/types/auth.types";
+import type {
+  IGoogleAuth,
+  ILoginData,
+  IRegisterData,
+} from "~/types/auth.types";
 
-export async function login(payload: ILoginData) {
+export function login(data: ILoginData) {
   const config = useRuntimeConfig();
 
   return $fetch<{ access_token: string }>(
     `${config.public.apiUrl}/auth/login`,
     {
       method: "POST",
-      body: payload,
+      body: data,
       onResponseError: ({ response }) => {
         throw response._data.message;
       },
-    }
+    },
   );
 }
 
-export async function register(payload: IRegisterData) {
+export function register(data: IRegisterData) {
   return useNuxtApp().$api(`/auth/register`, {
     method: "POST",
-    body: payload,
+    body: data,
   });
 }
 
-export async function loginGoogle(paylod: { email: string; name: string }) {
+export function loginGoogle(data: IGoogleAuth) {
   return useNuxtApp().$api<{ access_token: string }>(`/auth/google`, {
     method: "POST",
-    body: paylod,
+    body: data,
   });
 }

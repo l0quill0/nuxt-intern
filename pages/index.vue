@@ -18,8 +18,8 @@ const onCategoryClick = (category: string) => {
     class="flex flex-col lg:flex-row flex-wrap gap-7.5 max-w-277.5 pt-13.75 lg:justify-evenly xl:justify-normal"
   >
     <CategoryCard
-      v-if="categories?.data"
-      v-for="category in categories.data"
+      v-if="categories?.items"
+      v-for="category in categories.items"
       :category="category"
       @click="onCategoryClick"
     />

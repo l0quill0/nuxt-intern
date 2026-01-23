@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import type { TableColumn } from "@nuxt/ui";
-import { addToCart, removeFromCart } from "~/api/cartApi";
-import type { IOrderItem } from "~/types/order.types";
+import { updateOrder } from "~/api/orderApi";
+import type { IOrderProduct } from "~/types/order.types";
 
-const props = defineProps<{ items: IOrderItem[]; qunatityControls: boolean }>();
+const props = defineProps<{
+  items: IOrderProduct[];
+  orderId: number;
+  qunatityControls: boolean;
+}>();
 const emit = defineEmits<{
   (e: "dataUpdate"): void;
   (e: "itemClick", id: number): void;
@@ -14,13 +18,13 @@ const toast = useToast();
 
 const parsedData = computed(() =>
   props.items.map((item) => ({
-    id: item.id,
-    title: item.title,
-    image: `${config.public.bucketUrl}${item.image}`,
+    id: item.product.id,
+    title: item.product.title,
+    image: `${config.public.bucketUrl}${item.product.image}`,
     quantity: item.quantity,
-    price: item.price,
-    total: item.quantity * item.price,
-  }))
+    price: item.product.price,
+    total: item.quantity * item.product.price,
+  })),
 );
 
 type tableRow = {
@@ -41,7 +45,24 @@ const tableColumns: TableColumn<tableRow>[] = [
 
 async function onAddClick(id: number) {
   try {
-    await addToCart(id);
+    let isInItems = false;
+    const items = parsedData.value.map((item) => {
+      if (item.id === id) {
+        isInItems = true;
+        return {
+          productId: item.id,
+          quantity: item.quantity + 1,
+        };
+      }
+      return {
+        productId: item.id,
+        quantity: item.quantity + 1,
+      };
+    });
+
+    if (!isInItems) items.push({ productId: id, quantity: 1 });
+
+    await updateOrder(props.orderId, { items });
     emit("dataUpdate");
   } catch (error) {
     toast.add({ title: error as string, color: "error" });
@@ -50,7 +71,20 @@ async function onAddClick(id: number) {
 
 async function onRemoveClick(id: number) {
   try {
-    await removeFromCart(id, 1);
+    const items = parsedData.value.map((item) => {
+      if (item.id === id) {
+        return {
+          productId: item.id,
+          quantity: item.quantity - 1,
+        };
+      }
+      return {
+        productId: item.id,
+        quantity: item.quantity,
+      };
+    });
+
+    await updateOrder(props.orderId, { items });
     emit("dataUpdate");
   } catch (error) {
     toast.add({ title: error as string, color: "error" });

@@ -2,8 +2,8 @@
 import type { FormSubmitEvent } from "@nuxt/ui";
 import * as zod from "zod";
 import { getCategories } from "~/api/categoryApi";
-import { getItemById, updateItem } from "~/api/itemApi";
-import type { IItem } from "~/types/item.types";
+import { getProductById, updateItem } from "~/api/productApi";
+import type { IProduct } from "~/types/product.types";
 
 const props = defineProps({
   itemId: { type: Number, required: true },
@@ -26,7 +26,7 @@ const schema = zod.object({
 });
 
 const { data: categories } = await getCategories();
-const { data: response, refresh } = await getItemById(props.itemId);
+const { data: response, refresh } = await getProductById(props.itemId);
 
 const validation = computed(() => schema.safeParse(state));
 const hasErrors = computed(
@@ -37,9 +37,9 @@ const hasErrors = computed(
       newState: state,
       omitKeys: ["image"],
     }) &&
-      !state.image)
+      !state.image),
 );
-const item = computed(() => response.value ?? ({} as IItem));
+const item = computed(() => response.value ?? ({} as IProduct));
 
 const isUploading = ref<number | null>(0);
 const isDismissable = ref(true);
@@ -49,7 +49,7 @@ const categoryItems = computed<{ label: string; value: string }[]>(
     categories.value?.map((c) => ({
       label: c.name.charAt(0).toUpperCase() + c.name.slice(1),
       value: c.slug,
-    })) ?? []
+    })) ?? [],
 );
 type Schema = zod.output<typeof schema>;
 

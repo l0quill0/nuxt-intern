@@ -2,12 +2,19 @@ import type {
   ICategory,
   ICategoryQuery,
   ICategoryPaginated,
+  ICreateCategory,
 } from "~/types/category.types";
 
 export function getCategories() {
   return useApi<ICategory[]>("/category/all", {
     method: "GET",
     key: "categories",
+  });
+}
+
+export function getCategoryBySlug(slug: string) {
+  return useApi<ICategory>(`/category/${slug}`, {
+    method: "GET",
   });
 }
 
@@ -19,16 +26,10 @@ export function getPaginatedCategories(query?: Ref<ICategoryQuery>) {
   });
 }
 
-export function getCategoryById(id: number) {
-  return useApi<ICategory>(`/category/${id}`, {
-    method: "GET",
-  });
-}
-
-export async function createCategory(image: File, name: string) {
+export function createCategory(data: ICreateCategory) {
   const formData = new FormData();
-  formData.append("file", image);
-  formData.append("name", name);
+  formData.append("name", data.name);
+  formData.append("file", data.image);
 
   return useNuxtApp().$api(`/category`, {
     method: "POST",
@@ -36,26 +37,18 @@ export async function createCategory(image: File, name: string) {
   });
 }
 
-export async function updateCategory(
-  id: number,
-  data: { name?: string; image?: File }
-) {
+export function updateCategory(slug: string, image: File) {
   const formData = new FormData();
-  if (data.name) {
-    formData.append("name", data.name);
-  }
-  if (data.image) {
-    formData.append("file", data.image);
-  }
+  formData.append("file", image);
 
-  return useNuxtApp().$api(`/category/${id}`, {
+  return useNuxtApp().$api(`/category/${slug}`, {
     method: "PATCH",
     body: formData,
   });
 }
 
-export async function deleteCategory(id: number) {
-  return useNuxtApp().$api(`/category/${id}`, {
+export function deleteCategory(slug: string) {
+  return useNuxtApp().$api(`/category/${slug}`, {
     method: "DELETE",
   });
 }

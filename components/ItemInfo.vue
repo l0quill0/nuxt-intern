@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { addFavourites, removeFavourites } from "~/api/userApi";
-import { addToCart } from "~/api/cartApi";
-import type { IItem } from "~/types/item.types";
+import type { IProductWithScore } from "~/types/product.types";
 import { Scale, Check, Heart, HeartCrack } from "lucide-vue-next";
+import { getActive, updateOrder } from "~/api/orderApi";
+import type { IOrder, IOrderProduct } from "~/types/order.types";
 
 const props = defineProps<{
-  itemInfo: IItem & { isInFavourite: boolean };
+  itemInfo: IProductWithScore & { isInFavourites: boolean };
 }>();
 
 const emit = defineEmits<{
@@ -14,6 +15,10 @@ const emit = defineEmits<{
 
 const config = useRuntimeConfig();
 const toast = useToast();
+
+const { data: response } = await getActive();
+
+const cart = computed(() => response.value ?? ({} as IOrder));
 
 const user = useUserStore().getUser();
 const token = useTokenStore().getToken();
@@ -25,7 +30,7 @@ const imageLink = `${config.public.bucketUrl}${props.itemInfo.image}`;
 
 async function onFavClick() {
   try {
-    props.itemInfo.isInFavourite
+    props.itemInfo.isInFavourites
       ? await removeFavourites(props.itemInfo.id)
       : await addFavourites(props.itemInfo.id);
     await refreshNuxtData("count");
@@ -36,13 +41,31 @@ async function onFavClick() {
 }
 
 async function addToCartClick() {
-  try {
-    await addToCart(props.itemInfo.id);
-    await refreshNuxtData("count");
-    toast.add({ title: "Додано до кошика", color: "success" });
-  } catch (error) {
-    toast.add({ title: error as string, color: "error" });
-  }
+  if (cart.value.id)
+    try {
+      let isInItems = false;
+      const items = cart.value.items.map((item) => {
+        if (item.product.id === props.itemInfo.id) {
+          isInItems = true;
+          return {
+            productId: item.product.id,
+            quantity: item.quantity + 1,
+          };
+        }
+        return {
+          productId: item.product.id,
+          quantity: item.quantity + 1,
+        };
+      });
+
+      if (!isInItems) items.push({ productId: props.itemInfo.id, quantity: 1 });
+      await updateOrder(cart.value.id, { items });
+      await refreshNuxtData("active");
+      await refreshNuxtData("count");
+      toast.add({ title: "Додано до кошика", color: "success" });
+    } catch (error) {
+      toast.add({ title: error as string, color: "error" });
+    }
 }
 
 function onCompClick() {
@@ -52,7 +75,7 @@ function onCompClick() {
     compStore.addItem(
       props.itemInfo.category.slug,
       props.itemInfo.category.name,
-      props.itemInfo.id
+      props.itemInfo.id,
     );
   }
 }
@@ -112,7 +135,7 @@ function onCompClick() {
               v-if="user && token"
               @click="onFavClick"
               ><Heart
-                v-if="!itemInfo.isInFavourite"
+                v-if="!itemInfo.isInFavourites"
                 class="w-8 h-8" /><HeartCrack v-else class="w-8 h-8"
             /></UButton>
             <UButton

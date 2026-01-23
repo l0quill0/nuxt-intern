@@ -1,4 +1,22 @@
-import type { IOrdersPaginated, IOrderQuery } from "~/types/order.types";
+import {
+  type IOrdersPaginated,
+  type IOrderQuery,
+  type IUpdateOrder,
+  type IOrder,
+} from "~/types/order.types";
+
+export function getOrderById(orderId: number) {
+  return useApi<IOrder>(`/order/${orderId}`, {
+    method: "GET",
+  });
+}
+
+export function getActive() {
+  return useApi<IOrder>(`/order/active`, {
+    method: "GET",
+    key: "active",
+  });
+}
 
 export function getOrders(orderQuery: Ref<IOrderQuery>) {
   return useApi<IOrdersPaginated>("/order", {
@@ -8,21 +26,9 @@ export function getOrders(orderQuery: Ref<IOrderQuery>) {
   });
 }
 
-export async function createOrder(officeId: number) {
-  return useNuxtApp().$api(`/order/send`, {
+export function updateOrder(orderId: number, data: IUpdateOrder) {
+  return useNuxtApp().$api(`/order/${orderId}`, {
     method: "PATCH",
-    body: { postOffice: officeId },
-  });
-}
-
-export async function cancelOrder(id: number) {
-  return useNuxtApp().$api(`/order/cancel/${id}`, {
-    method: "PATCH",
-  });
-}
-
-export async function confirmOrder(id: number) {
-  return useNuxtApp().$api(`/order/confirm/${id}`, {
-    method: "PATCH",
+    body: data,
   });
 }

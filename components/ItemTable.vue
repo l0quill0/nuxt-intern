@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import type { TableColumn } from "@nuxt/ui";
-import { getPaginatedItems, removeItem, restoreItem } from "~/api/itemApi";
-import type { IItem } from "~/types/item.types";
+
 import UpdateItemForm from "./UpdateItemForm.vue";
 import { PublicDynamicRoutes } from "~/enums/routes.enum";
+import {
+  archiveProduct,
+  getPaginatedProducts,
+  unarchiveProduct,
+} from "~/api/productApi";
+import type { IProduct } from "~/types/product.types";
 
 const config = useRuntimeConfig();
 const UButton = resolveComponent("UButton");
@@ -13,13 +18,17 @@ const updateModal = overlay.create(UpdateItemForm);
 
 const { pagination } = useItemPagination();
 
-const { data: response, pending, refresh } = getPaginatedItems(pagination);
+const { data: response, pending, refresh } = getPaginatedProducts(pagination);
 
-const items = computed(() => response.value?.data ?? []);
+const items = computed(() => response.value?.items ?? []);
 const page = computed(() => pagination.value.page ?? 1);
 const pageSize = computed(() => pagination.value.pageSize ?? 6);
-const total = computed(() => response.value?.meta.totalItems ?? 0);
-const totalPages = computed(() => response.value?.meta.totalPages ?? 0);
+const total = computed(() =>
+  response.value?.totalPages && pagination.value.pageSize
+    ? response.value.totalPages * pagination.value.pageSize
+    : 0,
+);
+const totalPages = computed(() => response.value?.totalPages ?? 0);
 
 const onItemClick = (id: number) => {
   navigateTo(`${PublicDynamicRoutes.ITEM}${id}`);
@@ -31,7 +40,7 @@ const openUpdateModal = (id: number) => {
 
 const onReturnClick = async (id: number) => {
   try {
-    await restoreItem(id);
+    await unarchiveProduct(id);
     await refresh();
     toast.add({ title: "Товар відновлено", color: "success" });
   } catch (error) {
@@ -41,7 +50,7 @@ const onReturnClick = async (id: number) => {
 
 const onRemoveClick = async (id: number) => {
   try {
-    await removeItem(id);
+    await archiveProduct(id);
     await refresh();
     toast.add({ title: "Товар видалено", color: "success" });
   } catch (error) {
@@ -57,7 +66,7 @@ const onPageChange = (page: number) => {
   }
 };
 
-type TableRow = IItem;
+type TableRow = IProduct;
 
 const tableColumns: TableColumn<TableRow>[] = [
   { accessorKey: "title", header: "Назва" },

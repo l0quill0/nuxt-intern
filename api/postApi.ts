@@ -1,19 +1,23 @@
-import type { IPostOffice } from "~/types/postOffice.types";
+import {
+  type IPostOffice,
+  type IRegion,
+  type ISettlement,
+} from "~/types/postOffice.types";
 
-export async function getRegions() {
-  return useApi<{ id: number; name: string }[]>(`/post/regions`, {
+export function getRegions() {
+  return useApi<IRegion[]>(`/post/regions`, {
     method: "GET",
   });
 }
 
-export async function getSettlements(regionId: number) {
-  return useApi<{ id: number; name: string }[]>(`/post/regions/${regionId}`, {
+export function getSettlements(regionId: number) {
+  return useNuxtApp().$api<ISettlement[]>(`/post/regions/${regionId}`, {
     method: "GET",
   });
 }
 
-export async function getPostOffices(settlementId: number) {
-  return useApi<IPostOffice[]>(`/post/${settlementId}`, {
+export function getPostOffices(settlementId: number) {
+  return useNuxtApp().$api<IPostOffice[]>(`/post/${settlementId}`, {
     method: "GET",
   });
 }

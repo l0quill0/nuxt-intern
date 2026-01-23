@@ -32,7 +32,10 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   try {
     isUploading.value = null;
     emit("uploading", true);
-    await createCategory(event.data.image, event.data.name.toLowerCase());
+    await createCategory({
+      ...event.data,
+      name: event.data.name.toLowerCase(),
+    });
     await refreshNuxtData("categories");
     await refreshNuxtData("category-paginated");
     state.name = undefined;

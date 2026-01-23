@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { createOrder } from "~/api/orderApi";
 import * as zod from "zod";
 import { getPostOffices, getRegions, getSettlements } from "~/api/postApi";
 import type { FormSubmitEvent } from "@nuxt/ui";
+import { updateOrder } from "~/api/orderApi";
+import { OrderStatus } from "~/enums/order.status.enum";
 
 const props = defineProps({
   hasItems: { type: Boolean, required: true },
+  orderId: { type: Number, required: true },
 });
 
 const schema = zod.object({
@@ -29,7 +31,7 @@ const regionOptions = computed(() =>
     label: $t(`region.${region.name}`),
     name: region.name,
     value: region.id,
-  }))
+  })),
 );
 
 const postOfficesOptions = ref<{ label: string; value: number }[]>([]);
@@ -42,7 +44,7 @@ const user = useUserStore().getUser();
 
 const selectedRegion = computed(() => {
   const selected = regionOptions.value?.find(
-    (reg) => reg.value === state.region
+    (reg) => reg.value === state.region,
   )?.name;
   return selected;
 });
@@ -52,7 +54,10 @@ const hasErrors = computed(() => !validation.value.success || !props.hasItems);
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
   try {
-    await createOrder(event.data.postOffice);
+    await updateOrder(props.orderId, {
+      postId: event.data.postOffice,
+      status: OrderStatus.PENDING,
+    });
     await refreshNuxtData("count");
     await refreshNuxtData("orderPagiantion");
     state.postOffice = undefined;
@@ -69,26 +74,26 @@ watch(
   () => state.region,
   async () => {
     if (!state.region) return;
-    const { data } = await getSettlements(state.region);
-    if (!data.value) return;
-    settlementOptions.value = data.value.map((settle) => ({
+    const settlements = await getSettlements(state.region);
+    if (!settlements) return;
+    settlementOptions.value = settlements.map((settle) => ({
       label: $t(`${selectedRegion.value}.${settle.name}`),
       value: settle.id,
     }));
-  }
+  },
 );
 
 watch(
   () => state.settlement,
   async () => {
     if (!state.settlement) return;
-    const { data } = await getPostOffices(state.settlement);
-    if (!data.value) return;
-    postOfficesOptions.value = data.value.map((office) => ({
+    const offices = await getPostOffices(state.settlement);
+    if (!offices) return;
+    postOfficesOptions.value = offices.map((office) => ({
       label: office.name,
       value: office.id,
     }));
-  }
+  },
 );
 </script>
 

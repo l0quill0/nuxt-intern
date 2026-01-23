@@ -4,19 +4,20 @@ import { refDebounced } from "@vueuse/core";
 
 const { pagination } = useItemPagination();
 
-const { data: categories } = getCategories();
+const { data: categories } = await getCategories();
 
 const priceMin = ref(pagination.value.priceMin);
 const priceMax = ref(pagination.value.priceMax);
 const priceMinDebounced = refDebounced(priceMin, 500);
 const priceMaxDebounced = refDebounced(priceMax, 500);
 
-const categoryItems = computed<{ label: string; value: string }[]>(
-  () =>
-    categories.value?.map((c) => ({
-      label: c.name.charAt(0).toUpperCase() + c.name.slice(1),
-      value: c.slug,
-    })) ?? []
+const categoryItems = computed<{ label: string; value: string }[]>(() =>
+  categories.value
+    ? categories.value.map((c) => ({
+        label: c.name.charAt(0).toUpperCase() + c.name.slice(1),
+        value: c.slug,
+      }))
+    : [],
 );
 
 const sortFieldItems = [
@@ -115,7 +116,9 @@ watch(priceMaxDebounced, (value) => {
         variant="none"
         placeholder="Порядок"
         :disabled="!pagination.sortBy"
-        :items="sortOrderItems[pagination.sortBy as keyof typeof sortOrderItems]"
+        :items="
+          sortOrderItems[pagination.sortBy as keyof typeof sortOrderItems]
+        "
         v-model="pagination.sortOrder"
       />
     </div>

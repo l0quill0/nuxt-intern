@@ -44,7 +44,7 @@ const isDismissable = ref(true);
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   try {
     isDismissable.value = false;
-    await updatePassword(event.data.oldPassword, event.data.newPassword);
+    await updatePassword(event.data);
     state.oldPassword = "";
     state.newPassword = "";
     state.confirmPassword = "";

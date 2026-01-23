@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { TableColumn } from "@nuxt/ui";
 import dayjs from "dayjs";
-import { cancelOrder, confirmOrder, getOrders } from "~/api/orderApi";
+import { getOrders, updateOrder } from "~/api/orderApi";
 import { PublicDynamicRoutes } from "~/enums/routes.enum";
 import { OrderStatus } from "~/enums/order.status.enum";
 import type { IOrder } from "~/types/order.types";
@@ -15,11 +15,17 @@ const { data: orders, refresh, pending } = getOrders(pagination);
 
 const parsedData = computed<tableRow[]>(
   () =>
-    orders.value?.data.map((order) => ({
+    orders.value?.items.map((order) => ({
       ...order,
       status: OrderStatus[order.status as keyof typeof OrderStatus],
       createdAt: dayjs(order.createdAt).format("DD.MM.YYYY"),
-    })) ?? []
+    })) ?? [],
+);
+
+const totalItems = computed(() =>
+  orders.value?.totalPages && pagination.value.pageSize
+    ? orders.value.totalPages * pagination.value.pageSize
+    : 0,
 );
 
 const sortField = ref<string>("id");
@@ -35,7 +41,7 @@ const onItemClick = (itemId: number) => {
 
 const onPageChange = (page: number) => {
   if (orders.value) {
-    if (page < 1 || page > orders.value?.meta.totalPages) return;
+    if (page < 1 || page > orders.value?.totalPages) return;
   }
   pagination.value.page = page;
 };
@@ -52,7 +58,7 @@ const onSortClick = (sortBy: string) => {
 
 const onCancelClick = async (id: number) => {
   try {
-    await cancelOrder(id);
+    await updateOrder(id, { status: OrderStatus.CANCELED });
     await refresh();
     toast.add({ title: `Замовлення №${id} скасовано`, color: "success" });
   } catch (error) {
@@ -62,7 +68,7 @@ const onCancelClick = async (id: number) => {
 
 const onConfirmClick = async (id: number) => {
   try {
-    await confirmOrder(id);
+    await updateOrder(id, { status: OrderStatus.COMPLETE });
     await refresh();
     toast.add({ title: `Замовлення №${id} підтвержено`, color: "success" });
   } catch (error) {
@@ -175,7 +181,7 @@ const tableColumns: TableColumn<tableRow>[] = [
               label: "Підтвердити",
               class: "flex justify-center",
               onClick: () => onConfirmClick(row.original.id),
-            })
+            }),
           );
         buttons.push(
           h(UButton, {
@@ -183,14 +189,14 @@ const tableColumns: TableColumn<tableRow>[] = [
             label: "Скасувати",
             class: "flex justify-center",
             onClick: () => onCancelClick(row.original.id),
-          })
+          }),
         );
       }
 
       return h(
         "div",
         { class: "flex gap-[10px] lg:flex-row flex-col lg:justify-end" },
-        buttons
+        buttons,
       );
     },
   },
@@ -214,6 +220,7 @@ const tableColumns: TableColumn<tableRow>[] = [
     >
       <template #expanded="{ row }">
         <OrderItemTable
+          :order-id="row.original.id"
           :items="row.original.items"
           :qunatity-controls="false"
           @item-click="onItemClick"
@@ -228,10 +235,10 @@ const tableColumns: TableColumn<tableRow>[] = [
             row.original.status === OrderStatus['PENDING']
               ? 'text-orange-400'
               : row.original.status === OrderStatus['CANCELED']
-              ? 'text-red-600'
-              : 'text-green-500'
+                ? 'text-red-600'
+                : 'text-green-500'
           "
-          >{{ row.original.status }}</span
+          >{{ $t(`orderStatus.${row.original.status}`) }}</span
         >
       </template>
       <template #total-cell="{ row }">
@@ -241,9 +248,9 @@ const tableColumns: TableColumn<tableRow>[] = [
         <span>{{ row.original.createdAt }}</span>
       </template>
       <template #postOffice-cell="{ row }">
-        <span class="text-wrap" v-if="row.original.postOffice.name">{{
+        <span class="text-wrap" v-if="row.original.postOffice?.name">{{
           `${row.original.postOffice.name}, ${$t(
-            `${row.original.postOffice.region}.${row.original.postOffice.settlement}`
+            `${row.original.postOffice.settlement.region.name}.${row.original.postOffice.settlement.name}`,
           )}`
         }}</span>
         <div v-else></div>
@@ -254,7 +261,7 @@ const tableColumns: TableColumn<tableRow>[] = [
       active-color="main"
       v-model:page="pagination.page"
       :items-per-page="pagination.pageSize"
-      :total="orders?.meta.totalItems"
+      :total="totalItems"
       @update:page="onPageChange"
       class="pt-2.5 pb-2.5"
       :ui="{

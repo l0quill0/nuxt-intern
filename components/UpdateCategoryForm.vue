@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from "@nuxt/ui";
 import * as zod from "zod";
-import { getCategoryById, updateCategory } from "~/api/categoryApi";
+import { getCategoryBySlug, updateCategory } from "~/api/categoryApi";
 import type { ICategory } from "~/types/category.types";
 
 const props = defineProps({
-  id: { type: Number, required: true },
+  slug: { type: String, required: true },
 });
 
 const toast = useToast();
 
-const { data: response, refresh } = await getCategoryById(props.id);
+const { data: response, refresh } = await getCategoryBySlug(props.slug);
 
 const category = computed(() => response.value || ({} as ICategory));
 const validation = computed(() => schema.safeParse(state));
@@ -22,26 +22,19 @@ const hasErrors = computed(
       newState: state,
       omitKeys: ["image"],
     }) &&
-      !state.image)
+      !state.image),
 );
 
 const isDismissable = ref(true);
 const isUploading = ref<number | null>(0);
 
 const schema = zod.object({
-  name: zod
-    .string("Введіть назву категорії")
-    .min(3, "Мінімум 3 символи")
-    .max(10, "Максимум 10 символів")
-    .toLowerCase()
-    .optional(),
-  image: zod.instanceof(File, { message: "Додайте фото категорії" }).optional(),
+  image: zod.instanceof(File, { message: "Додайте фото категорії" }),
 });
 
 type Schema = zod.output<typeof schema>;
 
 const state = reactive<Partial<Schema>>({
-  name: category.value.name,
   image: undefined,
 });
 
@@ -49,7 +42,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   try {
     isUploading.value = null;
     isDismissable.value = false;
-    await updateCategory(props.id, event.data);
+    await updateCategory(props.slug, event.data.image);
     await refresh();
     await refreshNuxtData("category-paginated");
     state.image = undefined;
@@ -98,15 +91,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
               label: 'text-main-400',
             }"
         /></UFormField>
-        <UFormField label="Назва" name="name" class="w-full">
-          <UInput
-            class="w-full"
-            v-model="state.name"
-            :ui="{
-              base: 'bg-transparent! rounded-none ring-white focus-visible:ring-white aria-invalid:ring-error aria-invalid:focus-visible:ring-error placeholder:text-white',
-            }"
-          />
-        </UFormField>
         <UButton
           type="submit"
           color="success"

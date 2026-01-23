@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { getItemById } from "~/api/itemApi";
 import { Trash } from "lucide-vue-next";
 import { PublicDynamicRoutes } from "~/enums/routes.enum";
-import type { IItem } from "~/types/item.types";
+import type { IProduct } from "~/types/product.types";
 
 const config = useRuntimeConfig();
 const compStore = useCompStore();
@@ -12,7 +11,7 @@ const props = defineProps<{
 }>();
 
 const promises = props.data.items.map((item) =>
-  useNuxtApp().$api<IItem>(`item/${item}`, { method: "GET" })
+  useNuxtApp().$api<IProduct>(`/product/${item}`, { method: "GET" }),
 );
 
 const items = await Promise.all(promises);

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from "@nuxt/ui";
 import * as zod from "zod";
-import { updateMe } from "~/api/userApi";
+import { getMe, updateMe } from "~/api/userApi";
 import type { IUser } from "~/types/auth.types";
 
 const userStore = useUserStore();
@@ -45,8 +45,9 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     return;
   }
   try {
-    const response = await updateMe(event.data.email, event.data.name);
-    userStore.setUser(response);
+    await updateMe(event.data);
+    const { data: response } = await getMe();
+    if (response.value) userStore.setUser(response.value);
     isEditing.value = false;
   } catch (error) {
     toast.add({ title: error as string, color: "error" });

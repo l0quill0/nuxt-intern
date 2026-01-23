@@ -1,31 +1,37 @@
-import type { IItem } from "./item.types";
-import type { IPaginationMeta } from "./paginationMeta.type";
+import type { IUser } from "./auth.types";
+import type { IPostOffice } from "./postOffice.types";
+import type { IProduct } from "./product.types";
 
 export interface IOrder {
   id: number;
-  status: string;
+  user: IUser;
   total: number;
+  items: IOrderProduct[];
+  status: string;
   createdAt: string;
-  postOffice: {
-    name: string;
-    settlement: string;
-    region: string;
-  };
-  items: IOrderItem[];
+  postOffice?: IPostOffice;
 }
 
-export interface IOrderItem extends IItem {
+export interface IOrderProduct {
+  product: IProduct;
   quantity: number;
 }
 
 export interface IOrderQuery {
-  page: number;
-  pageSize: number;
-  sortBy: string;
-  sortOrder: "asc" | "desc";
+  page?: number;
+  sortBy?: string;
+  pageSize?: number;
+  sortOrder?: string;
 }
 
 export interface IOrdersPaginated {
-  data: IOrder[];
-  meta: IPaginationMeta;
+  items: IOrder[];
+  totalPages: number;
+  currentpage: number;
+}
+
+export interface IUpdateOrder {
+  postId?: number;
+  status?: string;
+  items?: { productId: number; quantity: number }[];
 }

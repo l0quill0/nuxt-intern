@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from "@nuxt/ui";
 import * as zod from "zod";
-import { addPassword, updatePassword } from "~/api/userApi";
+import { addPassword } from "~/api/userApi";
 
 const toast = useToast();
 const userStore = useUserStore();
