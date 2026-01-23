@@ -47,7 +47,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
     @submit="onSubmit"
     :schema="schema"
     :state="state"
-    class="w-full items-end max-w-275"
+    class="w-full items-end max-w-275 bg-accent-100 p-1.5"
   >
     <div class="flex gap-1.5 items-center">
       <p v-if="value > 0">{{ value }}</p>

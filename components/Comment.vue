@@ -23,7 +23,9 @@ const onDeleteClick = async (id: number) => {
 </script>
 
 <template>
-  <div class="flex flex-col w-full pt-5 justify-items-start group">
+  <div
+    class="flex flex-col w-full p-4 mt-2 justify-items-start group bg-accent-100"
+  >
     <div class="flex gap-1.5">
       <p>{{ Number(comment.score).toFixed(1) }}</p>
       <NuxtRating :rating-value="Number(comment.score)" />

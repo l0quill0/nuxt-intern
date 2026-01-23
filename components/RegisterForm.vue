@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from "@nuxt/ui";
 import * as zod from "zod";
-import { register } from "~/api/authApi";
+import { login, register } from "~/api/authApi";
 import { PublicRoutes } from "~/enums/routes.enum";
 
 const toast = useToast();
+const tokenStore = useTokenStore();
+const userStore = useUserStore();
+const compStore = useCompStore();
 
 const schema = zod
   .object({
@@ -22,7 +25,7 @@ const schema = zod
     {
       message: "Паролі не збігаються",
       path: ["confirmPassword"],
-    }
+    },
   );
 
 type Schema = zod.output<typeof schema>;
@@ -42,16 +45,19 @@ const hasErrors = computed(() => !validation.value.success);
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   try {
     await register(event.data);
+    const response = await login(event.data);
+    tokenStore.setToken(response.access_token);
+    await userStore.fetchUser();
+    toast.add({
+      title: "Реєстрація успішна",
+      color: "success",
+    });
+    compStore.clearAll();
+    navigateTo(PublicRoutes.HOME);
   } catch (error) {
     toast.add({ title: error as string, color: "error" });
     return;
   }
-
-  toast.add({
-    title: "Реєстрація успішна, будь ласька авторизуйтесь",
-    color: "success",
-  });
-  navigateTo(PublicRoutes.LOGIN);
 }
 </script>
 

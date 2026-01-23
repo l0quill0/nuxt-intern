@@ -70,7 +70,7 @@ watch(
       />
       <div
         v-if="comments.length"
-        class="max-w-275 w-full overflow-y-scroll max-h-100 pt-2.5 px-2.5 xl:px-0"
+        class="max-w-275 w-full overflow-y-scroll max-h-100 pt-2.5 pl-4 xl:px-0"
       >
         <Comment
           v-for="comment in comments"

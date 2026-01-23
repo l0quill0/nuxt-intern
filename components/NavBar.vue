@@ -115,9 +115,9 @@ watch(searchDebounced, (value) => {
           "
           :to="PublicRoutes.LOGIN"
           @click="() => (menuOpen = false)"
-          class="hover:underline hover:text-main-300 text-white p-0 h-5.25 text-sm duration-300"
+          class="hover:underline hover:text-main-300 text-white p-0 text-sm duration-300 leading-6"
         >
-          Вхід/Регистрація
+          Вхід/Реестрація
         </NuxtLink>
         <UDropdownMenu
           class=""
