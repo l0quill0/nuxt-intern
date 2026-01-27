@@ -2,19 +2,24 @@
 import * as zod from "zod";
 import { getPostOffices, getRegions, getSettlements } from "~/api/postApi";
 import type { FormSubmitEvent } from "@nuxt/ui";
-import { updateOrder } from "~/api/orderApi";
-import { OrderStatus } from "~/enums/order.status.enum";
 
 const props = defineProps({
   hasItems: { type: Boolean, required: true },
-  orderId: { type: Number, required: true },
 });
 
-const schema = zod.object({
-  region: zod.number("Оберіть область"),
-  settlement: zod.number("Оберіть населений пункт"),
-  postOffice: zod.number("Оберіть пункт видачі"),
-});
+const { isAuth } = storeToRefs(useTokenStore());
+
+const schema = zod
+  .object({
+    region: zod.number("Оберіть область"),
+    settlement: zod.number("Оберіть населений пункт"),
+    postOffice: zod.number("Оберіть пункт видачі"),
+    email: zod.email("Введіть email").toLowerCase().optional(),
+  })
+  .refine(({ email }) => {
+    if (isAuth) return true;
+    return !!email;
+  });
 
 type Schema = zod.output<typeof schema>;
 
@@ -22,9 +27,11 @@ const state = reactive<Partial<Schema>>({
   region: undefined,
   settlement: undefined,
   postOffice: undefined,
+  email: undefined,
 });
 
 const { data: responseRegion } = await getRegions();
+const { sendOrder } = useCartStore();
 
 const regionOptions = computed(() =>
   responseRegion.value?.map((region) => ({
@@ -36,8 +43,6 @@ const regionOptions = computed(() =>
 
 const postOfficesOptions = ref<{ label: string; value: number }[]>([]);
 const settlementOptions = ref<{ label: string; value: number }[]>([]);
-
-const emit = defineEmits<{ (e: "orderSent"): void }>();
 
 const toast = useToast();
 const user = useUserStore().getUser();
@@ -54,19 +59,17 @@ const hasErrors = computed(() => !validation.value.success || !props.hasItems);
 
 const onSubmit = async (event: FormSubmitEvent<Schema>) => {
   try {
-    await updateOrder(props.orderId, {
-      postId: event.data.postOffice,
-      status: OrderStatus.PENDING,
-    });
-    await refreshNuxtData("count");
+    await sendOrder({ postId: event.data.postOffice, email: event.data.email });
+    if (isAuth.value) {
+      await refreshNuxtData("count");
+    }
     await refreshNuxtData("orderPagiantion");
     state.postOffice = undefined;
     state.region = undefined;
     state.settlement = undefined;
     toast.add({ title: "Замволення створено", color: "success" });
-    emit("orderSent");
   } catch (error) {
-    toast.add({ title: error as string, color: "error" });
+    toast.add({ title: $t(`errorMessage.${error as string}`), color: "error" });
   }
 };
 
@@ -99,21 +102,34 @@ watch(
 
 <template>
   <div class="flex flex-col gap-2.5 xl:max-w-1/3 w-full">
-    <h2 class="font-bold text-[20px]">Ваші контактні дані</h2>
-    <div class="flex gap-1 flex-col">
-      <span class="font-bold">Email</span>
-      <span>
-        {{ user?.email }}
-      </span>
-    </div>
-    <div class="flex gap-1 flex-col">
-      <span class="font-bold">Ім'я</span>
-      <span>
-        {{ user?.name }}
-      </span>
-    </div>
-    <h2 class="font-bold text-[20px]">Пункт видачі</h2>
     <UForm :schema="schema" :state="state" @submit="onSubmit" class="gap-2.5">
+      <h2 class="font-bold text-[20px]">Ваші контактні дані</h2>
+      <div class="flex gap-1 flex-col w-full">
+        <div class="flex gap-1 flex-col" v-if="isAuth">
+          <span class="font-bold">Email</span>
+          <span>
+            {{ user?.email }}
+          </span>
+          <div class="flex gap-1 flex-col">
+            <span class="font-bold">Ім'я</span>
+            <span>
+              {{ user?.name }}
+            </span>
+          </div>
+        </div>
+      </div>
+      <UFormField class="w-full" name="email" v-if="!isAuth">
+        <UInput
+          class="w-full text-main-400 border-b border-accent-100"
+          :ui="{
+            base: 'rounded-none bg-transparent h-8.5 text-main-400 pl-0',
+          }"
+          variant="none"
+          placeholder="Email"
+          v-model="state.email"
+        />
+      </UFormField>
+      <h2 class="font-bold text-[20px]">Пункт видачі</h2>
       <UFormField class="w-full" name="region"
         ><USelectMenu
           class="w-full text-main-400 border-b border-accent-100 aria-invalid:border-b-red-500"

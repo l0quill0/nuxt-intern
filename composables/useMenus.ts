@@ -1,10 +1,10 @@
 import { AdminRoutes, PublicRoutes, UserRoutes } from "~/enums/routes.enum";
-import type { IUser } from "~/types/auth.types";
 
 export const useMenus = () => {
   const tokenStore = useTokenStore();
   const userStore = useUserStore();
   const compStore = useCompStore();
+  const cartStore = useCartStore();
   const { userToken } = storeToRefs(tokenStore);
   const { user } = storeToRefs(userStore);
   const toast = useToast();
@@ -22,6 +22,7 @@ export const useMenus = () => {
         tokenStore.clearToken();
         userStore.clearUser();
         compStore.clearAll();
+        cartStore.clearStore();
         navigateTo(PublicRoutes.HOME);
         toast.add({ title: "Вихід успішний", color: "success" });
       },
@@ -56,9 +57,10 @@ export const useMenus = () => {
       label: "Вийти",
       icon: "i-lucide-log-out",
       onSelect: () => {
-        tokenStore.setToken("");
-        userStore.setUser({} as IUser);
+        tokenStore.clearToken();
+        userStore.clearUser();
         compStore.clearAll();
+        cartStore.clearStore();
         navigateTo(PublicRoutes.HOME);
         toast.add({ title: "Вихід успішний", color: "success" });
       },

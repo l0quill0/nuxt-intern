@@ -59,7 +59,7 @@ const onRemoveClick = async (slug: string) => {
     toast.add({ title: "Категорія видалена", color: "success" });
     isDeleting.value = false;
   } catch (error) {
-    toast.add({ title: error as string, color: "error" });
+    toast.add({ title: $t(`errorMessage.${error as string}`), color: "error" });
     isDeleting.value = false;
   }
 };

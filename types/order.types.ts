@@ -31,7 +31,13 @@ export interface IOrdersPaginated {
 }
 
 export interface IUpdateOrder {
+  items?: { productId: number; quantity: number }[];
   postId?: number;
   status?: string;
-  items?: { productId: number; quantity: number }[];
+}
+
+export interface IOrderCreateUnauth {
+  items: { productId: number; quantity: number }[];
+  email: string;
+  postId: number;
 }

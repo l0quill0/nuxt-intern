@@ -4,6 +4,7 @@ export enum PublicRoutes {
   REGISTER = "/register",
   CATALOG = "/catalog",
   COMPARISON = "/comparison",
+  CREATEORDER = "/create-order",
 }
 
 export enum PublicDynamicRoutes {
@@ -14,7 +15,6 @@ export enum PublicDynamicRoutes {
 export enum UserRoutes {
   FAVOURITE = "/favourite",
   PROFILE = "/profile",
-  CREATEORDER = "/create-order",
 }
 
 export enum AdminRoutes {

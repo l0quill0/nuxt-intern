@@ -50,7 +50,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     if (response.value) userStore.setUser(response.value);
     isEditing.value = false;
   } catch (error) {
-    toast.add({ title: error as string, color: "error" });
+    toast.add({ title: $t(`errorMessage.${error as string}`), color: "error" });
   }
 }
 </script>

@@ -1,29 +1,30 @@
 <script setup lang="ts">
 import type { TableColumn } from "@nuxt/ui";
-import { updateOrder } from "~/api/orderApi";
 import type { IOrderProduct } from "~/types/order.types";
 
 const props = defineProps<{
   items: IOrderProduct[];
-  orderId: number;
+  orderId?: number;
   qunatityControls: boolean;
 }>();
+
 const emit = defineEmits<{
-  (e: "dataUpdate"): void;
   (e: "itemClick", id: number): void;
 }>();
 
-const config = useRuntimeConfig();
 const toast = useToast();
+const config = useRuntimeConfig();
+const { updateItems } = useCartStore();
+const { isAuth } = storeToRefs(useTokenStore());
 
 const parsedData = computed(() =>
   props.items.map((item) => ({
     id: item.product.id,
     title: item.product.title,
-    image: `${config.public.bucketUrl}${item.product.image}`,
-    quantity: item.quantity,
     price: item.product.price,
     total: item.quantity * item.product.price,
+    image: `${config.public.bucketUrl}${item.product.image}`,
+    quantity: item.quantity,
   })),
 );
 
@@ -31,9 +32,9 @@ type tableRow = {
   id: number;
   title: string;
   image: string;
-  quantity: number;
   price: number;
   total: number;
+  quantity: number;
 };
 
 const tableColumns: TableColumn<tableRow>[] = [
@@ -45,25 +46,10 @@ const tableColumns: TableColumn<tableRow>[] = [
 
 async function onAddClick(id: number) {
   try {
-    let isInItems = false;
-    const items = parsedData.value.map((item) => {
-      if (item.id === id) {
-        isInItems = true;
-        return {
-          productId: item.id,
-          quantity: item.quantity + 1,
-        };
-      }
-      return {
-        productId: item.id,
-        quantity: item.quantity + 1,
-      };
-    });
-
-    if (!isInItems) items.push({ productId: id, quantity: 1 });
-
-    await updateOrder(props.orderId, { items });
-    emit("dataUpdate");
+    updateItems({ productId: id, quantity: 1 });
+    if (isAuth.value) {
+      await refreshNuxtData("count");
+    }
   } catch (error) {
     toast.add({ title: error as string, color: "error" });
   }
@@ -71,21 +57,10 @@ async function onAddClick(id: number) {
 
 async function onRemoveClick(id: number) {
   try {
-    const items = parsedData.value.map((item) => {
-      if (item.id === id) {
-        return {
-          productId: item.id,
-          quantity: item.quantity - 1,
-        };
-      }
-      return {
-        productId: item.id,
-        quantity: item.quantity,
-      };
-    });
-
-    await updateOrder(props.orderId, { items });
-    emit("dataUpdate");
+    updateItems({ productId: id, quantity: -1 });
+    if (isAuth.value) {
+      await refreshNuxtData("count");
+    }
   } catch (error) {
     toast.add({ title: error as string, color: "error" });
   }

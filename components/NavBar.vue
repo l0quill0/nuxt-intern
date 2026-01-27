@@ -5,34 +5,32 @@ import Cart from "./Cart.vue";
 import { getCount } from "~/api/userApi";
 
 const overlay = useOverlay();
-const modal = overlay.create(Cart);
+const modalAuth = overlay.create(Cart);
 
 const { currentMenu } = useMenus();
 const { pagination } = useItemPagination();
-
-const tokenStore = useTokenStore();
-const userStore = useUserStore();
 const compStore = useCompStore();
 
-const { userToken } = storeToRefs(tokenStore);
-const { user } = storeToRefs(userStore);
+const { isAuth } = storeToRefs(useTokenStore());
+const cartStore = storeToRefs(useCartStore());
+
+let favCount = undefined;
+if (isAuth) {
+  const data = await getCount();
+  favCount = data.data.value?.favCount;
+}
 
 const route = useRoute();
 
 const search = ref(pagination.value.search);
 const searchDebounced = debouncedRef(search, 500);
 
-const { data: response } = await getCount();
-
-const favCount = computed(() => response.value?.favCount);
-const cartCount = computed(() => response.value?.cartCount);
-const isMenuActive = computed(() => user && userToken);
 const compCount = computed(() => compStore.count);
 
 const menuOpen = ref(false);
 
 function openCart() {
-  modal.open();
+  modalAuth.open();
 }
 
 watch(searchDebounced, (value) => {
@@ -71,7 +69,7 @@ watch(searchDebounced, (value) => {
           variant="link"
           class="p-0 w-6 h-6 flex justify-center group"
           @click="openCart"
-          v-if="user && userToken && route.fullPath !== UserRoutes.CREATEORDER"
+          v-if="route.fullPath !== PublicRoutes.CREATEORDER"
         >
           <ShoppingCart
             class="text-white group-hover:text-main-300 w-4 h-4 duration-300"
@@ -81,14 +79,12 @@ watch(searchDebounced, (value) => {
         </UButton>
         <div
           v-if="
-            user &&
-            userToken &&
-            cartCount &&
-            route.fullPath !== UserRoutes.CREATEORDER
+            cartStore.cartCount.value &&
+            route.fullPath !== PublicRoutes.CREATEORDER
           "
           class="flex items-center justify-center bg-orange-600 text-white rounded-full text-[8px] aspect-square w-5 bottom-[-40%] right-[-40%] absolute font-bold"
         >
-          <span class="leading-0">{{ cartCount }}</span>
+          <span class="leading-0">{{ cartStore.cartCount }}</span>
         </div>
       </div>
       <UButton
@@ -109,7 +105,7 @@ watch(searchDebounced, (value) => {
       <div class="menu" :class="menuOpen ? 'open' : ''">
         <NuxtLink
           v-if="
-            (!user || !userToken) &&
+            !isAuth &&
             route.path !== PublicRoutes.LOGIN &&
             route.path !== PublicRoutes.REGISTER
           "
@@ -129,12 +125,12 @@ watch(searchDebounced, (value) => {
             itemLeadingIcon: 'text-white! group-hover:text-main-400!',
             group: 'p-0',
           }"
-          v-if="user && userToken"
+          v-if="isAuth"
         >
           <UButton
             variant="link"
             class="p-0 w-6 h-6 hidden xl:flex justify-center group"
-            :disabled="!isMenuActive"
+            :disabled="!isAuth"
           >
             <UIcon
               name="custom:user"
@@ -157,7 +153,7 @@ watch(searchDebounced, (value) => {
           class="bg-accent-50 w-full h-px border-b-accent-50 xl:hidden"
         ></div>
         <div class="flex flex-row gap-7.5">
-          <div class="relative" v-if="user && userToken">
+          <div class="relative" v-if="isAuth">
             <NuxtLink
               class="p-0 xl:w-6 xl:h-6 w-12.5 h-12.5 flex justify-center items-center group"
               :to="UserRoutes.FAVOURITE"

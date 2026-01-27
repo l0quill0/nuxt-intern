@@ -37,7 +37,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     navigateTo(PublicRoutes.HOME);
   } catch (error) {
     toast.add({
-      title: error as string,
+      title: $t(`errorMessage.${error as string}`),
       color: "error",
     });
   }

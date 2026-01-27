@@ -1,4 +1,26 @@
 {
+  "errorMessage": {
+    "BASIC_FLOW_INCOMPLETE": "Базова авторизація не завершена.",
+    "USER_ALREADY_EXISTS": "Користувач з такою поштою вже існує.",
+    "INVALID_PASSWORD": "Невірний пароль.",
+    "CATEGORY_NOT_FOUND": "Категорія не знайдена.",
+    "CATEGORY_ALREADY_EXISTS": "Категорія вже існує.",
+    "ALREADY_IN_FAVOURITE": "Товар вже у улюбленому.",
+    "NOT_IN_FAVOURITES": "Товар не у улюбленому.",
+    "ORDER_NOT_FOUND": "Замовлення не знайдене.",
+    "ORDER_EMPTY": "Замовлення не має товарів.",
+    "ORDER_ITEM_NOT_FOUND": "Товар не знайдений у замовлені.",
+    "NOT_OWN_ORDER": "Ви не власник цього замовлення.",
+    "STATUS_INCORRECT": "Невірний статус замовлення.",
+    "REGION_NOT_FOUND": "Регіон не знайдений.",
+    "SETTLEMENT_NOT_FOUND": "Населений пункт не знайдений.",
+    "POST_OFFICT_NOT_FOUND": "Поштове відділення не знайдене.",
+    "PRODUCT_NOT_FOUND": "Товар не знайдений.",
+    "USER_NOT_FOUND": "Користувач не знайдений.",
+    "PASSWORDS_DONT_MATCH": "Старий пароль не вірний.",
+    "FLOW_COMPLETED": "Реестрація вже завершена.",
+    "ERROR_CREATING_USER": "Виникла помилка при створенні користувача."
+  },
   "orderStatus": {
     "PENDING": "Підтвержене",
     "CANCELED": "Скасоване",

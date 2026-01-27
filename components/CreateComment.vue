@@ -37,7 +37,7 @@ const onSubmit = async (event: FormSubmitEvent<Schema>) => {
     value.value = 0;
     emit("commentCreate");
   } catch (error) {
-    toast.add({ title: error as string, color: "error" });
+    toast.add({ title: $t(`errorMessage.${error as string}`), color: "error" });
   }
 };
 </script>

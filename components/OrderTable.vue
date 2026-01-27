@@ -62,7 +62,7 @@ const onCancelClick = async (id: number) => {
     await refresh();
     toast.add({ title: `Замовлення №${id} скасовано`, color: "success" });
   } catch (error) {
-    toast.add({ title: error as string, color: "error" });
+    toast.add({ title: $t(`errorMessage.${error as string}`), color: "error" });
   }
 };
 
@@ -72,7 +72,7 @@ const onConfirmClick = async (id: number) => {
     await refresh();
     toast.add({ title: `Замовлення №${id} підтвержено`, color: "success" });
   } catch (error) {
-    toast.add({ title: error as string, color: "error" });
+    toast.add({ title: $t(`errorMessage.${error as string}`), color: "error" });
   }
 };
 

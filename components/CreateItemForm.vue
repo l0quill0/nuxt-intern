@@ -61,7 +61,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   } catch (error) {
     emit("uploading", false);
     isUploading.value = 0;
-    toast.add({ title: error as string, color: "error" });
+    toast.add({ title: $t(`errorMessage.${error as string}`), color: "error" });
   }
 }
 </script>

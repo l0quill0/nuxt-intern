@@ -1,29 +1,26 @@
 <script setup lang="ts">
-import { getActive, updateOrder } from "~/api/orderApi";
-import { PublicDynamicRoutes, UserRoutes } from "~/enums/routes.enum";
-import type { IOrder } from "~/types/order.types";
+import { PublicDynamicRoutes, PublicRoutes } from "~/enums/routes.enum";
 
 const toast = useToast();
 const modal = useOverlay();
+const { isAuth } = storeToRefs(useTokenStore());
 
-const { data: response, refresh } = await getActive();
+const { clear, fetchItems } = useCartStore();
 
-const cart = computed(() => response.value ?? ({} as IOrder));
+const cartItems = storeToRefs(useCartStore());
 
-const isSendEnabled = computed(() => cart.value && cart.value.items.length > 0);
+await fetchItems();
 
-async function onDataUpdate() {
-  await refresh();
-  await refreshNuxtData("count");
-}
+const isSendable = computed(() => cartItems.cart.value.items.length > 0);
 
 async function onClearClick() {
   try {
-    await updateOrder(cart.value.id, { items: [] });
-    await refresh();
-    await refreshNuxtData("count");
+    await clear();
+    if (isAuth.value) {
+      await refreshNuxtData("count");
+    }
   } catch (error) {
-    toast.add({ title: error as string, color: "error" });
+    toast.add({ title: $t(`errorMessage.${error as string}`), color: "error" });
   }
 }
 
@@ -34,7 +31,7 @@ async function onItemClick(id: number) {
 
 async function onCreateClick() {
   modal.closeAll();
-  navigateTo(UserRoutes.CREATEORDER);
+  navigateTo(PublicRoutes.CREATEORDER);
 }
 </script>
 
@@ -53,23 +50,20 @@ async function onCreateClick() {
         class="flex flex-col bg-accent-50 lg:min-h-175 lg:min-w-275 h-full w-full justify-between"
       >
         <OrderItemTable
-          v-if="cart"
-          :order-id="cart.id"
-          :items="cart.items"
+          :items="cartItems.items.value"
           :qunatity-controls="true"
-          @data-update="onDataUpdate"
           @item-click="onItemClick"
         />
         <div class="flex items-center justify-end gap-4 p-2.5 w-full flex-wrap">
-          <span class="text-2xl tracking-widest">
-            {{ `${cart?.total.toFixed(2)} ₴` }}
-          </span>
+          <span class="text-2xl tracking-widest">{{
+            `${cartItems.total.value.toFixed(2)} ₴`
+          }}</span>
           <div class="flex gap-1.25 lg:gap-4">
             <UButton
               color="main"
               @click="onCreateClick"
               class="pt-2.5 pb-2.5 lg:pl-5 lg:pr-5 text-white"
-              :disabled="!isSendEnabled"
+              :disabled="!isSendable"
               >Створити замовлення</UButton
             >
             <UButton
@@ -77,7 +71,7 @@ async function onCreateClick() {
               variant="outline"
               @click="onClearClick"
               class="pt-2.5 pb-2.5 lg:pl-5 lg:pr-5"
-              :disabled="!isSendEnabled"
+              :disabled="!isSendable"
               >Очистити кошик</UButton
             >
           </div>

@@ -17,11 +17,6 @@ const onOpenModalClick = () => {
 const onCreatePassClick = () => {
   addPasswordModal.open();
 };
-
-watch(
-  () => useUserStore().user,
-  () => {},
-);
 </script>
 
 <template>

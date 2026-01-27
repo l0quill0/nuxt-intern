@@ -2,8 +2,6 @@
 import { addFavourites, removeFavourites } from "~/api/userApi";
 import type { IProductWithScore } from "~/types/product.types";
 import { Scale, Check, Heart, HeartCrack } from "lucide-vue-next";
-import { getActive, updateOrder } from "~/api/orderApi";
-import type { IOrder, IOrderProduct } from "~/types/order.types";
 
 const props = defineProps<{
   itemInfo: IProductWithScore & { isInFavourites: boolean };
@@ -15,14 +13,9 @@ const emit = defineEmits<{
 
 const config = useRuntimeConfig();
 const toast = useToast();
-
-const { data: response } = await getActive();
-
-const cart = computed(() => response.value ?? ({} as IOrder));
-
-const user = useUserStore().getUser();
-const token = useTokenStore().getToken();
 const compStore = useCompStore();
+const cartStore = useCartStore();
+const { isAuth } = storeToRefs(useTokenStore());
 
 const isComp = computed(() => compStore.isInStore(props.itemInfo.id));
 
@@ -36,36 +29,20 @@ async function onFavClick() {
     await refreshNuxtData("count");
     emit("updateInfo");
   } catch (error) {
-    toast.add({ title: error as string, color: "error" });
+    toast.add({ title: $t(`errorMessage.${error as string}`), color: "error" });
   }
 }
 
 async function addToCartClick() {
-  if (cart.value.id)
-    try {
-      let isInItems = false;
-      const items = cart.value.items.map((item) => {
-        if (item.product.id === props.itemInfo.id) {
-          isInItems = true;
-          return {
-            productId: item.product.id,
-            quantity: item.quantity + 1,
-          };
-        }
-        return {
-          productId: item.product.id,
-          quantity: item.quantity + 1,
-        };
-      });
-
-      if (!isInItems) items.push({ productId: props.itemInfo.id, quantity: 1 });
-      await updateOrder(cart.value.id, { items });
-      await refreshNuxtData("active");
+  try {
+    await cartStore.updateItems({ productId: props.itemInfo.id, quantity: 1 });
+    if (isAuth.value) {
       await refreshNuxtData("count");
-      toast.add({ title: "Додано до кошика", color: "success" });
-    } catch (error) {
-      toast.add({ title: error as string, color: "error" });
     }
+    toast.add({ title: "Додано до кошика", color: "success" });
+  } catch (error) {
+    toast.add({ title: $t(`errorMessage.${error as string}`), color: "error" });
+  }
 }
 
 function onCompClick() {
@@ -121,7 +98,6 @@ function onCompClick() {
           v-if="!props.itemInfo.isRemoved"
         >
           <UButton
-            v-if="user && token"
             color="main"
             class="border border-white py-2.5 px-5 text-white text-[18px]"
             @click="addToCartClick"
@@ -132,7 +108,7 @@ function onCompClick() {
               variant="ghost"
               color="main"
               class="relative hover:bg-transparent active:bg-transparent hover:text-main-300 duration-300 h-full"
-              v-if="user && token"
+              v-if="isAuth"
               @click="onFavClick"
               ><Heart
                 v-if="!itemInfo.isInFavourites"

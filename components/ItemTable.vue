@@ -44,7 +44,7 @@ const onReturnClick = async (id: number) => {
     await refresh();
     toast.add({ title: "Товар відновлено", color: "success" });
   } catch (error) {
-    toast.add({ title: error as string, color: "error" });
+    toast.add({ title: $t(`errorMessage.${error as string}`), color: "error" });
   }
 };
 
@@ -54,7 +54,7 @@ const onRemoveClick = async (id: number) => {
     await refresh();
     toast.add({ title: "Товар видалено", color: "success" });
   } catch (error) {
-    toast.add({ title: error as string, color: "error" });
+    toast.add({ title: $t(`errorMessage.${error as string}`), color: "error" });
   }
 };
 

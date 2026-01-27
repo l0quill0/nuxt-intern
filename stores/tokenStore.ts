@@ -24,4 +24,9 @@ export const useTokenStore = defineStore("userToken", {
       this.userToken = null;
     },
   },
+  getters: {
+    isAuth: (state) => {
+      return !!state.userToken;
+    },
+  },
 });

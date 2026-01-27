@@ -44,7 +44,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
     toast.add({ title: "Пароль створений", color: "success" });
   } catch (error) {
-    toast.add({ title: error as string, color: "error" });
+    toast.add({ title: $t(`errorMessage.${error as string}`), color: "error" });
     isDismissable.value = true;
   }
 }

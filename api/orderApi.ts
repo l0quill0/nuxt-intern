@@ -3,6 +3,7 @@ import {
   type IOrderQuery,
   type IUpdateOrder,
   type IOrder,
+  type IOrderCreateUnauth,
 } from "~/types/order.types";
 
 export function getOrderById(orderId: number) {
@@ -12,9 +13,8 @@ export function getOrderById(orderId: number) {
 }
 
 export function getActive() {
-  return useApi<IOrder>(`/order/active`, {
+  return useNuxtApp().$api<IOrder>(`/order/active`, {
     method: "GET",
-    key: "active",
   });
 }
 
@@ -23,6 +23,13 @@ export function getOrders(orderQuery: Ref<IOrderQuery>) {
     method: "GET",
     query: orderQuery,
     key: "orderPagination",
+  });
+}
+
+export function createUnauth(data: IOrderCreateUnauth) {
+  return useNuxtApp().$api(`/order/unauth`, {
+    method: "POST",
+    body: data,
   });
 }
 
