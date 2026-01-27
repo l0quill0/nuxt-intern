@@ -3,17 +3,16 @@ import { Trash } from "lucide-vue-next";
 import { PublicDynamicRoutes } from "~/enums/routes.enum";
 import type { IProduct } from "~/types/product.types";
 
-const config = useRuntimeConfig();
-const compStore = useCompStore();
-
 const props = defineProps<{
   data: { category: string; categoryName: string; items: number[] };
 }>();
 
+const config = useRuntimeConfig();
+const compStore = useCompStore();
+
 const promises = props.data.items.map((item) =>
   useNuxtApp().$api<IProduct>(`/product/${item}`, { method: "GET" }),
 );
-
 const items = await Promise.all(promises);
 
 const onClearClick = () => {

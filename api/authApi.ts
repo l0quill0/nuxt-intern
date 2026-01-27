@@ -1,22 +1,20 @@
 import type {
   IGoogleAuth,
   ILoginData,
+  ILoginReposnse,
   IRegisterData,
 } from "~/types/auth.types";
 
 export function login(data: ILoginData) {
   const config = useRuntimeConfig();
 
-  return $fetch<{ access_token: string }>(
-    `${config.public.apiUrl}/auth/login`,
-    {
-      method: "POST",
-      body: data,
-      onResponseError: ({ response }) => {
-        throw response._data.message;
-      },
+  return $fetch<ILoginReposnse>(`${config.public.apiUrl}/auth/login`, {
+    method: "POST",
+    body: data,
+    onResponseError: ({ response }) => {
+      throw response._data.message;
     },
-  );
+  });
 }
 
 export function register(data: IRegisterData) {
@@ -27,7 +25,7 @@ export function register(data: IRegisterData) {
 }
 
 export function loginGoogle(data: IGoogleAuth) {
-  return useNuxtApp().$api<{ access_token: string }>(`/auth/google`, {
+  return useNuxtApp().$api<ILoginReposnse>(`/auth/google`, {
     method: "POST",
     body: data,
   });

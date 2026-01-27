@@ -12,7 +12,7 @@ export function getOrderById(orderId: number) {
   });
 }
 
-export function getActive() {
+export function getActiveOrder() {
   return useNuxtApp().$api<IOrder>(`/order/active`, {
     method: "GET",
   });
@@ -26,7 +26,7 @@ export function getOrders(orderQuery: Ref<IOrderQuery>) {
   });
 }
 
-export function createUnauth(data: IOrderCreateUnauth) {
+export function createOrderUnauth(data: IOrderCreateUnauth) {
   return useNuxtApp().$api(`/order/unauth`, {
     method: "POST",
     body: data,

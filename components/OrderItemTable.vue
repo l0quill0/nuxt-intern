@@ -51,7 +51,7 @@ async function onAddClick(id: number) {
       await refreshNuxtData("count");
     }
   } catch (error) {
-    toast.add({ title: error as string, color: "error" });
+    toast.add({ title: $t(`errorMessage.${error as string}`), color: "error" });
   }
 }
 
@@ -62,7 +62,7 @@ async function onRemoveClick(id: number) {
       await refreshNuxtData("count");
     }
   } catch (error) {
-    toast.add({ title: error as string, color: "error" });
+    toast.add({ title: $t(`errorMessage.${error as string}`), color: "error" });
   }
 }
 </script>

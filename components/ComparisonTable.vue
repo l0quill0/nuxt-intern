@@ -7,6 +7,7 @@ const props = defineProps<{ items: IProductWithScore[] }>();
 const emit = defineEmits<{
   (e: "itemRemove", id: number): void;
 }>();
+
 const config = useRuntimeConfig();
 const compStore = useCompStore();
 

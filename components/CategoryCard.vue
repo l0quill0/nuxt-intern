@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import type { ICategory } from "~/types/category.types";
-const config = useRuntimeConfig();
-
 const props = defineProps<{
   category: ICategory;
 }>();
@@ -9,6 +7,8 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: "click", category: string): void;
 }>();
+
+const config = useRuntimeConfig();
 
 const { image, name, id, slug } = props.category;
 

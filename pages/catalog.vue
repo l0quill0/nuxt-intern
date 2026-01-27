@@ -1,4 +1,4 @@
-<script setup lang="tsx">
+<script setup lang="ts">
 import { getPaginatedProducts } from "~/api/productApi";
 import { PublicDynamicRoutes } from "~/enums/routes.enum";
 import type { IProduct } from "~/types/product.types";

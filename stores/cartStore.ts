@@ -1,4 +1,4 @@
-import { createUnauth, getActive, updateOrder } from "~/api/orderApi";
+import { createOrderUnauth, getActiveOrder, updateOrder } from "~/api/orderApi";
 import { useTokenStore } from "./tokenStore";
 import type { IOrderProduct } from "~/types/order.types";
 import type { IProduct } from "~/types/product.types";
@@ -20,7 +20,7 @@ export const useCartStore = defineStore("cartStore", {
     async fetchItems(data?: { productId: number; quantity: number }[]) {
       const token = useTokenStore().getToken();
       if (token) {
-        const order = await getActive();
+        const order = await getActiveOrder();
         if (!order) return;
         this.items = order.items;
         this.total = order.total;
@@ -76,7 +76,7 @@ export const useCartStore = defineStore("cartStore", {
       if (!hasItem) newItems.push({ productId, quantity });
 
       if (token) {
-        const order = await getActive();
+        const order = await getActiveOrder();
         if (!order) return;
         await updateOrder(order.id, { items: newItems });
         await this.fetchItems();
@@ -88,7 +88,7 @@ export const useCartStore = defineStore("cartStore", {
     async clear() {
       const token = useTokenStore().getToken();
       if (token) {
-        const order = await getActive();
+        const order = await getActiveOrder();
         if (!order) return;
         await updateOrder(order.id, { items: [] });
       }
@@ -103,7 +103,7 @@ export const useCartStore = defineStore("cartStore", {
     async sendOrder(data: ISendOrder) {
       const token = useTokenStore().getToken();
       if (token) {
-        const order = await getActive();
+        const order = await getActiveOrder();
         if (!order) return;
         await updateOrder(order.id, {
           status: OrderStatus.PENDING,
@@ -114,7 +114,7 @@ export const useCartStore = defineStore("cartStore", {
           productId: item.product.id,
           quantity: item.quantity,
         }));
-        await createUnauth({
+        await createOrderUnauth({
           email: data.email!,
           postId: data.postId,
           items: sendItems,

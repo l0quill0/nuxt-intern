@@ -48,6 +48,7 @@ watch(priceMinDebounced, (value) => {
     priceMin.value = undefined;
   }
 });
+
 watch(priceMaxDebounced, (value) => {
   if (Number(value) > 0) {
     pagination.value.priceMax = Number(value);

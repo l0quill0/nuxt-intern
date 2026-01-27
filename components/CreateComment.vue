@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import type { FormSubmitEvent } from "@nuxt/ui";
+import * as zod from "zod";
+import { addComment } from "~/api/productApi";
+
 const props = defineProps({
   itemId: { type: Number, required: true },
 });
@@ -6,10 +10,6 @@ const props = defineProps({
 const emit = defineEmits<{
   (e: "commentCreate"): void;
 }>();
-
-import type { FormSubmitEvent } from "@nuxt/ui";
-import * as zod from "zod";
-import { addComment } from "~/api/productApi";
 
 const toast = useToast();
 

@@ -1,4 +1,5 @@
 export interface IUser {
+  id: number;
   name: string;
   role: string;
   email: string;
@@ -8,6 +9,10 @@ export interface IUser {
 export interface IUpdateUser {
   name?: string;
   email?: string;
+}
+
+export interface ILoginReposnse {
+  access_token: string;
 }
 
 export interface IUpdatePassword {

@@ -3,12 +3,11 @@ import { PublicDynamicRoutes, PublicRoutes } from "~/enums/routes.enum";
 
 const toast = useToast();
 const modal = useOverlay();
+
 const { isAuth } = storeToRefs(useTokenStore());
-
-const { clear, fetchItems } = useCartStore();
-
 const cartItems = storeToRefs(useCartStore());
 
+const { clear, fetchItems } = useCartStore();
 await fetchItems();
 
 const isSendable = computed(() => cartItems.cart.value.items.length > 0);

@@ -5,6 +5,7 @@ import { getCategories } from "~/api/categoryApi";
 import { createProduct } from "~/api/productApi";
 
 const emit = defineEmits<{ (e: "uploading", isDismissable: boolean): void }>();
+
 const toast = useToast();
 
 const schema = zod.object({
