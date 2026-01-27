@@ -8,7 +8,12 @@ const { isAuth } = storeToRefs(useTokenStore());
 const cartItems = storeToRefs(useCartStore());
 
 const { clear, fetchItems } = useCartStore();
-await fetchItems();
+
+try {
+  await fetchItems();
+} catch (error) {
+  toast.add({ title: $t(`errorMessage.${error}`), color: "error" });
+}
 
 const isSendable = computed(() => cartItems.cart.value.items.length > 0);
 

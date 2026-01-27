@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { TableColumn } from "@nuxt/ui";
-
 import UpdateItemForm from "./UpdateItemForm.vue";
 import { PublicDynamicRoutes } from "~/enums/routes.enum";
 import {
@@ -23,12 +22,12 @@ const { data: response, pending, refresh } = getPaginatedProducts(pagination);
 const items = computed(() => response.value?.items ?? []);
 const page = computed(() => pagination.value.page ?? 1);
 const pageSize = computed(() => pagination.value.pageSize ?? 6);
+const totalPages = computed(() => response.value?.totalPages ?? 0);
 const total = computed(() =>
   response.value?.totalPages && pagination.value.pageSize
     ? response.value.totalPages * pagination.value.pageSize
     : 0,
 );
-const totalPages = computed(() => response.value?.totalPages ?? 0);
 
 const onItemClick = (id: number) => {
   navigateTo(`${PublicDynamicRoutes.ITEM}${id}`);

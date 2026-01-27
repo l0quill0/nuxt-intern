@@ -1,4 +1,3 @@
-import { defineStore } from "pinia";
 import { Cookie } from "~/enums/cookie.enum";
 
 export const useTokenStore = defineStore("userToken", {

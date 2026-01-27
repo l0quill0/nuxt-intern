@@ -38,10 +38,19 @@ type tableRow = {
 };
 
 const tableColumns: TableColumn<tableRow>[] = [
-  { accessorKey: "title", header: "Товар" },
+  {
+    accessorKey: "title",
+    header: "Товар",
+  },
   { accessorKey: "image", header: "Фото" },
-  { accessorKey: "quantity", header: "Кількість" },
-  { accessorKey: "total", header: "Загалом" },
+  {
+    accessorKey: "quantity",
+    header: "Кількість",
+  },
+  {
+    accessorKey: "total",
+    header: "Загалом",
+  },
 ];
 
 async function onAddClick(id: number) {
@@ -72,7 +81,7 @@ async function onRemoveClick(id: number) {
     :columns="tableColumns"
     :data="parsedData"
     :ui="{
-      th: 'bg-main-400 ',
+      th: 'bg-main-400',
       td: 'text-main-400 text-xl',
       tr: 'border-b border-accent-100 pl-2.5',
       tbody: 'border-0 ',

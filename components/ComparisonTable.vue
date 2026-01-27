@@ -54,7 +54,9 @@ const onRemoveClick = (id: number, category: string) => {
         </tr>
         <tr class="bg-accent-100">
           <td :colspan="items.length">
-            <div class="sticky left-[50%] max-w-fit text-center">
+            <div
+              class="sticky left-[50%] -translate-x-1/2 max-w-fit text-center"
+            >
               <p class="text-main-300 font-bold">Рейтинг</p>
             </div>
           </td>
@@ -72,7 +74,9 @@ const onRemoveClick = (id: number, category: string) => {
         </tr>
         <tr class="bg-accent-100">
           <td :colspan="items.length">
-            <div class="sticky left-[50%] max-w-fit text-center">
+            <div
+              class="sticky left-[50%] -translate-x-1/2 max-w-fit text-center"
+            >
               <p class="text-main-300 font-bold">Ціна</p>
             </div>
           </td>

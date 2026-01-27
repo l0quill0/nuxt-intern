@@ -24,14 +24,14 @@ type Schema = zod.output<typeof schema>;
 
 const state = reactive<Partial<Schema>>({
   email: user.email,
-  name: user.name,
+  name: user.name === "empty" ? undefined : user.name,
 });
 
 function onCancel() {
   isEditing.value = false;
   state.email = user.email;
-  state.name = user.name;
-  form.value.clear();
+  ((state.name = user.name === "empty" ? undefined : user.name),
+    form.value.clear());
 }
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
@@ -61,11 +61,11 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     :schema="schema"
     :state="state"
     @submit="onSubmit"
-    class="gap-3 p-5"
+    class="gap-3 p-5 w-full"
   >
     <h2 class="font-bold text-2xl text-white">Мій профіль</h2>
-    <div class="flex gap-6">
-      <UFormField label="Email" name="email">
+    <div class="flex flex-col gap-6 w-full">
+      <UFormField label="Email" name="email" class="w-full">
         <UInput
           v-model="state.email"
           :disabled="!isEditing"
@@ -74,7 +74,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
           class="w-full border-b"
         />
       </UFormField>
-      <UFormField label="Ім'я" name="name">
+      <UFormField label="Ім'я" name="name" class="w-full">
         <UInput
           v-model="state.name"
           :disabled="!isEditing"
@@ -86,17 +86,23 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     </div>
     <div class="flex gap-2">
       <UButton
+        v-if="isEditing"
+        type="submit"
+        color="success"
+        class="w-25 flex justify-center"
+        >Зберегти</UButton
+      >
+      <UButton
+        v-else
+        color="success"
         @click="isEditing = true"
         :disabled="isEditing"
-        class="text-white bg-main-300 hover:bg-main-200 disabled:bg-main-100 active:bg-main-200"
+        class="w-25 flex justify-center"
         >Редагувати</UButton
       >
       <UButton @click="() => onCancel()" color="error" :disabled="!isEditing"
         >Скасувати</UButton
       >
     </div>
-    <UButton type="submit" :disabled="!isEditing" color="success"
-      >Зберегти</UButton
-    >
   </UForm>
 </template>

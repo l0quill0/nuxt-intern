@@ -1,5 +1,3 @@
-import { defineStore } from "pinia";
-
 export const useCompStore = defineStore("compStore", {
   state: () => ({
     compIds: [] as {

@@ -9,11 +9,10 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: "click", itemId: number): void;
 }>();
+const { title, image, category, price, id } = props.productInfo;
 
 const config = useRuntimeConfig();
 const compStore = useCompStore();
-
-const { title, image, category, price, id } = props.productInfo;
 
 const isComp = computed(() => compStore.isInStore(id));
 

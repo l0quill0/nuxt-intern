@@ -107,7 +107,7 @@ const tableColumns: TableColumn<tableRow>[] = [
               : "i-lucide-arrow-down-wide-narrow"
             : "i-lucide-arrow-up-down",
         class:
-          "bg-transparent hover:bg-transparent active:bg-transparent font-bold p-0 hover:text-accent-300",
+          "bg-transparent hover:bg-transparent active:bg-transparent font-bold p-0 hover:text-accent-300 flex text-main-400",
         onClick: () => onSortClick(column.id),
         label: "№",
       });
@@ -124,7 +124,7 @@ const tableColumns: TableColumn<tableRow>[] = [
               : "i-lucide-arrow-down-wide-narrow"
             : "i-lucide-arrow-up-down",
         class:
-          "bg-transparent hover:bg-transparent active:bg-transparent font-bold p-0 hover:text-accent-300",
+          "bg-transparent hover:bg-transparent active:bg-transparent font-bold p-0 hover:text-accent-300 flex text-main-400",
         onClick: () => onSortClick(column.id),
         label: "Статус",
       });
@@ -141,7 +141,7 @@ const tableColumns: TableColumn<tableRow>[] = [
               : "i-lucide-arrow-down-wide-narrow"
             : "i-lucide-arrow-up-down",
         class:
-          "bg-transparent hover:bg-transparent active:bg-transparent font-bold p-0 hover:text-accent-300",
+          "bg-transparent hover:bg-transparent active:bg-transparent font-bold p-0 hover:text-accent-300 flex text-main-400",
         onClick: () => onSortClick(column.id),
         label: "Сума",
       });
@@ -158,7 +158,7 @@ const tableColumns: TableColumn<tableRow>[] = [
               : "i-lucide-arrow-down-wide-narrow"
             : "i-lucide-arrow-up-down",
         class:
-          "bg-transparent hover:bg-transparent active:bg-transparent font-bold p-0 hover:text-accent-300",
+          "bg-transparent hover:bg-transparent active:bg-transparent font-bold p-0 hover:text-main-300 flex pr-2 text-main-400",
         onClick: () => onSortClick(column.id),
         label: "Створено",
       });
@@ -205,7 +205,7 @@ const tableColumns: TableColumn<tableRow>[] = [
 
 <template>
   <div
-    class="flex flex-col items-center lg:w-225 xl:w-fit xl:min-w-2/3 grow w-full p-2.5"
+    class="flex flex-col items-center lg:w-225 xl:w-full xl:min-w-2/3 grow w-full p-2.5"
   >
     <UTable
       :data="parsedData"
