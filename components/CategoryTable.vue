@@ -108,6 +108,7 @@ const onRemoveClick = async (slug: string) => {
             >Оновити</UButton
           >
           <UButton
+            v-if="row.original.slug !== 'other'"
             color="error"
             class="flex justify-center"
             @click="() => onRemoveClick(row.original.slug)"

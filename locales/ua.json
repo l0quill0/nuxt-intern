@@ -22,7 +22,7 @@
     "ERROR_CREATING_USER": "Виникла помилка при створенні користувача."
   },
   "orderStatus": {
-    "PENDING": "Підтвержене",
+    "PENDING": "В обробці",
     "CANCELED": "Скасоване",
     "COMPLETE": "Виконане"
   },

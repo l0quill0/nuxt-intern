@@ -13,12 +13,9 @@ const compStore = useCompStore();
 
 const { isAuth } = storeToRefs(useTokenStore());
 const cartStore = storeToRefs(useCartStore());
+const { data: response } = await getCount();
 
-let favCount = undefined;
-if (isAuth) {
-  const data = await getCount();
-  favCount = data.data.value?.favCount;
-}
+const favCount = computed(() => response.value?.favCount ?? 0);
 
 const route = useRoute();
 

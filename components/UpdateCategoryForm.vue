@@ -10,7 +10,7 @@ const props = defineProps({
 
 const toast = useToast();
 
-const { data: response, refresh } = await getCategoryBySlug(props.slug);
+const { data: response } = await getCategoryBySlug(props.slug);
 
 const category = computed(() => response.value || ({} as ICategory));
 const validation = computed(() => schema.safeParse(state));
@@ -43,7 +43,6 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     isUploading.value = null;
     isDismissable.value = false;
     await updateCategory(props.slug, event.data.image);
-    await refresh();
     await refreshNuxtData("category-paginated");
     state.image = undefined;
     isUploading.value = 100;
