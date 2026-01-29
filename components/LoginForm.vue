@@ -5,14 +5,14 @@ import { login } from "~/api/authApi";
 import { PublicRoutes } from "~/enums/routes.enum";
 
 const schema = zod.object({
-  email: zod.email("Введіть email").toLowerCase(),
+  identifier: zod.string("Введіть номер телефону або email").toLowerCase(),
   password: zod.string("Введіть пароль").min(6, "Мінімум 6 символів"),
 });
 
 type Schema = zod.output<typeof schema>;
 
 const state = reactive<Partial<Schema>>({
-  email: undefined,
+  identifier: undefined,
   password: undefined,
 });
 
@@ -53,10 +53,10 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     class="bg-main-400 p-10 gap-5"
   >
     <h2 class="font-bold text-2xl text-white">Авторизація</h2>
-    <UFormField label="Email" name="email">
+    <UFormField label="Email або номер телефону" name="identifier">
       <UInput
         class="w-62.5"
-        v-model="state.email"
+        v-model="state.identifier"
         :ui="{
           base: 'bg-transparent! rounded-none ring-white focus-visible:ring-white aria-invalid:ring-error aria-invalid:focus-visible:ring-error',
         }"

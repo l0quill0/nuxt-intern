@@ -16,7 +16,9 @@
     "@pinia/nuxt": "^0.11.3",
     "@tailwindcss/vite": "^4.1.17",
     "@vueuse/shared": "^14.1.0",
+    "country-flag-emoji-polyfill": "^0.1.8",
     "dayjs": "^1.11.19",
+    "google-libphonenumber": "^3.2.44",
     "iconify-icon": "^3.0.2",
     "lodash": "^4.17.21",
     "lucide-vue-next": "^0.555.0",
@@ -32,6 +34,7 @@
   },
   "devDependencies": {
     "@nuxt/fonts": "^0.12.1",
+    "@types/google-libphonenumber": "^7.4.30",
     "@types/lodash": "^4.17.21",
     "@types/node": "^24.10.1",
     "@vueuse/core": "^14.1.0",

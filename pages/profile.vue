@@ -24,7 +24,7 @@ const onCreatePassClick = () => {
     class="flex pt-12.5 h-full xl:flex-row flex-col p-2.5 w-full xl:w-auto items-center xl:items-start gap-4"
   >
     <div
-      class="flex flex-col items-center gap-2.5 bg-main-400 p-5 sm:w-2/5 w-full"
+      class="flex flex-col items-center gap-2.5 bg-main-400 p-5 sm:w-2/5 w-full max-w-90"
     >
       <ProfileInfo />
       <UButton color="success" @click="onOpenModalClick" v-if="hasPassword"

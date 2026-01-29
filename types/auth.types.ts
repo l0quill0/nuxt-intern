@@ -3,12 +3,14 @@ export interface IUser {
   name: string;
   role: string;
   email: string;
+  phone: string;
   authFlow: string[];
 }
 
 export interface IUpdateUser {
   name?: string;
   email?: string;
+  phone?: string;
 }
 
 export interface ILoginReposnse {
@@ -31,12 +33,13 @@ export interface IGoogleAuth {
 }
 
 export interface ILoginData {
-  email: string;
+  identifier: string;
   password: string;
 }
 
 export interface IRegisterData {
-  email: string;
   name: string;
+  email: string;
+  phone: string;
   password: string;
 }

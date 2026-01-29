@@ -111,6 +111,12 @@ watch(
             {{ user?.email }}
           </span>
           <div class="flex gap-1 flex-col">
+            <span class="font-bold">Номер телефону</span>
+            <span>
+              {{ user?.phone }}
+            </span>
+          </div>
+          <div class="flex gap-1 flex-col">
             <span class="font-bold">Ім'я</span>
             <span>
               {{ user?.name }}
